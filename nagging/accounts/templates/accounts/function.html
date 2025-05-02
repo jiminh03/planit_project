@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>기능 소개</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: '맑은 고딕', sans-serif;
+      background-color: #f9f9f9;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 50px;
+      background-color: #fff;
+      border-bottom: 1px solid #ddd;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .navbar .menu {
+      display: flex;
+      gap: 30px;
+    }
+
+    .navbar a {
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .navbar a:hover {
+      color: #7c3aed;
+    }
+
+    .main-section {
+      max-width: 1200px;
+      margin: 80px auto;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .text-section {
+      flex: 1;
+    }
+
+    .text-section h2 {
+      font-size: 32px;
+      margin-bottom: 20px;
+    }
+
+    .text-section p {
+      font-size: 18px;
+      color: #555;
+      margin-bottom: 12px;
+    }
+
+    .image-section {
+      flex: 1;
+      text-align: center;
+    }
+
+    .image-section img {
+      width: 300px;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="navbar">
+    <div><a href="{% url 'accounts:index' %}">로고</a></div>
+    <div class="menu">
+      <a href="{% url 'accounts:function' %}">기능</a>
+      <a href="#">공지사항</a>
+      <a href="{% url 'accounts:signup' %}">회원가입</a>
+      <a href="{% url 'accounts:login' %}">로그인</a>
+    </div>
+  </div>
+
+  <div class="main-section">
+    <div class="text-section">
+      <h2>쉽고 재미있게 함께하는 가계부!<br>지금 시작해보세요 😊</h2>
+      <p><strong>혼자만 보는 가계부는 그만!</strong><br>목적에 따라 함께 가계부 작성하기</p>
+      <p>공동관리 기능을 통해 가계부를 같이 작성할 수 있어요.<br>
+      우리의 수입 · 지출 관리부터 함께 공유할 카드, 계좌 및 투자와 보험 정보까지!</p>
+      <p>공유하고 싶은 정보만 골라서 <strong>우리 함께 봐요</strong>.</p>
+    </div>
+
+    <div class="image-section">
+      <img src="/static/images/feature_mockup.png" alt="기능 예시 화면">
+      <!-- 나중에 실제 이미지 넣으면 됨 -->
+    </div>
+  </div>
+
+</body>
+</html>

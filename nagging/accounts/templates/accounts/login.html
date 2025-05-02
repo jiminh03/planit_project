@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>로그인</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: '맑은 고딕', sans-serif;
+      background-color: #f9f9f9;
+    }
+
+    /* 네비게이션 바 */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 50px;
+      background-color: #fff;
+      border-bottom: 1px solid #ddd;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .navbar .menu {
+      display: flex;
+      gap: 30px;
+    }
+
+    .navbar a {
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .navbar a:hover {
+      color: #7c3aed;
+    }
+
+    /* 로그인 폼 */
+    .container {
+      margin: 100px auto;
+      width: 300px;
+      padding: 40px;
+      border: 1px solid #ccc;
+      border-radius: 12px;
+      background-color: white;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 24px;
+    }
+
+    label {
+      display: block;
+      margin-top: 12px;
+      font-weight: bold;
+      text-align: left;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 8px;
+      margin-top: 4px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    input[type="submit"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 20px;
+      background-color: #000;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #333;
+    }
+
+    .link {
+      margin-top: 16px;
+      font-size: 14px;
+    }
+
+    .link a {
+      color: #007BFF;
+      text-decoration: none;
+    }
+
+    .link a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 네비게이션 바 -->
+  <div class="navbar">
+    <div><a href="{% url "accounts:index" %}">로고</a></div> <!-- ✅ 여기 수정 -->
+    <div class="menu">
+      <a href="#">기능</a>
+      <a href="#">공지사항</a>
+      <a href="{% url 'accounts:signup' %}">회원가입</a>
+      <a href="{% url 'accounts:login' %}">로그인</a>
+    </div>
+  </div>
+
+  <!-- 로그인 폼 -->
+  <div class="container">
+    <h1>로그인</h1>
+    <form method="POST" action="{% url 'accounts:login' %}">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <input type="submit" value="로그인">
+    </form>
+    <div class="link">
+      <a href="{% url 'accounts:signup' %}">회원가입</a>
+    </div>
+  </div>
+
+</body>
+</html>

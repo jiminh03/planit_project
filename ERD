@@ -1,0 +1,76 @@
+Project 한도초과 {
+  database_type: "PostgreSQL"
+}
+
+Table users {                // 사용자
+  id int [pk, increment]     // increment : 자동증가
+  username varchar           // 로그인용 아이디
+  name varchar               // 이름
+  age int                    // 나이
+  gender varchar             // 성별
+  phone_number varchar       // 전화번호
+  email varchar              // 이메일
+  password varchar           // 비밀번호
+  total_income int           // 총 수입 (고정지출 제외 X)
+  consumption_goal int       // 목표 지출액
+  preferred_pattern varchar  // 지향하는 소비 패턴
+  created_at datetime
+}
+
+Table fixed_expenses {       // 고정지출 정보
+  id int [pk, increment]
+  user_id int [ref: > users.id]
+  category varchar           // 예: 월세, 통신비
+  amount int
+  created_at datetime
+}
+
+Table previous_expenses {     // 과거 소비 입력 (CSV or 수동)
+  id int [pk, increment]
+  user_id int [ref: > users.id]
+  source varchar              // 입력 방식 (CSV, 수동)
+  raw_data text               // 사용자가 입력한 과거 소비 데이터
+  created_at datetime
+}
+
+Table daily_expenses {        // 일별 소비 기록
+  id int [pk, increment]
+  user_id int [ref: > users.id]
+  date date                   // "소비"한 날짜
+  category varchar            // 지피티가 추후에 정할 소비 카테고리
+  item_description text       // 예: '스타벅스 아메리카노'
+  amount int                  // 금액
+  emotion_id int [ref: > emotions.id, null]
+  created_at datetime
+}
+
+Table emotions {              // 감정 목록
+  id int [pk, increment]
+  name varchar                // 감정 이름 (좋음, 보통, 나쁨)
+}
+
+Table daily_moods {           // 일별 감정 상태 기록
+  id int [pk, increment]
+  user_id int [ref: > users.id]
+  date date                   // 해당 날짜
+  mood_type varchar           // 기복형, 안정형
+  created_at datetime
+}
+
+Table persona_profiles {      // 소비 + 감정 기반 성향
+  id int [pk, increment]
+  user_id int [ref: > users.id, unique]
+  spending_type varchar       // 과소비형, 안정형, 절약형
+  mood_type varchar           // 기복형, 안정형
+  description text            // 각 성향에 대한 설명 텍스트 (필요 시)
+  updated_at datetime
+}
+
+Table feedback_logs {         // AI 조언 기록
+  id int [pk, increment]
+  user_id int [ref: > users.id]
+  date date                   // 조언 생성 날짜
+  content text                // 조언 문장
+  source varchar              // GPT, Claude, Rule 등
+  created_at datetime
+}

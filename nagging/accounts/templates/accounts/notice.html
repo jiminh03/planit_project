@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>공지사항</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: '맑은 고딕', sans-serif;
+      background-color: #f9f9f9;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 50px;
+      background-color: #fff;
+      border-bottom: 1px solid #ddd;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .navbar .menu {
+      display: flex;
+      gap: 30px;
+    }
+
+    .navbar a {
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .navbar a:hover {
+      color: #7c3aed;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 80px auto;
+      background: #fff;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    table thead {
+      background-color: #f1f1f1;
+    }
+
+    table th, table td {
+      padding: 12px;
+      text-align: center;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .pagination {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .pagination a {
+      text-decoration: none;
+      margin: 0 8px;
+      color: #333;
+      font-weight: bold;
+    }
+
+    .pagination a.active {
+      color: #7c3aed;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 네비게이션 바 -->
+  <div class="navbar">
+    <div><a href="{% url 'accounts:index' %}">로고</a></div>
+    <div class="menu">
+      <a href="{% url 'accounts:function' %}">기능</a>
+      <a href="{% url 'accounts:notice' %}">공지사항</a>
+      <a href="{% url 'accounts:signup' %}">회원가입</a>
+      <a href="{% url 'accounts:login' %}">로그인</a>
+    </div>
+  </div>
+
+  <!-- 공지사항 섹션 -->
+  <div class="container">
+    <h1>📢 공지사항</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>번호</th>
+          <th>제목</th>
+          <th>등록일</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for notice in page_obj %}
+          <tr>
+            <td>{{ forloop.counter0|add:page_obj.start_index }}</td> <!-- 번호 순서 -->
+            <td>{{ notice.title }}</td>
+            <td>{{ notice.created_at|date:"Y-m-d" }}</td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="3">등록된 공지사항이 없습니다.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+      
+      
+    </table>
+
+    <!-- 페이지네이션 -->
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+          <a href="?page={{ page_obj.previous_page_number }}">&laquo;</a>
+        {% endif %}
+      
+        {% for num in page_obj.paginator.page_range %}
+          {% if page_obj.number == num %}
+            <a href="?page={{ num }}" class="active">{{ num }}</a>
+          {% else %}
+            <a href="?page={{ num }}">{{ num }}</a>
+          {% endif %}
+        {% endfor %}
+      
+        {% if page_obj.has_next %}
+          <a href="?page={{ page_obj.next_page_number }}">&raquo;</a>
+        {% endif %}
+      </div>
+      
+  </div>
+
+</body>
+</html>
