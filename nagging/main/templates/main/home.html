@@ -1,0 +1,178 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>홈 화면</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: '맑은 고딕', sans-serif;
+      background-color: #f9f9f9;
+    }
+
+    .container {
+      display: flex;
+    }
+
+    .title-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .icon {
+      width: 24px;
+      height: 24px;
+      position: relative;
+      top: -2px;
+    }
+
+    .sidebar {
+      width: 220px;
+      background-color: #fff;
+      height: 100vh;
+      padding: 30px 20px;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+    }
+
+    .sidebar .title-row {
+      margin-bottom: 30px;
+    }
+
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .sidebar li {
+      margin-bottom: 20px;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sidebar li img {
+      width: 20px;
+      height: 20px;
+      position: relative;
+      top: -2px;
+    }
+
+    .main {
+      flex: 1;
+      padding: 40px;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .header img {
+      width: 28px;
+      height: 28px;
+    }
+
+    .header-title {
+      font-size: 25px;
+      font-weight: bold;
+      margin: 0;
+    }
+
+    .sub-title {
+      margin: 5px 0 30px 38px;
+      font-size: 16px;
+      color: #666;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+
+    .calendar-box {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      min-height: 400px;
+    }
+
+    .card-boxes {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+
+    .card {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      min-height: 180px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- 사이드바 -->
+    <div class="sidebar">
+      <a href="{% url "main:home" %}" style="text-decoration: none; color: inherit;">
+        <div class="title-row">
+          <img src="{% static 'main/home_icon.png' %}" alt="홈 아이콘" class="icon">
+          <h3>홈 화면</h3>
+        </div>
+      </a>
+      <a href="{% url "main:report" %}" style="text-decoration: none; color: inherit;">
+        <div class="title-row">
+          <img src="{% static 'main/search_icon.png' %}" alt="찾기 아이콘" class="icon">
+          <h3>내 소비 분석</h3>
+        </div> 
+      </a>
+      <a href="{% url "main:helper" %}" style="text-decoration: none; color: inherit;">
+        <div class="title-row">
+          <img src="{% static 'main/lightbulb_icon.png' %}" alt="전구 아이콘" class="icon">
+          <h3>지출 도우미</h3>
+        </div>
+      </a>
+      <a href="{% url 'main:settings' %}" style="text-decoration: none; color: inherit;">
+        <div class="title-row">
+          <img src="{% static 'main/settings_icon.png' %}" alt="설정 아이콘" class="icon">
+          <h3>설정</h3>
+        </div>
+      </a>
+      
+    </div>
+
+    <!-- 본문 -->
+    <div class="main">
+      <div class="header">
+        <img src="{% static 'main/home_icon.png' %}" alt="로고">
+        <h1 class="header-title">홈 화면</h1>
+      </div>
+      <p class="sub-title">소비 요약 및 지출 분석 결과를 한눈에 볼 수 있어요!</p>
+
+      <div class="grid">
+        <!-- 왼쪽 달력 -->
+        <div class="calendar-box">
+          <h3>📅 2025년 5월 (캘린더 자리)</h3>
+        </div>
+
+        <!-- 오른쪽 카드 4개 -->
+        <div class="card-boxes">
+          <div class="card"><strong>오늘 요약 카드</strong></div>
+          <div class="card"><strong>소비 분석 카드</strong></div>
+          <div class="card"><strong>카테고리 분석 카드</strong></div>
+          <div class="card"><strong>비어있는 자리 (예정)</strong></div>
+        </div>
+      </div>
+    </div> 
+  </div>
+</body>
+</html>

@@ -1,0 +1,204 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>설정</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: '맑은 고딕', sans-serif;
+      background-color: #f9f9f9;
+    }
+
+    .container {
+      display: flex;
+    }
+
+    .title-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .icon {
+      width: 24px;
+      height: 24px;
+      position: relative;
+      top: -2px;
+    }
+
+    .sidebar {
+      width: 220px;
+      background-color: #fff;
+      height: 100vh;
+      padding: 30px 20px;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+    }
+
+    .sidebar .title-row {
+      margin-bottom: 30px;
+    }
+
+    .main {
+      flex: 1;
+      padding: 40px;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .header img {
+      width: 28px;
+      height: 28px;
+    }
+
+    .header-title {
+      font-size: 25px;
+      font-weight: bold;
+      margin: 0;
+    }
+
+    .card-section {
+      background-color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      margin-bottom: 30px;
+      padding: 25px;
+    }
+
+    .card-section h3 {
+      margin-bottom: 20px;
+      font-size: 18px;
+    }
+
+    .card-button {
+      background-color: #fff;
+      border: none;
+      width: 100%;
+      text-align: left;
+      padding: 12px 10px;
+      font-size: 16px;
+      cursor: pointer;
+      border-bottom: 1px solid #eee;
+    }
+
+    .card-button:last-child {
+      border-bottom: none;
+    }
+
+    .card-button::after {
+      content: '›';
+      float: right;
+      color: #888;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- 사이드바 -->
+    <div class="sidebar">
+      <a href="{% url 'main:home' %}" style="text-decoration: none; color: inherit;">
+        <div class="title-row">
+          <img src="{% static 'main/home_icon.png' %}" alt="홈 아이콘" class="icon">
+          <h3>홈 화면</h3>
+        </div>
+      </a>
+      <a href="{% url 'main:report' %}" style="text-decoration: none; color: inherit;">
+        <div class="title-row">
+          <img src="{% static 'main/search_icon.png' %}" alt="검색 아이콘" class="icon">
+          <h3>내 소비 분석</h3>
+        </div>
+      </a>
+      <a href="{% url 'main:helper' %}" style="text-decoration: none; color: inherit;">
+        <div class="title-row">
+          <img src="{% static 'main/lightbulb_icon.png' %}" alt="전구 아이콘" class="icon">
+          <h3>지출 도우미</h3>
+        </div>
+      </a>
+      <a href="{% url 'main:settings' %}" style="text-decoration: none; color: inherit;">
+        <div class="title-row">
+          <img src="{% static 'main/settings_icon.png' %}" alt="설정 아이콘" class="icon">
+          <h3>설정</h3>
+        </div>
+      </a>
+    </div>
+
+    <!-- 본문 -->
+    <div class="main">
+      <div class="header">
+        <img src="{% static 'main/settings_icon.png' %}" alt="설정 아이콘">
+        <h1 class="header-title">설정</h1>
+      </div>
+
+      <!-- 사용자 정보 설정 -->
+      <div class="card-section">
+        <h3>사용자 정보 설정</h3>
+        <button class="card-button">비밀번호 변경</button>
+        <button class="card-button">내 소비 데이터 다운로드</button>
+        <button class="card-button">계정 탈퇴</button>
+        <button class="card-button">감정/지출 기록 삭제</button>
+      </div>
+
+      <div class="card-section">
+        <h3>월 수입 설정</h3>
+        <button class="card-button">고정지출 항목 입력</button>
+        <button class="card-button">월 목표 지출액 설정</button>
+        <button class="card-button">지출 초과시 알림 여부 설정</button>
+      </div>
+
+      <div class="card-section">
+        <h3>목표 설정</h3>
+        <button class="card-button">소비 절감 목표 설정</button>
+        <button class="card-button">자동 추천 전략</button>
+        <button class="card-button">챌린지 확인 / 수정</button>
+      </div>
+
+      <div class="card-section">
+        <h3>감정 설정</h3>
+        <button class="card-button">감정 이모지 설정</button>
+        <button class="card-button">감정 기록 유도 알림 여부 설정</button>
+        <button class="card-button">제외할 감정 설정</button>
+      </div>
+
+      <div class="card-section">
+        <h3>알림 설정</h3>
+        <button class="card-button">하루 마무리 설정 알림</button>
+        <button class="card-button">소비 초과 절약 알림</button>
+        <button class="card-button">분석 리포트 주간 요약 알림</button>
+      </div>
+
+      <div class="card-section">
+        <h3>리포트 주기 설정</h3>
+        <button class="card-button">리포트 주기 선택</button>
+      </div>
+
+      <div class="card-section">
+        <h3>AI 설정</h3>
+        <button class="card-button">AI 톤 설정</button>
+        <button class="card-button">예측 대응 설정</button>
+      </div>
+
+      <div class="card-section">
+        <h3>테마 설정</h3>
+        <button class="card-button">테마</button>
+      </div>
+
+      <div class="card-section">
+        <h3>언어 설정</h3>
+        <button class="card-button">언어</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
