@@ -175,7 +175,7 @@ cython_debug/
 
 .env
 
-nagging/node_modules/
+planit/node_modules/
 
 
 # Created by https://www.toptal.com/developers/gitignore/api/vue

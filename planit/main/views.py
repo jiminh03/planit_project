@@ -4,7 +4,7 @@ from .models import Report
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.models import User
 from django.conf import settings
-import openai
+# import openai
 import markdown
 
 
@@ -28,7 +28,7 @@ def setting(request):
 
 # 내 소비 분석 GPT 결과
 
-client = openai.OpenAI(api_key=settings.OPENAI_API_KEY)
+# client = openai.OpenAI(api_key=settings.OPENAI_API_KEY)
 
 # 메뉴 키 → 라벨 매핑
 MENU_ITEMS = {
