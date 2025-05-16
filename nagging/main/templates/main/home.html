@@ -41,24 +41,34 @@
       margin-bottom: 30px;
     }
 
-    .sidebar ul {
-      list-style: none;
-      padding: 0;
-    }
-
-    .sidebar li {
-      margin-bottom: 20px;
-      font-size: 15px;
+    .logout-btn {
       display: flex;
       align-items: center;
-      gap: 10px;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 10px 0;
+      background-color: #f0f0f0;
+      color: #333;
+      font-size: 15px;
+      font-weight: 600;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background-color 0.2s ease, color 0.2s ease;
+      box-shadow: inset 0 0 0 1px #ccc;
+      margin-bottom: 30px;
     }
 
-    .sidebar li img {
-      width: 20px;
-      height: 20px;
+    .logout-btn:hover {
+      background-color: #e0e0e0;
+      color: #000;
+    }
+
+    .logout-btn .icon {
+      width: 18px;
+      height: 18px;
       position: relative;
-      top: -2px;
+      top: -1px;
     }
 
     .main {
@@ -123,6 +133,11 @@
   <div class="container">
     <!-- 사이드바 -->
     <div class="sidebar">
+      <h1>로고</h1>
+      <!-- ✅ 로그아웃 버튼 -->
+      <a href="{% url 'accounts:logout' %}" class="logout-btn">로그아웃</a>
+
+      <!-- 메뉴 -->
       <a href="{% url "main:home" %}" style="text-decoration: none; color: inherit;">
         <div class="title-row">
           <img src="{% static 'main/home_icon.png' %}" alt="홈 아이콘" class="icon">
@@ -141,13 +156,12 @@
           <h3>지출 도우미</h3>
         </div>
       </a>
-      <a href="{% url 'main:settings' %}" style="text-decoration: none; color: inherit;">
+      <a href="{% url 'main:setting' %}" style="text-decoration: none; color: inherit;">
         <div class="title-row">
           <img src="{% static 'main/settings_icon.png' %}" alt="설정 아이콘" class="icon">
           <h3>설정</h3>
         </div>
       </a>
-      
     </div>
 
     <!-- 본문 -->
@@ -156,17 +170,29 @@
         <img src="{% static 'main/home_icon.png' %}" alt="로고">
         <h1 class="header-title">홈 화면</h1>
       </div>
-      <p class="sub-title">소비 요약 및 지출 분석 결과를 한눈에 볼 수 있어요!</p>
+      <p class="sub-title">{{ user.username }}님의 소비 요약 및 분석 결과입니다.</p>
 
       <div class="grid">
         <!-- 왼쪽 달력 -->
         <div class="calendar-box">
           <h3>📅 2025년 5월 (캘린더 자리)</h3>
+          {% if report %}
+            <p><strong>최근 리포트 생성일:</strong> {{ report.created_at|date:"Y년 m월 d일" }}</p>
+          {% else %}
+            <p>리포트가 아직 없습니다.</p>
+          {% endif %}
         </div>
 
         <!-- 오른쪽 카드 4개 -->
         <div class="card-boxes">
-          <div class="card"><strong>오늘 요약 카드</strong></div>
+          <div class="card">
+            <strong>오늘 요약 카드</strong><br>
+            {% if report %}
+              {{ report.summary|linebreaksbr }}
+            {% else %}
+              오늘의 리포트가 없습니다.
+            {% endif %}
+          </div>
           <div class="card"><strong>소비 분석 카드</strong></div>
           <div class="card"><strong>카테고리 분석 카드</strong></div>
           <div class="card"><strong>비어있는 자리 (예정)</strong></div>

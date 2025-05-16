@@ -41,6 +41,36 @@
       margin-bottom: 30px;
     }
 
+    .logout-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 10px 0;
+      background-color: #f0f0f0;
+      color: #333;
+      font-size: 15px;
+      font-weight: 600;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background-color 0.2s ease, color 0.2s ease;
+      box-shadow: inset 0 0 0 1px #ccc;
+      margin-bottom: 30px;
+    }
+
+    .logout-btn:hover {
+      background-color: #e0e0e0;
+      color: #000;
+    }
+
+    .logout-btn .icon {
+      width: 18px;
+      height: 18px;
+      position: relative;
+      top: -1px;
+    }
+
     .main {
       flex: 1;
       padding: 40px;
@@ -101,6 +131,9 @@
   <div class="container">
     <!-- 사이드바 -->
     <div class="sidebar">
+      <h1>로고</h1>
+      <a href="{% url 'accounts:logout' %}" class="logout-btn">로그아웃</a>
+
       <a href="{% url 'main:home' %}" style="text-decoration: none; color: inherit;">
         <div class="title-row">
           <img src="{% static 'main/home_icon.png' %}" alt="홈 아이콘" class="icon">
@@ -119,7 +152,7 @@
           <h3>지출 도우미</h3>
         </div>
       </a>
-      <a href="{% url 'main:settings' %}" style="text-decoration: none; color: inherit;">
+      <a href="{% url 'main:setting' %}" style="text-decoration: none; color: inherit;">
         <div class="title-row">
           <img src="{% static 'main/settings_icon.png' %}" alt="설정 아이콘" class="icon">
           <h3>설정</h3>

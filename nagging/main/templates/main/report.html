@@ -41,6 +41,36 @@
       margin-bottom: 30px;
     }
 
+    .logout-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 10px 0;
+      background-color: #f0f0f0;
+      color: #333;
+      font-size: 15px;
+      font-weight: 600;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background-color 0.2s ease, color 0.2s ease;
+      box-shadow: inset 0 0 0 1px #ccc;
+      margin-bottom: 30px;
+    }
+
+    .logout-btn:hover {
+      background-color: #e0e0e0;
+      color: #000;
+    }
+
+    .logout-btn .icon {
+      width: 18px;
+      height: 18px;
+      position: relative;
+      top: -1px;
+    }
+
     .main {
       flex: 1;
       padding: 40px;
@@ -92,6 +122,9 @@
   <div class="container">
     <!-- 사이드바 -->
     <div class="sidebar">
+      <h1>로고</h1>
+      <a href="{% url 'accounts:logout' %}" class="logout-btn">로그아웃</a>
+
       <a href="{% url 'main:home' %}" style="text-decoration: none; color: inherit;">
         <div class="title-row">
           <img src="{% static 'main/home_icon.png' %}" alt="홈 아이콘" class="icon">
@@ -110,7 +143,7 @@
             <h3>지출 도우미</h3>
           </div>
       </a>
-      <a href="{% url 'main:settings' %}" style="text-decoration: none; color: inherit;">
+      <a href="{% url 'main:setting' %}" style="text-decoration: none; color: inherit;">
         <div class="title-row">
           <img src="{% static 'main/settings_icon.png' %}" alt="설정 아이콘" class="icon">
           <h3>설정</h3>
@@ -127,16 +160,9 @@
       <p class="sub-title">지출 패턴과 소비 성향을 확인해보세요.</p>
 
       <section>
-        <h2>📌 소비 패턴 분석</h2>
-        <p><strong>📈 월별 소비 추이</strong><br>최근 3개월간 소비 총액이 <b>1월 82만 원 → 2월 94만 원 → 3월 103만 원</b>으로 증가 중입니다.<br>
-        특히 3월은 외식·배달 지출이 많이 늘어난 시기입니다.</p>
+        <h1>AI 소비 분석 결과</h1>
+        <p>{{ response|linebreaks }}</p>
 
-        <p><strong>⚖️ 계획 소비 vs 충동 소비</strong><br>총 84건 중 <b>충동 소비 41%</b> 차지. 대부분 밤 10시 이후 발생. 감정: '기분 전환', '스트레스' 다수.<br>
-        → <i>AI 제안:</i> 알림 기능으로 야간 소비 억제 유도 제안.</p>
-
-        <p><strong>📺 고정 지출 비율</strong><br>3월 전체 지출 중 <b>28.7%</b>가 고정 지출 (넷플릭스, 헬스장 등).<br>
-        → <i>예: 넷플릭스 해지 시 연간 약 13만 원 절감 가능</i></p>
-      </section>
     </div>
   </div>
 </body>
