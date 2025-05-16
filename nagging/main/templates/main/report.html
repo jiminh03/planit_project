@@ -160,8 +160,12 @@
       <p class="sub-title">지출 패턴과 소비 성향을 확인해보세요.</p>
 
       <section>
-        <h1>AI 소비 분석 결과</h1>
-        <p>{{ response|linebreaks }}</p>
+
+      <h1 class="text-2xl font-bold mb-4">AI 소비 분석 결과</h1>
+      <div class="prose max-w-full bg-white p-6 rounded shadow">
+        {{ result|safe }}
+      </div>
+
 
     </div>
   </div>
