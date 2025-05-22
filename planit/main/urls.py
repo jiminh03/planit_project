@@ -13,4 +13,11 @@ urlpatterns = [
     path('password/', PasswordChangeView.as_view(
         template_name='main/password_change.html',
         success_url='/main/setting/'), name='password_change'), 
+    path('create_expense/', views.create_expense, name='create_expense'),
+    path('create_income/', views.create_income, name='create_income'),
+    path('expense/<int:pk>/edit/', views.update_expense, name='update_expense'),
+    path('expense/<int:pk>/delete/', views.delete_expense, name='delete_expense'),
+    path('download/', views.download_expense_data, name='download'),
+    path('fixed-expense/', views.fixed_expense_input, name='fixed_expense_input'),
+    path('monthly-budget/', views.monthly_budget_view, name='monthly_budget'),
 ]

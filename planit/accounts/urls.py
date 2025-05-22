@@ -10,4 +10,5 @@ urlpatterns = [
     path('function/', views.function, name = 'function'),
     path('notice/', views.notice, name = 'notice'),
     path('logout/', views.logout_view, name='logout'),
+    path("google/callback/", views.google_callback, name="google_callback"),
 ]

@@ -1,0 +1,6 @@
+<h2>고정지출 항목 입력</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">등록</button>
+</form>

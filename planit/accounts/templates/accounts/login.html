@@ -125,6 +125,23 @@
       {{ form.as_p }}
       <input type="submit" value="로그인">
     </form>
+
+    <div style="margin-top: 20px;">
+      <a href="https://accounts.google.com/o/oauth2/v2/auth?client_id=481621724186-aonqe19oociv0hmocpa1sth6vvfkp23c.apps.googleusercontent.com&redirect_uri=http://127.0.0.1:8000/accounts/google/callback/&response_type=code&scope=openid%20email%20profile&prompt=select_account"
+        style="display: flex; align-items: center; justify-content: center; background-color: white; border: 1px solid #ddd; border-radius: 6px; padding: 10px; text-decoration: none; font-weight: bold; color: #444;">
+        
+        <!-- Google 로고 SVG -->
+        <svg width="20" height="20" viewBox="0 0 533.5 544.3" style="margin-right: 10px;">
+          <path fill="#4285f4" d="M533.5 278.4c0-17.4-1.6-34.1-4.7-50.4H272v95.3h146.9c-6.4 34.7-25.5 64-54.3 83.5v69.2h87.7c51.3-47.3 81.2-117 81.2-197.6z"/>
+          <path fill="#34a853" d="M272 544.3c73.5 0 135.2-24.4 180.3-66.1l-87.7-69.2c-24.3 16.3-55.3 25.8-92.6 25.8-71.2 0-131.6-48-153.2-112.3H28.2v70.9c45.3 89.5 137.9 150.9 243.8 150.9z"/>
+          <path fill="#fbbc04" d="M118.8 322.4c-10.5-31.5-10.5-65.4 0-96.9V154.6H28.2c-38.3 76.6-38.3 166.4 0 243z"/>
+          <path fill="#ea4335" d="M272 107.7c38.7 0 73.5 13.3 100.9 39.3l75.4-75.4C407.2 24.2 345.5 0 272 0 166.1 0 73.5 61.4 28.2 150.9l90.6 70.9c21.5-64.3 82-112.3 153.2-112.3z"/>
+        </svg>
+        Google 계정으로 로그인
+      </a>
+    </div>
+
+
     <div class="link">
       <a href="{% url 'accounts:signup' %}">회원가입</a>
     </div>

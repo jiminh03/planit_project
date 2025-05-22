@@ -1,4 +1,5 @@
 {% load static %}
+{% load humanize %}
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -144,7 +145,7 @@
           <h3>홈 화면</h3>
         </div>
       </a>
-      <a href="{% url "main:report" %}" style="text-decoration: none; color: inherit;">
+      <a href="#" style="text-decoration: none; color: inherit;">
         <div class="title-row">
           <img src="{% static 'main/search_icon.png' %}" alt="찾기 아이콘" class="icon">
           <h3>내 소비 분석</h3>
@@ -176,11 +177,56 @@
         <!-- 왼쪽 달력 -->
         <div class="calendar-box">
           <h3>📅 2025년 5월 (캘린더 자리)</h3>
-          {% if report %}
-            <p><strong>최근 리포트 생성일:</strong> {{ report.created_at|date:"Y년 m월 d일" }}</p>
-          {% else %}
-            <p>리포트가 아직 없습니다.</p>
-          {% endif %}
+          <hr>
+          <!-- + 버튼 -->
+          <form action="{% url 'main:create_expense' %}" method="POST" style="margin-top: 20px;">
+            {% csrf_token %}
+            <h4>지출 입력</h4>
+            날짜: <input type="date" name="date" required><br>
+            금액: <input type="number" name="amount" required><br>
+            카테고리: <input type="text" name="category" required><br>
+            감정: 
+            <select name="emotion">
+              <option value="happy">😊</option>
+              <option value="neutral">😐</option>
+              <option value="sad">☹️</option>
+            </select><br>
+            <button type="submit">+ 지출 추가</button>
+          </form>
+
+          <form action="{% url 'main:create_income' %}" method="POST" style="margin-top: 20px;">
+            {% csrf_token %}
+            <h4>수입 입력</h4>
+            날짜: <input type="date" name="date" required><br>
+            금액: <input type="number" name="amount" required><br>
+            감정: 
+            <select name="emotion">
+              <option value="happy">😊</option>
+              <option value="neutral">😐</option>
+              <option value="sad">☹️</option>
+            </select><br>
+            <button type="submit">+ 수입 추가</button>
+          </form>
+
+          <div>
+            <br>
+          <strong>💸 오늘의 지출 내역</strong><br><br>
+
+          {% for e in todays_expenses %}
+            <div style="margin-bottom: 10px;">
+              {% comment %} 번호가 필요하면 {% endcomment %}
+              {% comment %} <span style="display: inline-block; width: 40px;">{{ forloop.counter }}.</span> {% endcomment %}
+              <span>{{ e.category }}</span>
+              <span> - {{ e.amount|intcomma }}원</span>
+              <a href="{% url 'main:update_expense' e.pk %}">✏️</a>
+              <a href="{% url 'main:delete_expense' e.pk %}" onclick="return confirm('삭제할까요?')">❌</a>
+            </div>
+          {% empty %}
+            <p>지출 내역이 없습니다.</p>
+          {% endfor %}
+        </div>
+
+
         </div>
 
         <!-- 오른쪽 카드 4개 -->

@@ -1,0 +1,6 @@
+<h2>월 목표 지출액 설정</h2>
+<form method="POST">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">저장</button>
+</form>

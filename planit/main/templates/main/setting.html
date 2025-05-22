@@ -180,64 +180,40 @@
         <form action="{% url 'main:password_change' %}" method="get" style="margin: 0;">
         <button type="submit" class="card-button" style="border-bottom: 1px solid #eee;">비밀번호 변경</button>
         </form>
-        <button class="card-button">내 소비 데이터 다운로드</button>
+        
+        <form action="{% url 'main:download' %}" method="get" style="margin: 0;">
+        <button type="submit" class="card-button" style="border-bottom: 1px solid #eee;">
+          내 소비 데이터 다운로드
+        </button>
+      </form>
         <form action="{% url 'main:delete' %}" method="POST" onsubmit="return confirm('정말로 계정을 삭제하시겠습니까?');" style="margin: 0;">
         {% csrf_token %}
-        <button type="submit" class="card-button" style="border-bottom: 1px solid #eee;">
+        <button type="submit" class="card-button">
           계정 탈퇴
         </button>
         </form>
-
-        <button class="card-button">감정/지출 기록 삭제</button>
       </div>
 
       <div class="card-section">
         <h3>월 수입 설정</h3>
-        <button class="card-button">고정지출 항목 입력</button>
-        <button class="card-button">월 목표 지출액 설정</button>
-        <button class="card-button">지출 초과시 알림 여부 설정</button>
+        <form action="{% url 'main:fixed_expense_input' %}" method="get" style="margin: 0;">
+        <button type="submit" class="card-button" style="border-bottom: 1px solid #eee;">고정지출 항목 입력</button>
+        </form>
+        <form action="{% url 'main:monthly_budget' %}" method="get" style="margin: 0;">
+        <button type="submit" class="card-button">월 목표 지출액 설정</button>
+        </form>
       </div>
 
       <div class="card-section">
-        <h3>목표 설정</h3>
-        <button class="card-button">소비 절감 목표 설정</button>
-        <button class="card-button">자동 추천 전략</button>
+        <h3>목표 달성 설정</h3>
         <button class="card-button">챌린지 확인 / 수정</button>
       </div>
 
       <div class="card-section">
-        <h3>감정 설정</h3>
-        <button class="card-button">감정 이모지 설정</button>
-        <button class="card-button">감정 기록 유도 알림 여부 설정</button>
-        <button class="card-button">제외할 감정 설정</button>
-      </div>
-
-      <div class="card-section">
-        <h3>알림 설정</h3>
-        <button class="card-button">하루 마무리 설정 알림</button>
-        <button class="card-button">소비 초과 절약 알림</button>
-        <button class="card-button">분석 리포트 주간 요약 알림</button>
-      </div>
-
-      <div class="card-section">
-        <h3>리포트 주기 설정</h3>
-        <button class="card-button">리포트 주기 선택</button>
-      </div>
-
-      <div class="card-section">
-        <h3>AI 설정</h3>
-        <button class="card-button">AI 톤 설정</button>
-        <button class="card-button">예측 대응 설정</button>
-      </div>
-
-      <div class="card-section">
         <h3>테마 설정</h3>
-        <button class="card-button">테마</button>
-      </div>
-
-      <div class="card-section">
-        <h3>언어 설정</h3>
-        <button class="card-button">언어</button>
+        <button class="card-button">라이트 모드</button>
+        <button class="card-button">다크 모드</button>
+        <button class="card-button">시스템 설정에 따름</button>
       </div>
     </div>
   </div>
