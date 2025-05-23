@@ -4,23 +4,35 @@
     <div class="modal-container">
       <!-- ✅ 좌측: 오늘의 기록 리스트 -->
       <div class="modal-left">
-    <h3>{{ date }}의 내역</h3>
-    <div
-      v-for="item in todayList"
-      :key="item._index"
-      class="record-item"
-    >
-      <span :class="item.amount > 0 ? 'income' : 'expense'">
-        {{ item.amount.toLocaleString() }}원
-      </span>
-      <span>{{ item.category || item.source }}</span>
-      <span>{{ emojiMap[item.emotion] }}</span>
+        <h3>{{ date }}의 내역</h3>
+        <!-- ✅ 수정 후: 수정 모드일 경우 input과 select로 대체 -->
+        <div v-for="(item, idx) in todayList" :key="item._index" class="record-item">
+          <!-- ✏️ 수정 모드일 경우 -->
+          <template v-if="editingItem && editingItem._index === item._index">
+            <input type="number" v-model="editingItem.amount" style="width: 80px;" />
+            <input type="text" v-model="editingItem.category" style="width: 80px;" />
+            <select v-model="editingItem.emotion">
+              <option value="happy">😀</option>
+              <option value="neutral">😐</option>
+              <option value="sad">😟</option>
+            </select>
+            <button @click="saveEdit(editingItem)">저장</button>
+            <button @click="cancelEdit">취소</button>
+          </template>
 
-      <!-- 수정/삭제 버튼 -->
-      <button @click="editItem(item)">✏️</button>
-      <button @click="deleteItem(item._index)">🗑️</button>
-    </div>
-  </div>
+          <!-- 👀 기본 보기 모드 -->
+          <template v-else>
+            <span :class="item.amount > 0 ? 'income' : 'expense'">
+              {{ item.amount.toLocaleString() }}원
+            </span>
+            <span>{{ item.category || item.source }}</span>
+            <span>{{ emojiMap[item.emotion] }}</span>
+            <button @click="editItem(item)">✏️</button>
+            <button @click="deleteItem(item._index)">🗑️</button>
+          </template>
+        </div>
+
+      </div>
       <!-- ✅ 우측: 탭 + 폼 입력 -->
       <div class="modal-right">
         <div class="tabs">
@@ -28,13 +40,7 @@
           <span :class="{ active: tab === 'income' }" @click="tab = 'income'">수입</span>
         </div>
 
-        <component
-          :is="tabMap[tab]"
-          :date="date"
-          :editing="editingItem"
-          @save="handleSave"
-          @close="$emit('close')"
-        />
+        <component :is="tabMap[tab]" :date="date" :editing="editingItem" @save="handleSave" @close="$emit('close')" />
       </div>
     </div>
   </div>
@@ -87,6 +93,12 @@ function deleteItem(index) {
 //   editingItem.value = null
 // }
 
+function saveEdit(item) {
+  const newItem = { ...item }  // ✅ 새 객체로 복사하여 반응성 보장
+  store.updateTransaction(newItem._index, newItem)
+  editingItem.value = null
+}
+
 function handleSave(data) {
   if (data._index !== undefined && data._index !== null) {
     store.updateTransaction(data._index, data)
@@ -96,6 +108,9 @@ function handleSave(data) {
   editingItem.value = null
 }
 
+function cancelEdit() {
+  editingItem.value = null   // ✅ 수정 모드 종료
+}
 
 
 </script>
@@ -126,6 +141,7 @@ function handleSave(data) {
   padding: 1rem;
   overflow-y: auto;
 }
+
 .record-item {
   display: flex;
   justify-content: space-between;
@@ -133,9 +149,11 @@ function handleSave(data) {
   border-bottom: 1px solid #ccc;
   font-size: 14px;
 }
+
 .record-item .income {
   color: blue;
 }
+
 .record-item .expense {
   color: red;
 }
@@ -152,11 +170,13 @@ function handleSave(data) {
   gap: 2rem;
   margin-bottom: 1rem;
 }
+
 .tabs span {
   cursor: pointer;
   padding-bottom: 4px;
   border-bottom: 2px solid transparent;
 }
+
 .tabs .active {
   font-weight: bold;
   border-color: #007bff;

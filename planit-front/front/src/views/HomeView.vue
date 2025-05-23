@@ -1,3 +1,4 @@
+<!-- HomeView.vue -->
 <template>
   <div class="home-container">
     <SidebarMenu />
@@ -7,12 +8,7 @@
         <CalendarSection @open-modal="openModal" />
         <CardWidgets />
       </div>
-        <ModalForm
-          v-if="isModalOpen"
-          :date="selectedDate"
-          @close="closeModal"
-          @save="handleSave"
-        />
+
     </div>
   </div>
 </template>
@@ -23,7 +19,6 @@ import SidebarMenu from '../components/SidebarMenu.vue'
 import TopHeader from '../components/TopHeader.vue'
 import CalendarSection from '../components/CalendarSection.vue'
 import CardWidgets from '../components/CardWidgets.vue'
-import ModalForm from '../components/ModalForm.vue'
 
 
 const isModalOpen = ref(false)
