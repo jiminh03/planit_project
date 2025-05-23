@@ -6,15 +6,19 @@ import datetime
 class FixedExpenseForm(forms.ModelForm):
     class Meta:
         model = FixedExpense
-        fields = ['name', 'amount', 'date']
+        fields = ['name', 'amount', 'day']
         labels = {
             'name': '항목명',
             'amount': '금액',
-            'date': '납부일',
+            'day': '납부일(매월)',
         }
-        widgets = {
-            'date': forms.DateInput(attrs={'type': 'date'}),
-        }
+
+    day = forms.IntegerField(
+        label='납부일(매월)',
+        min_value=1,
+        max_value=31,
+        widget=forms.NumberInput(attrs={'placeholder': '1~31'}),
+    )
         
 class MonthlyBudgetForm(forms.ModelForm):
     class Meta:

@@ -40,12 +40,12 @@ class Expense(models.Model): # 지출
     
 class FixedExpense(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)  # 항목명 (예: 넷플릭스)
-    amount = models.PositiveIntegerField()   # 금액
-    date = models.DateField()                # 지출 시작일 (혹은 납부일)
+    name = models.CharField(max_length=50)
+    amount = models.PositiveIntegerField()
+    day = models.PositiveIntegerField()
 
     def __str__(self):
-        return f"{self.name} - {self.amount}원"
+        return f"{self.name} - {self.amount}원 (매월 {self.day}일)"
 
 class MonthlyBudget(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

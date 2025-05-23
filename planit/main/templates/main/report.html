@@ -4,7 +4,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>내 소비 분석</title>
+  <title>지출 도우미</title>
   <style>
     body {
       margin: 0;
@@ -100,40 +100,32 @@
       color: #666;
     }
 
-    section {
-      background-color: white;
-      border-radius: 10px;
-      padding: 30px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-      margin-bottom: 40px;
-    }
-
-    h2 {
-      margin-bottom: 20px;
-      font-size: 20px;
-    }
-
-    p {
-      line-height: 1.6;
-    }
-
     .card-block {
-    background: lightgrey;
-    border-radius: 12px;
-    padding: 30px;
-    margin-bottom: 24px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-  }
+      background: white;
+      border-radius: 12px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
 
-  .card-block h3 {
-    font-size: 20px;
-    font-weight: bold;
-    color: #111;
-  }
+    .card-block h3 {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 15px;
+      color: #222;
+    }
 
+    .card-block p, ul, ol {
+      font-size: 15px;
+      line-height: 1.6;
+      color: #333;
+    }
 
-
-
+    .card-block mark {
+      background-color: #fff4c4;
+      padding: 2px 4px;
+      border-radius: 4px;
+    }
   </style>
 </head>
 <body>
@@ -172,7 +164,7 @@
     <!-- 본문 -->
     <div class="main">
       <div class="header">
-        <img src="{% static 'main/search_icon.png' %}" alt="돋보기 아이콘">
+        <img src="{% static 'main/lightbulb_icon.png' %}" alt="전구 아이콘">
         <h1 class="header-title">내 소비 분석</h1>
       </div>
       <p class="sub-title">지출 패턴과 소비 성향을 확인해보세요.</p>
@@ -185,11 +177,7 @@
           {{ card.html|safe }}
         </div>
       {% endfor %}
-      </section>
-
-
     </div>
   </div>
 </body>
 </html>
-  

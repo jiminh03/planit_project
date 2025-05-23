@@ -117,7 +117,7 @@
       line-height: 1.6;
     }
 
-    ul {
+    ul, ol {
       padding-left: 20px;
       margin-bottom: 20px;
     }
@@ -168,31 +168,13 @@
       </div>
       <p class="sub-title">낭비되는 소비를 줄이고, 절약할 수 있는 지점을 분석해드려요.</p>
 
-      <section>
-        <h2>💡 대체 소비 전략</h2>
-        <ol>
-          <li><strong>☕ 카페 소비</strong><br>
-            → 하루 1잔씩 마시던 커피를 <u>주 2회로 줄이면</u>, <br>
-            → <strong>월 약 28,000원을 절약</strong>할 수 있어요!
-          </li>
-          <li><strong>🛍️ 스트레스 쇼핑</strong><br>
-            → 스트레스를 쇼핑으로 해소하는 대신, <br>
-            → <em>산책이나 음악 앱 활용</em> 같은 심리적 대체 루틴 추천
-          </li>
-          <li><strong>📱 앱 구독</strong><br>
-            → 최근 사용하지 않은 구독 서비스 확인<br>
-            → <i>빈도 낮은 구독 해지 시 연간 약 72,000원 절약</i>
-          </li>
-        </ol>
-      </section>
+      <!-- GPT 기반 분석 결과 -->
+      {% for card in cards %}
+        <section>
+          {{ card.html|safe }}
+        </section>
+      {% endfor %}
 
-      <section>
-        <h2>📉 절약 시뮬레이션</h2>
-        <p><strong>명준님</strong>, 지금 외식 소비를 조금만 줄여보는 건 어떨까요?</p>
-        <p><strong>📌 전략 요약:</strong> “외식을 주 3회 → 1회로 줄이면?”</p>
-        <p><strong>💰 예상 절감액:</strong> <mark>월 약 54,000원 절약 가능!</mark></p>
-        <p style="color: gray;">(이 결과는 차트와 함께 시각적으로 보여드릴 수 있습니다)</p>
-      </section>
     </div>
   </div>
 </body>

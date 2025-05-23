@@ -11,4 +11,5 @@ urlpatterns = [
     path('notice/', views.notice, name = 'notice'),
     path('logout/', views.logout_view, name='logout'),
     path("google/callback/", views.google_callback, name="google_callback"),
+    path('naver/callback/', views.naver_callback, name='naver_callback'),
 ]
