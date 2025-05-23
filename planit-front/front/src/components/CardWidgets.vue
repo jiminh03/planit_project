@@ -1,17 +1,26 @@
+<!-- CardWidgets.vue -->
 <template>
   <div class="card-scroll-wrapper">
     <div class="card-grid">
       <div class="card" v-for="(card, index) in cards" :key="index">
-        <p class="card-title">카드 {{ index + 1 }}</p>
-        <p class="card-content">이곳에 요약 정보가 들어갑니다.</p>
+        <p class="card-title">{{ card.title }}</p>
+        <p class="card-content">{{ card.content }}</p>
       </div>
     </div>
   </div>
 </template>
 
+
 <script setup>
-const cards = [1, 2, 3, 4, 5]
+const cards = [
+  { title: '제목1', content: '' },
+  { title: '제목2', content: '' },
+  { title: '제목3', content: '' },
+  { title: '구독 서비스', content: '' },
+  { title: '절약 시뮬레이션', content: '' }
+]
 </script>
+
 
 <style scoped>
 .card-scroll-wrapper {

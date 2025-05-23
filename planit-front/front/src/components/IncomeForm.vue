@@ -1,8 +1,8 @@
+<!-- IncomeForm.vue -->
 <template>
   <div class="form-wrapper">
     <p class="form-date">{{ date }}</p>
 
-    <!-- 금액 입력 -->
     <label>금액</label>
     <div class="input-icon-wrapper">
       <input type="number" v-model="amount" placeholder="금액 입력" />
@@ -10,17 +10,14 @@
       <span class="icon">💰</span>
     </div>
 
-    <!-- 수입 출처 -->
     <label>출처</label>
-    <input list="sources" v-model="source" placeholder="출처 선택 또는 입력" />
+    <input list="sources" v-model="source" placeholder="출처 입력 또는 선택" />
     <datalist id="sources">
       <option value="월급" />
       <option value="용돈" />
       <option value="부수입" />
-      <option value="기타" />
     </datalist>
 
-    <!-- 감정 선택 -->
     <label>감정</label>
     <div class="emotion-group">
       <span
@@ -31,25 +28,21 @@
       >{{ emo.icon }}</span>
     </div>
 
-    <!-- 버튼 -->
     <div class="btn-group">
-      <button class="cancel" @click="$emit('close')">취소</button>
+      <button class="cancel" @click="$emit('close')">닫기</button>
       <button class="submit" @click="handleSubmit">저장</button>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref,watch } from 'vue'
+import { useTransactionStore } from '@/stores/transactions'
 
-const props = defineProps({
-  date: {
-    type: String,
-    editingItem: Object
-  }
-})
+const props = defineProps({ date: String })
+const emit = defineEmits(['save', 'close'])
 
-const emit = defineEmits(['save'])
+const store = useTransactionStore()
 
 const amount = ref('')
 const source = ref('')
@@ -61,14 +54,6 @@ const emotions = [
   { value: 'sad', icon: '😟' },
 ]
 
-// onMounted(() => {
-//   if (props.editingItem) {
-//     amount.value = props.editingItem.amount
-//     category.value = props.editingItem.category
-//     emotion.value = props.editingItem.emotion
-//   }
-// })
-
 function handleSubmit() {
   if (!amount.value || !source.value) {
     alert('금액과 출처를 입력해주세요.')
@@ -77,15 +62,13 @@ function handleSubmit() {
 
   const payload = {
     date: props.date,
-    amount: Number(amount.value),
+    amount: Math.abs(Number(amount.value)), // 수입은 양수
     source: source.value,
     emotion: emotion.value
   }
 
-  console.log('💾 수입 저장 데이터:', payload)
-  alert('수입이 저장되었습니다.')
-  // emit('close')
   emit('save', payload)
+  // emit('close')
 }
 </script>
 
@@ -164,5 +147,4 @@ button.submit {
   border: none;
   border-radius: 6px;
   cursor: pointer;
-}
-</style>
+}</style>

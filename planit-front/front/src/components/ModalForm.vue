@@ -1,100 +1,103 @@
+<!-- ModalForm.vue -->
 <template>
   <div class="modal-overlay" @click.self="$emit('close')">
     <div class="modal-container">
-      <!-- 좌측: 지출 내역 로그 -->
+      <!-- ✅ 좌측: 오늘의 기록 리스트 -->
       <div class="modal-left">
-        <h3>오늘의 지출 내역</h3>
-        <div
-          class="expense-item"
-          v-for="item in expenseList"
-          :key="item.id"
-        >
-          <span>{{ item.amount }}</span>
-          <span>{{ item.category }}</span>
-          <span>{{ emojiMap[item.emotion] || '' }}</span>
-          <span @click="editItem(item)" class="icon">✏️</span>
-          <span @click="deleteItem(item.id)" class="icon">❌</span>
-        </div>
-      </div>
+    <h3>{{ date }}의 내역</h3>
+    <div
+      v-for="item in todayList"
+      :key="item._index"
+      class="record-item"
+    >
+      <span :class="item.amount > 0 ? 'income' : 'expense'">
+        {{ item.amount.toLocaleString() }}원
+      </span>
+      <span>{{ item.category || item.source }}</span>
+      <span>{{ emojiMap[item.emotion] }}</span>
 
-      <!-- 우측: 탭 + 입력 폼 -->
+      <!-- 수정/삭제 버튼 -->
+      <button @click="editItem(item)">✏️</button>
+      <button @click="deleteItem(item._index)">🗑️</button>
+    </div>
+  </div>
+      <!-- ✅ 우측: 탭 + 폼 입력 -->
       <div class="modal-right">
         <div class="tabs">
-          <span :class="['tab', activeTab === 'expense' ? 'active' : '']"
-                @click="activeTab = 'expense'">지출</span>
-          <span :class="['tab', activeTab === 'income' ? 'active' : '']"
-                @click="activeTab = 'income'">수입</span>
+          <span :class="{ active: tab === 'expense' }" @click="tab = 'expense'">지출</span>
+          <span :class="{ active: tab === 'income' }" @click="tab = 'income'">수입</span>
         </div>
 
         <component
-          :is="tabComponentMap[activeTab]"
+          :is="tabMap[tab]"
           :date="date"
-          :editing-item="editingItem"
+          :editing="editingItem"
           @save="handleSave"
-          />
-          <!-- @close="$emit('close')" -->
+          @close="$emit('close')"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import { useTransactionStore } from '@/stores/transactions'
 import ExpenseForm from './ExpenseForm.vue'
 import IncomeForm from './IncomeForm.vue'
 
+const props = defineProps({ date: String })
+const tab = ref('expense')
+const tabMap = { expense: ExpenseForm, income: IncomeForm }
+
+const store = useTransactionStore()
+
+const todayList = computed(() => store.getByDate(props.date))
 
 const emojiMap = {
   happy: '😀',
   neutral: '😐',
   sad: '😟'
 }
-
-
-const props = defineProps({
-  date: {
-    type: String,
-    required: true,
-  }
-})
-
-const activeTab = ref('expense')
-
-// 좌측 리스트 상태
-const expenseList = ref([])
-
-// 수정 중인 항목
 const editingItem = ref(null)
 
-const tabComponentMap = {
-  expense: ExpenseForm,
-  income: IncomeForm,
+function handleEdit(item) {
+  editingItem.value = item
+}
+const emit = defineEmits(['edit'])
+
+function editItem(item) {
+  editingItem.value = { ...item }
+  tab.value = item.amount > 0 ? 'income' : 'expense'
+  // emit('edit', item)  // 폼에 데이터 전달
 }
 
-// 저장 처리
-function handleSave(data) {
-  if (editingItem.value) {
-    const idx = expenseList.value.findIndex(item => item.id === editingItem.value.id)
-    if (idx !== -1) {
-      expenseList.value[idx] = { ...editingItem.value, ...data }
-    }
-    editingItem.value = null
-  } else {
-    expenseList.value.push({ id: Date.now(), ...data })   // ✅ 새로 추가
+function deleteItem(index) {
+  if (confirm('정말 삭제하시겠습니까?')) {
+    store.deleteTransaction(index)
   }
 }
 
+// function handleSave(data) {
+//   if (data._index !== undefined) {
+//     store.updateTransaction(data._index, data)
+//   } else {
+//     store.addTransaction(data)
+//   }
+//   editingItem.value = null
+// }
 
-// 삭제 처리
-function deleteItem(id) {
-  expenseList.value = expenseList.value.filter(item => item.id !== id)
+function handleSave(data) {
+  if (data._index !== undefined && data._index !== null) {
+    store.updateTransaction(data._index, data)
+  } else {
+    store.addTransaction(data)
+  }
+  editingItem.value = null
 }
 
-// 수정 진입
-function editItem(item) {
-  activeTab.value = 'expense'
-  editingItem.value = { ...item }
-}
+
+
 </script>
 
 <style scoped>
@@ -119,11 +122,22 @@ function editItem(item) {
 
 .modal-left {
   width: 50%;
-  background: #ddd;
-  padding: 1.5rem;
+  background: #f0f0f0;
+  padding: 1rem;
+  overflow-y: auto;
+}
+.record-item {
   display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
+  justify-content: space-between;
+  padding: 0.4rem;
+  border-bottom: 1px solid #ccc;
+  font-size: 14px;
+}
+.record-item .income {
+  color: blue;
+}
+.record-item .expense {
+  color: red;
 }
 
 .modal-right {
@@ -138,28 +152,13 @@ function editItem(item) {
   gap: 2rem;
   margin-bottom: 1rem;
 }
-.tab {
-  font-size: 18px;
-  font-weight: 500;
+.tabs span {
   cursor: pointer;
   padding-bottom: 4px;
   border-bottom: 2px solid transparent;
 }
-.tab.active {
+.tabs .active {
   font-weight: bold;
-  border-color: #333;
-}
-
-.expense-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #f6f6f6;
-  padding: 0.5rem;
-  border-radius: 6px;
-  font-size: 14px;
-}
-.icon {
-  cursor: pointer;
+  border-color: #007bff;
 }
 </style>

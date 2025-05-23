@@ -1,3 +1,4 @@
+<!-- TopHeader.vue -->
 <template>
   <header class="top-header">
     <div class="title-area">
