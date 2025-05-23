@@ -20,4 +20,5 @@ urlpatterns = [
     path('download/', views.download_expense_data, name='download'),
     path('fixed-expense/', views.fixed_expense_input, name='fixed_expense_input'),
     path('monthly-budget/', views.monthly_budget_view, name='monthly_budget'),
+    path('delete/', views.delete_account, name='delete_confirm'),
 ]

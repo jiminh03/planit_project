@@ -6,8 +6,9 @@ from django.contrib.auth import logout as auth_logout
 from .models import Notice
 from django.core.paginator import Paginator
 import os, requests
-import urllib.parse
-from uuid import uuid4
+from django.conf import settings
+import uuid
+from django.utils.crypto import get_random_string
 
 
 def index(request):
@@ -23,6 +24,9 @@ def login(request):
         form = AuthenticationForm()
     context = {
         'form' : form,
+        'NAVER_CLIENT_ID': settings.NAVER_CLIENT_ID,  # ✅ 추가
+        'NAVER_CALLBACK_URI': settings.NAVER_CALLBACK_URI,  # ✅ 추가
+        'STATE': uuid.uuid4().hex,  # ✅ 추가
     }
     return render(request, 'accounts/login.html', context)
 
@@ -118,5 +122,51 @@ def google_callback(request):
     else:
         print(f"User exists: {user}")
 
+    auth_login(request, user)
+    return redirect("main:home")
+
+
+def naver_callback(request):
+    User = get_user_model()
+    code = request.GET.get("code")
+    state = request.GET.get("state")
+
+    # 1. 액세스 토큰 요청
+    token_url = "https://nid.naver.com/oauth2.0/token"
+    token_params = {
+        'grant_type': 'authorization_code',
+        'client_id': settings.NAVER_CLIENT_ID,
+        'client_secret': settings.NAVER_CLIENT_SECRET,
+        'code': code,
+        'state': state,
+    }
+    token_res = requests.get(token_url, params=token_params).json()
+    access_token = token_res.get("access_token")
+
+    # 2. 사용자 정보 요청
+    profile_url = "https://openapi.naver.com/v1/nid/me"
+    headers = {"Authorization": f"Bearer {access_token}"}
+    profile_res = requests.get(profile_url, headers=headers).json()
+    naver_info = profile_res.get("response")
+
+    if not naver_info:
+        return redirect("accounts:login")
+
+    email = naver_info.get("email")
+    name = naver_info.get("name") or naver_info.get("nickname")
+
+    if not name:
+        name = f"네이버사용자_{get_random_string(6)}"  # 최후의 보루
+
+    # 3. email 기준으로 조회 또는 생성
+    user = User.objects.filter(email=email).first()
+    if not user:
+        user = User.objects.create(
+            email=email,
+            username=name,     # ✅ 지민님 요구사항: username = name
+            first_name=name,   # ✅ 사용자 표시 이름
+        )
+
+    # 4. 로그인 처리
     auth_login(request, user)
     return redirect("main:home")
