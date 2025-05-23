@@ -1,9 +1,8 @@
+<!-- ExpenseForm.vue -->
 <template>
   <div class="form-wrapper">
-    <!-- 날짜 표시 -->
-    <p class="form-date">{{ date }} </p>
+    <p class="form-date">{{ date }}</p>
 
-    <!-- 금액 입력 -->
     <label>금액</label>
     <div class="input-icon-wrapper">
       <input type="number" v-model="amount" placeholder="금액 입력" />
@@ -11,18 +10,15 @@
       <span class="icon">🧾</span>
     </div>
 
-    <!-- 카테고리 입력 (기본 datalist 방식) -->
     <label>카테고리</label>
     <input list="categories" v-model="category" placeholder="카테고리 선택" />
     <datalist id="categories">
       <option value="식비" />
       <option value="교통" />
-      <option value="커피" />
       <option value="문화생활" />
       <option value="쇼핑" />
     </datalist>
 
-    <!-- 감정 선택 -->
     <label>감정</label>
     <div class="emotion-group">
       <span
@@ -33,23 +29,22 @@
       >{{ emo.icon }}</span>
     </div>
 
-    <!-- 버튼 -->
     <div class="btn-group">
-      <button class="cancel" @click="$emit('close')">취소</button>
+      <button class="cancel" @click="$emit('close')">닫기</button>
       <button class="submit" @click="handleSubmit">저장</button>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, watch } from 'vue'
+import { useTransactionStore } from '@/stores/transactions'
 
-const props = defineProps({
-  date: String,
-  editingItem: Object,
-})
+const props = defineProps({ date: String })
+const emit = defineEmits(['save', 'close'])
+const index = ref(null)
 
-const emit = defineEmits(['save'])  // ❗ 'close' 제거
+const store = useTransactionStore()
 
 const amount = ref('')
 const category = ref('')
@@ -61,28 +56,41 @@ const emotions = [
   { value: 'sad', icon: '😟' },
 ]
 
-onMounted(() => {
-  if (props.editingItem) {
-    amount.value = props.editingItem.amount
-    category.value = props.editingItem.category
-    emotion.value = props.editingItem.emotion
+watch(() => props.editing, (item) => {
+  if (item) {
+    amount.value = Math.abs(item.amount)
+    emotion.value = item.emotion
+    category.value = item.category || ''
+    // source.value = item.source || ''
+    index.value = item._index   // ✅ 여기 매우 중요
+  } else {
+    amount.value = ''
+    category.value = ''
+    // source.value = ''
+    emotion.value = ''
+    index.value = null
   }
-})
+}, { immediate: true })
+
 
 function handleSubmit() {
   if (!amount.value || !category.value) {
     alert('금액과 카테고리를 입력해주세요.')
     return
   }
-  const payload = {
-    date: props.date,
-    amount: Number(amount.value),
-    category: category.value,
-    emotion: emotion.value
-  }
 
-  emit('save', payload)        // ✅ 저장 호출
-  // emit('close') 제거 ❌
+  const payload = {
+  date: props.date,
+  amount: -Math.abs(Number(amount.value)),  // 또는 +amount
+  category: category.value,
+  emotion: emotion.value,
+  // source: source.value,
+  _index: index.value   // ✅ 이게 빠져있으면 update 못함
+}
+
+emit('save', payload)
+
+
 }
 </script>
 
@@ -161,5 +169,4 @@ button.submit {
   border: none;
   border-radius: 6px;
   cursor: pointer;
-}
-</style>
+}</style>
