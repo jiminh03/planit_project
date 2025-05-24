@@ -2,7 +2,10 @@
 <template>
   <div class="sidebar">
     <nav class="menu">
-      <router-link to="/" class="menu-item" exact-active-class="active">🏠 홈 화면</router-link>
+      <router-link to="/" class="menu-item" exact-active-class="active">
+        <img src="@/assets/home_icon.png" alt="홈 화면" class="icon" />
+        홈 화면
+      </router-link>
 
       <div class="menu-section">내 소비 분석</div>
       <router-link to="/analysis/summary" class="menu-item">한 줄 분석</router-link>
@@ -13,14 +16,20 @@
       <router-link to="/analysis/type" class="menu-item">소비 성향 진단</router-link>
       <router-link to="/analysis/feedback" class="menu-item">개인 맞춤형 피드백</router-link>
 
-      <div class="menu-section">💡 지출 도우미</div>
+      <div class="menu-section">
+        <img src="@/assets/lightbulb_icon.png" alt="지출 도우미" class="icon" />
+        지출 도우미
+      </div>
       <router-link to="/guide/message" class="menu-item">개선이 필요한 메시지</router-link>
       <router-link to="/guide/strategy" class="menu-item">대체 소비 전략</router-link>
       <router-link to="/guide/simulation" class="menu-item">절약 시뮬레이션</router-link>
       <router-link to="/guide/fixed" class="menu-item">고정/정기지출 정리 제안</router-link>
       <router-link to="/guide/combo" class="menu-item">전략 조합 시뮬 결과</router-link>
 
-      <div class="menu-section">⚙️ 설정</div>
+      <div class="menu-section">
+        <img src="@/assets/settings_icon.png" alt="서ㄹ정" class="icon" />
+        설정
+      </div>
       <router-link to="/settings" class="menu-item">설정</router-link>
     </nav>
   </div>
@@ -65,5 +74,12 @@
 .active {
   background-color: #e0e0e0;
   font-weight: bold;
+}
+
+.icon {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+  margin-right: 6px;
 }
 </style>
