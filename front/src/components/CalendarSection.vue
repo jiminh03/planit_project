@@ -159,6 +159,7 @@ function formatCurrency(val) {
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
+  min-width: 720px;
 }
 
 .calendar-header {

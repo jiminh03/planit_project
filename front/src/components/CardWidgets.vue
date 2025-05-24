@@ -27,6 +27,7 @@ const cards = [
   width: 100%;
   overflow-y: auto;
   padding-right: 0.5rem;
+  min-width: 600px;
 }
 
 .card-grid {

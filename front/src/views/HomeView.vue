@@ -1,4 +1,3 @@
-<!-- HomeView.vue -->
 <template>
   <div class="content-body">
     <CalendarSection @open-modal="openModal" />
@@ -51,13 +50,12 @@ function closeModal() {
   flex: 1;
   display: flex;
   flex-direction: row;
+  flex-wrap: nowrap;           /* ✅ 줄바꿈 금지 */
   width: 100%;
-  height: 100%; /* ✅ 유지 */
+  height: 100%;
   padding: 2rem;
   gap: 2rem;
-
-  /* 💥 변경 포인트 */
-  overflow: hidden; /* ✅ 스크롤을 CardWidgets에서 처리하므로 이건 hidden 유지 */
+  overflow-x: auto;            /* ✅ 수평 스크롤 허용 */
   box-sizing: border-box;
 }
 

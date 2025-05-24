@@ -39,7 +39,14 @@ const login = async () => {
     userStore.login(email.value)
     router.push('/home')
   } catch (error) {
-    alert('로그인 실패: ' + (error.response?.data?.error || '서버 오류'))
+    console.error('로그인 실패:', error)
+    if (error.response) {
+      console.error('응답 상태:', error.response.status)
+      console.error('응답 데이터:', error.response.data)
+      alert('로그인 실패: ' + (error.response.data?.detail || '인증 오류'))
+    } else {
+      alert('로그인 실패: 서버에 연결할 수 없습니다.')
+    }
   }
 }
 

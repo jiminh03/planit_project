@@ -10,6 +10,10 @@ from .models import Income, Expense
 from .serializers import IncomeSerializer, ExpenseSerializer
 from rest_framework.generics import RetrieveUpdateDestroyAPIView
 
+# CSRF exemption for login view
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+
 # 수입 등록
 class IncomeListCreateView(APIView):
     permission_classes = [IsAuthenticated]
@@ -254,3 +258,11 @@ class AIFeedbackView(APIView):
             return Response({"error": str(e)}, status=500)
 
         return Response({'feedback': answer})
+
+
+# 임시 CSRF exempt 로그인 뷰 (실제 구현 내용으로 대체 필요)
+@method_decorator(csrf_exempt, name='dispatch')
+class LoginView(APIView):
+    def post(self, request):
+        # 이 부분은 실제 구현 내용으로 대체되어야 합니다
+        return Response({'message': 'CSRF exempt login view placeholder'}, status=200)
