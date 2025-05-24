@@ -1,9 +1,9 @@
 <template>
   <header class="top-header">
     <div class="title-area">
-      <router-link to="/home" class="menu-group" exact-active-class="active">
+      <div class="menu-group" @click="goHomeIfLoggedIn" style="cursor: pointer">
         <img src="@/assets/logo.png" alt="LOGO" class="icon" />
-      </router-link>
+      </div>
     </div>
     <button
       v-if="userStore.isLoggedIn"
@@ -31,6 +31,7 @@ import { useUserStore } from '@/stores/user'
 
 const router = useRouter()
 const userStore = useUserStore()
+userStore.restore()
 
 function handleLogout() {
   userStore.logout()
@@ -40,6 +41,13 @@ function handleLogout() {
 
 function goToLogin() {
   router.push('/login')
+}
+
+function goHomeIfLoggedIn() {
+  userStore.restore()
+  if (userStore.isLoggedIn) {
+    router.push('/home')
+  }
 }
 </script>
 
