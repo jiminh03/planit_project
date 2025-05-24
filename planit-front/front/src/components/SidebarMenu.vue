@@ -82,6 +82,8 @@
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+  align-items: center;
+  height: 100%;
 }
 
 .menu-group {
