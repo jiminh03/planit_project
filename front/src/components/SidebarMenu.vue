@@ -134,5 +134,25 @@
   width: 24px;
   height: 24px;
   margin-right: 4px;
+  transition: filter 0.2s ease;
+}
+
+/* 다크모드에서 아이콘 색상 변경 */
+[data-theme="dark"] .icon {
+  filter: invert(1) brightness(0.9);
+}
+
+/* 시스템 다크모드 지원 */
+@media (prefers-color-scheme: dark) {
+  [data-theme="system"] .icon {
+    filter: invert(1) brightness(0.9);
+  }
+}
+
+.icon-dark-mode {
+  filter: invert(1);
+  width: 24px;
+  height: 24px;
+  margin-right: 4px;
 }
 </style>

@@ -2,13 +2,40 @@
   <div class="content">
     <div class="settings-section">
       <h2>사용자 정보 설정</h2>
-      <SettingsCard :items="['비밀번호 변경', '내 소비 데이터 다운로드', '계정 탈퇴', '감정/지출 기록 삭제']" @open-modal="handleOpenModal" />
+      <div class="settings-card">
+        <div class="settings-item" @click="handleOpenModal('비밀번호 변경')">비밀번호 변경</div>
+        <hr class="settings-divider" />
+        <div class="settings-item" @click="handleOpenModal('내 소비 데이터 다운로드')">내 소비 데이터 다운로드</div>
+        <hr class="settings-divider" />
+        <div class="settings-item" @click="handleOpenModal('계정 탈퇴')">계정 탈퇴</div>
+        <hr class="settings-divider" />
+        <div class="settings-item" @click="handleOpenModal('감정/지출 기록 삭제')">감정/지출 기록 삭제</div>
+      </div>
 
       <h2>월 수입 설정</h2>
-      <SettingsCard :items="['고정지출 항목 입력', '월 목표 지출액 설정', '지출 초과시 알림 여부 설정']" @open-modal="handleOpenModal" />
+      <div class="settings-card">
+        <div class="settings-item" @click="handleOpenModal('고정지출 항목 입력')">고정지출 항목 입력</div>
+        <hr class="settings-divider" />
+        <div class="settings-item" @click="handleOpenModal('월 목표 지출액 설정')">월 목표 지출액 설정</div>
+        <hr class="settings-divider" />
+        <div class="settings-item" @click="handleOpenModal('지출 초과시 알림 여부 설정')">지출 초과시 알림 여부 설정</div>
+      </div>
 
       <h2>목표 설정</h2>
-      <SettingsCard :items="['소비 절감 목표 설정', '자동 추천 전략', '챌린지 확인 / 수정']" @open-modal="handleOpenModal" />
+      <div class="settings-card">
+        <div class="settings-item" @click="handleOpenModal('소비 절감 목표 설정')">소비 절감 목표 설정</div>
+        <hr class="settings-divider" />
+        <div class="settings-item" @click="handleOpenModal('자동 추천 전략')">자동 추천 전략</div>
+        <hr class="settings-divider" />
+        <div class="settings-item" @click="handleOpenModal('챌린지 확인 / 수정')">챌린지 확인 / 수정</div>
+      </div>
+
+      <h2>테마 설정</h2>
+      <div class="settings-card">
+        <div style="padding: 1rem;">
+          <ThemeSelector />
+        </div>
+      </div>
     </div>
   </div>
   <SettingsItemModal v-if="isModalOpen" :title="selectedItem" @close="closeModal" />
@@ -18,6 +45,7 @@
 import { ref } from 'vue'
 import SettingsCard from '@/components/SettingsCard.vue'
 import SettingsItemModal from '@/components/SettingsItemModal.vue'
+import ThemeSelector from '@/components/ThemeSelector.vue'
 
 const isModalOpen = ref(false)
 const selectedItem = ref('')
@@ -100,5 +128,17 @@ function closeModal() {
 .arrow {
   font-size: 1.2rem;
   color: var(--text-color);
+}
+
+.settings-item {
+  padding: 1rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.settings-divider {
+  margin: 0;
+  border: none;
+  border-bottom: 1px solid var(--divider-color, #e2e0e0);
 }
 </style>

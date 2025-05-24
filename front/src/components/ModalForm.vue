@@ -22,13 +22,15 @@
 
           <!-- 👀 기본 보기 모드 -->
           <template v-else>
-            <span :class="item.amount > 0 ? 'income' : 'expense'">
+            <div class="cell amount" :class="item.amount > 0 ? 'income' : 'expense'">
               {{ item.amount.toLocaleString() }}원
-            </span>
-            <span>{{ item.category || item.source }}</span>
-            <span>{{ emojiMap[item.emotion] }}</span>
-            <button @click="editItem(item)">✏️</button>
-            <button @click="deleteItem(item._index)">🗑️</button>
+            </div>
+            <div class="cell">{{ item.category || item.source }}</div>
+            <div class="cell emoji">{{ emojiMap[item.emotion] }}</div>
+            <div class="cell action-buttons">
+              <button @click="editItem(item)">✏️</button>
+              <button @click="deleteItem(item._index)">❌</button>
+            </div>
           </template>
         </div>
 
@@ -84,14 +86,7 @@ function deleteItem(index) {
   }
 }
 
-// function handleSave(data) {
-//   if (data._index !== undefined) {
-//     store.updateTransaction(data._index, data)
-//   } else {
-//     store.addTransaction(data)
-//   }
-//   editingItem.value = null
-// }
+
 
 function saveEdit(item) {
   const newItem = { ...item }  // ✅ 새 객체로 복사하여 반응성 보장
@@ -146,20 +141,37 @@ function cancelEdit() {
   overflow-y: auto;
 }
 
+/* Record item grid style for better alignment */
 .record-item {
-  display: flex;
-  justify-content: space-between;
-  padding: 0.4rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr auto;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0;
   border-bottom: 1px solid #ccc;
   font-size: 14px;
 }
 
-.record-item .income {
+.cell {
+  display: flex;
+  align-items: center;
+}
+
+.amount {
+  font-weight: bold;
+}
+
+.income {
   color: blue;
 }
 
-.record-item .expense {
+.expense {
   color: red;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.4rem;
 }
 
 .modal-right {

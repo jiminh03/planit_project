@@ -2,8 +2,12 @@
   <div class="modal-overlay" @click.self="$emit('close')">
     <div class="modal-container">
       <h2>이번 달 전체 지출 내역</h2>
-      <ul>
-        <li v-for="item in currentMonthExpenses" :key="item._index">
+      <div class="records-wrapper">
+        <div
+          v-for="item in currentMonthExpenses"
+          :key="item._index"
+          class="record-item"
+        >
           <template v-if="editingItem && editingItem._index === item._index">
             <input v-model="editingItem.date" type="date" />
             <input v-model="editingItem.category" type="text" />
@@ -12,12 +16,14 @@
             <button @click="cancelEdit">취소</button>
           </template>
           <template v-else>
-            {{ item.date }} - {{ item.category }} - {{ item.amount }}원
-            <button @click="startEdit(item)">수정</button>
-            <button @click="deleteItem(item._index)">삭제</button>
+            <span>{{ item.date }} - {{ item.category }} - {{ item.amount }}원</span>
+            <div class="record-buttons">
+              <button @click="startEdit(item)">✏️</button>
+              <button @click="deleteItem(item._index)">❌</button>
+            </div>
           </template>
-        </li>
-      </ul>
+        </div>
+      </div>
       <button @click="$emit('close')">닫기</button>
     </div>
   </div>
@@ -42,8 +48,9 @@ onMounted(() => {
 
 const currentMonthExpenses = computed(() => {
   return store.transactions
-    .map((t, i) => ({ ...t, _index: i })) // index 추가
+    .map((t, i) => ({ ...t, _index: i }))
     .filter(tx => tx.date.startsWith(prefix))
+    .sort((a, b) => new Date(b.date) - new Date(a.date))  // 최신순 정렬
 })
 
 function startEdit(item) {
@@ -82,4 +89,35 @@ function deleteItem(index) {
   max-height: 80%;
   overflow-y: auto;
 }
+.records-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.record-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: #f9f9f9;
+  font-size: 0.95rem;
+}
+
+.record-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.record-buttons button {
+  padding: 0.3rem 0.6rem;
+  background: #eee;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
 </style>

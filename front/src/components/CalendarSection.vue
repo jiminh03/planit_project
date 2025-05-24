@@ -1,7 +1,7 @@
 <template>
   <div class="calendar-section">
     <div class="calendar-header">
-      <div class="calendar-title-area" style="display: flex; align-items: center; justify-content: space-between;">
+      <div class="calendar-title-area" style="display: flex; align-items: center; justify-content: center; position: relative;">
         <h2 style="display: flex; align-items: center;">
           <button @click="goToPrevMonth">&lt;</button>
           <select v-model="selectedYear" @change="onYearOrMonthChange">
@@ -12,7 +12,9 @@
           </select>
           <button @click="goToNextMonth">&gt;</button>
         </h2>
-        <button @click="viewAllExpenses">전체 지출내역 확인</button>
+      </div>
+      <div style="margin-top: 0rem; text-align: right;">
+        <button @click="viewAllExpenses">이번 달 지출내역 확인</button>
       </div>
     </div>
 

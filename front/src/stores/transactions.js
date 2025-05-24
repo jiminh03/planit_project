@@ -2,6 +2,12 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 
+function getCookie(name) {
+  const value = `; ${document.cookie}`
+  const parts = value.split(`; ${name}=`)
+  if (parts.length === 2) return parts.pop().split(';').shift()
+}
+
 export const useTransactionStore = defineStore('transaction', {
   state: () => ({
     transactions: []
@@ -64,14 +70,15 @@ export const useTransactionStore = defineStore('transaction', {
           console.warn('Unexpected expense data format:', expenseRes.data)
         }
 
-        const combined = [...incomeRes.data, ...expenseRes.data].map(t => {
-          const normalizedDate = new Date(t.date).toISOString().split('T')[0]
-          return {
-            ...t,
-            date: normalizedDate
-          }
-        })
-        console.log('🔥 전체 거래 날짜:', combined.map(t => t.date))
+        const combined = [...incomeRes.data, ...expenseRes.data].map(t => ({
+          ...t,
+          _parsedDate: new Date(t.date),
+        }))
+          .sort((a, b) => b._parsedDate - a._parsedDate)
+          .map(({ _parsedDate, ...rest }) => ({
+            ...rest,
+            date: new Date(rest.date).toISOString().split('T')[0],
+          }))
 
         this.transactions = combined
       } catch (error) {
@@ -81,7 +88,12 @@ export const useTransactionStore = defineStore('transaction', {
 
     async addIncome(data) {
       try {
-        const res = await axios.post('http://localhost:8000/api/home/incomes/', data, { withCredentials: true })
+        const res = await axios.post('http://localhost:8000/api/home/incomes/', data, {
+          withCredentials: true,
+          headers: {
+            'X-CSRFToken': getCookie('csrftoken')
+          }
+        })
         this.transactions.push(res.data)
       } catch (error) {
         console.error('수입 등록 실패:', error)
@@ -90,7 +102,12 @@ export const useTransactionStore = defineStore('transaction', {
 
     async addExpense(data) {
       try {
-        const res = await axios.post('http://localhost:8000/api/home/expenses/', data, { withCredentials: true })
+        const res = await axios.post('http://localhost:8000/api/home/expenses/', data, {
+          withCredentials: true,
+          headers: {
+            'X-CSRFToken': getCookie('csrftoken')
+          }
+        })
         this.transactions.push(res.data)
       } catch (error) {
         console.error('지출 등록 실패:', error)
