@@ -1,9 +1,12 @@
 <template>
-  <div class="signup-container">
-    <h2>회원가입</h2>
-    <input v-model="username" placeholder="사용자 이름 입력" />
-    <input v-model="password" type="password" placeholder="비밀번호 입력" />
-    <button @click="signup">회원가입</button>
+  <div class="login-page">
+    <div class="signup-container">
+      <h2>로그인</h2>
+      <input v-model="username" placeholder="사용자 이름 입력" />
+      <input v-model="password" type="password" placeholder="비밀번호 입력" />
+      <button @click="signup">로그인</button>
+      <button @click="goToSignup">회원가입</button>
+    </div>
   </div>
 </template>
 
@@ -11,6 +14,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
+import TopHeader from '@/components/TopHeader.vue'
 
 const username = ref('')
 const password = ref('')
@@ -25,5 +29,9 @@ const signup = () => {
 
   userStore.login(username.value)  // 실제로는 가입 후 로그인 상태로 진입
   router.push('/home')
+}
+
+const goToSignup = () => {
+  router.push('/signup')
 }
 </script>

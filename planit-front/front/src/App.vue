@@ -1,12 +1,15 @@
 <template>
-  <ThemeSelector />
+  <!-- <ThemeSelector /> -->
   <div class="app-layout">
     <TopHeader />
-    <div class="main-layout">
+    <div v-if="!isAuthPage" class="main-layout">
       <SidebarMenu />
       <div class="content-view">
         <router-view />
       </div>
+    </div>
+    <div v-else class="content-view">
+      <router-view />
     </div>
   </div>
 </template>
@@ -17,6 +20,11 @@ import SidebarMenu from '@/components/SidebarMenu.vue'
 import { onMounted } from 'vue'
 import { useThemeStore } from '@/stores/useThemeStore'
 import ThemeSelector from './components/ThemeSelector.vue'
+import { useRoute } from 'vue-router'
+import { computed } from 'vue'
+
+const route = useRoute()
+const isAuthPage = computed(() => route.path === '/login' || route.path === '/signup')
 const themeStore = useThemeStore()
 
 onMounted(() => {

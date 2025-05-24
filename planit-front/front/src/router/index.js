@@ -28,11 +28,13 @@ router.beforeEach((to, from, next) => {
   const userStore = useUserStore()
   userStore.restore()
 
-  const authRequired = !publicPages.includes(to.path)
   const isLoggedIn = userStore.isLoggedIn
+  const isPublic = publicPages.includes(to.path)
 
-  if (authRequired && !isLoggedIn) {
+  if (!isPublic && !isLoggedIn) {
     next({ path: '/login', query: { redirect: to.fullPath } })
+  } else if (to.path === '/home' && !isLoggedIn) {
+    next('/login')  // 혹시라도 명시적으로 홈 접근을 막고 싶다면
   } else {
     next()
   }
