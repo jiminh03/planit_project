@@ -32,7 +32,7 @@ class LoginView(APIView):
         if not email or not password:
             return Response({'error': '이메일과 비밀번호를 모두 입력해주세요.'}, status=status.HTTP_400_BAD_REQUEST)
 
-        user = authenticate(request, email=email, password=password)
+        user = authenticate(request, username=email, password=password)
         if user is not None:
             auth_login(request, user)
             return Response({'message': '로그인 성공', 'user': {

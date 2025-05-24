@@ -15,7 +15,14 @@ class IncomeListCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        incomes = Income.objects.filter(user=request.user).order_by('-date')
+        incomes = Income.objects.filter(user=request.user)
+        year = request.query_params.get('year')
+        month = request.query_params.get('month')
+
+        if year and month:
+            incomes = incomes.filter(date__year=year, date__month=month)
+
+        incomes = incomes.order_by('-date')
         serializer = IncomeSerializer(incomes, many=True)
         return Response(serializer.data)
 
@@ -31,7 +38,14 @@ class ExpenseListCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        expenses = Expense.objects.filter(user=request.user).order_by('-date')
+        expenses = Expense.objects.filter(user=request.user)
+        year = request.query_params.get('year')
+        month = request.query_params.get('month')
+
+        if year and month:
+            expenses = expenses.filter(date__year=year, date__month=month)
+
+        expenses = expenses.order_by('-date')
         serializer = ExpenseSerializer(expenses, many=True)
         return Response(serializer.data)
 

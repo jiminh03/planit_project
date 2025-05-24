@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
-from home.models import MonthlyBudget
+from home.models import MonthlyBudget, Expense
 from home.serializers import MonthlyBudgetSerializer  # 필요 시 settings로 옮겨도 됨
 from .models import FixedExpense
 from rest_framework import serializers
@@ -10,6 +10,12 @@ from .serializers import FixedExpenseSerializer, PasswordChangeSerializer
 from datetime import timedelta, datetime, date
 from calendar import monthrange
 from django.contrib.auth import authenticate
+from django.http import HttpResponse
+from django.utils.encoding import escape_uri_path
+from django.contrib.auth.decorators import login_required
+import csv
+from django.contrib.auth import logout as auth_logout
+
 
 # 월 목표 예산 설정
 class MonthlyBudgetView(APIView):
@@ -126,3 +132,44 @@ class PasswordChangeView(APIView):
             user.save()
             return Response({'detail': '비밀번호가 성공적으로 변경되었습니다.'})
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+# 소비 내역 다운로드 (이거 근데 테스트를 해볼 수가 없어서 되는지 안되는지 모름)
+@login_required
+def download_expense_data(request):
+    user = request.user
+    expenses = Expense.objects.filter(user=user)
+
+    response = HttpResponse(content_type='text/csv')
+    filename = f"{user.username}_소비데이터_{datetime.now().strftime('%Y%m%d')}.csv"
+    response['Content-Disposition'] = f'attachment; filename="{escape_uri_path(filename)}"'
+    response.write(u'\ufeff'.encode('utf8'))  # UTF-8 BOM for Excel
+
+    writer = csv.writer(response)
+    writer.writerow(['날짜', '금액', '카테고리', '감정'])
+
+    for expense in expenses:
+        writer.writerow([
+            expense.date.strftime('%Y-%m-%d'),
+            expense.amount,
+            expense.category,
+            expense.emotion,
+        ])
+
+    return response
+
+# 계정 삭제
+class AccountDeleteView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        password = request.data.get("password")
+        user = request.user
+        if not password:
+            return Response({"error": "비밀번호를 입력해주세요."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        if user.check_password(password):
+            user.delete()
+            auth_logout(request)  # 세션 로그아웃
+            return Response({"detail": "계정이 성공적으로 삭제되었습니다."}, status=status.HTTP_200_OK)
+        else:
+            return Response({"error": "비밀번호가 일치하지 않습니다."}, status=status.HTTP_400_BAD_REQUEST)

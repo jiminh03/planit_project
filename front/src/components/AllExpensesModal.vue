@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useTransactionStore } from '@/stores/transactions'
 
 const store = useTransactionStore()
@@ -35,6 +35,15 @@ const today = new Date()
 const year = today.getFullYear()
 const month = String(today.getMonth() + 1).padStart(2, '0')
 const prefix = `${year}-${month}`
+
+onMounted(() => {
+  store.fetchTransactions(year, Number(month))
+})
+
+onMounted(async () => {
+  await store.fetchTransactions(year, Number(month))
+  console.log('[DEBUG] 전체 거래내역:', store.transactions)
+})
 
 const currentMonthExpenses = computed(() => {
   return store.transactions

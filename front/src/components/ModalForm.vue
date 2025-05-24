@@ -103,7 +103,11 @@ function handleSave(data) {
   if (data._index !== undefined && data._index !== null) {
     store.updateTransaction(data._index, data)
   } else {
-    store.addTransaction(data)
+    if (data.amount > 0) {
+      store.addIncome(data)
+    } else {
+      store.addExpense(data)
+    }
   }
   editingItem.value = null
 }

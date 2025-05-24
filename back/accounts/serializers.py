@@ -5,6 +5,10 @@ User = get_user_model()
 
 class SignupSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
+    name = serializers.CharField(required=False, default="")
+    age = serializers.IntegerField(required=False, default=0)
+    gender = serializers.CharField(required=False, default="")
+    phone = serializers.CharField(required=False, default="")
 
     class Meta:
         model = User
