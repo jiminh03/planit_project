@@ -21,6 +21,10 @@ export const useTransactionStore = defineStore('transaction', {
 
     // API 연동 actions
     async fetchTransactions(year, month) {
+      if (!year || !month) {
+        console.warn('❌ fetchTransactions called with undefined year or month:', { year, month })
+        return
+      }
       try {
         console.log(`[FETCH 요청] /incomes/?year=${year}&month=${month}`)
         const incomeRes = await axios.get(`http://localhost:8000/api/home/incomes/?year=${year}&month=${month}`, { withCredentials: true })
@@ -38,8 +42,40 @@ export const useTransactionStore = defineStore('transaction', {
         })
 
         this.transactions = combined
+        console.log('✅ 모든 거래 날짜:', this.transactions.map(t => t.date))
       } catch (error) {
         console.error('거래내역 불러오기 실패:', error)
+      }
+    },
+
+    async fetchAllTransactions() {
+      try {
+        console.log(`[FETCH 요청] /incomes/ (전체)`)
+        const incomeRes = await axios.get(`http://localhost:8000/api/home/incomes/`, { withCredentials: true })
+        console.log('[DEBUG] 전체 수입 응답:', incomeRes.data)
+        if (!Array.isArray(incomeRes.data)) {
+          console.warn('Unexpected income data format:', incomeRes.data)
+        }
+
+        console.log(`[FETCH 요청] /expenses/ (전체)`)
+        const expenseRes = await axios.get(`http://localhost:8000/api/home/expenses/`, { withCredentials: true })
+        console.log('[DEBUG] 전체 지출 응답:', expenseRes.data)
+        if (!Array.isArray(expenseRes.data)) {
+          console.warn('Unexpected expense data format:', expenseRes.data)
+        }
+
+        const combined = [...incomeRes.data, ...expenseRes.data].map(t => {
+          const normalizedDate = new Date(t.date).toISOString().split('T')[0]
+          return {
+            ...t,
+            date: normalizedDate
+          }
+        })
+        console.log('🔥 전체 거래 날짜:', combined.map(t => t.date))
+
+        this.transactions = combined
+      } catch (error) {
+        console.error('전체 거래내역 불러오기 실패:', error)
       }
     },
 

@@ -6,14 +6,13 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import CalendarSection from '../components/CalendarSection.vue'
 import CardWidgets from '../components/CardWidgets.vue'
-
+import { useTransactionStore } from '@/stores/transactions'
 
 const isModalOpen = ref(false)
 const selectedDate = ref('')
-
 
 function handleSave(payload) {
   console.log('저장된 데이터:', payload)
@@ -28,6 +27,23 @@ function openModal(date) {
 function closeModal() {
   isModalOpen.value = false
 }
+
+const transactionStore = useTransactionStore()
+
+const now = new Date()
+const year = ref(now.getFullYear())
+const month = ref(now.getMonth() + 1)
+
+onMounted(async () => {
+  if (year.value && month.value) {
+    // await transactionStore.fetchTransactions(year.value, month.value)
+  } else {
+    console.warn('❌ HomeView.vue에서 잘못된 fetchTransactions 호출 차단:', {
+      year: year.value,
+      month: month.value
+    })
+  }
+})
 </script>
 
 <style scoped>

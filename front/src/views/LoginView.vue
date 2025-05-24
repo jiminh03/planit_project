@@ -14,14 +14,14 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
-import TopHeader from '@/components/TopHeader.vue'
+import { useTransactionStore } from '@/stores/transactions'
+import axios from 'axios'
 
 const email = ref('')
 const password = ref('')
 const router = useRouter()
 const userStore = useUserStore()
-
-import axios from 'axios'
+const transactionStore = useTransactionStore()
 
 const login = async () => {
   if (!email.value.trim() || !password.value.trim()) {
@@ -37,6 +37,10 @@ const login = async () => {
 
     alert('로그인 성공!')
     userStore.login(email.value)
+
+    // ✅ 로그인 후 전체 거래내역 불러오기
+    await transactionStore.fetchAllTransactions()
+
     router.push('/home')
   } catch (error) {
     console.error('로그인 실패:', error)

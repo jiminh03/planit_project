@@ -25,6 +25,7 @@ class IncomeListCreateView(APIView):
 
         if year and month:
             incomes = incomes.filter(date__year=year, date__month=month)
+        # else: don't filter; return all
 
         incomes = incomes.order_by('-date')
         serializer = IncomeSerializer(incomes, many=True)
@@ -48,6 +49,7 @@ class ExpenseListCreateView(APIView):
 
         if year and month:
             expenses = expenses.filter(date__year=year, date__month=month)
+        # else: don't filter; return all
 
         expenses = expenses.order_by('-date')
         serializer = ExpenseSerializer(expenses, many=True)

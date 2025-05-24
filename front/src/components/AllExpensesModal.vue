@@ -37,11 +37,6 @@ const month = String(today.getMonth() + 1).padStart(2, '0')
 const prefix = `${year}-${month}`
 
 onMounted(() => {
-  store.fetchTransactions(year, Number(month))
-})
-
-onMounted(async () => {
-  await store.fetchTransactions(year, Number(month))
   console.log('[DEBUG] 전체 거래내역:', store.transactions)
 })
 
