@@ -32,7 +32,7 @@ class Category(models.Model):
         return f"{self.user.username} - {self.name}"
     
 class Expense(models.Model): # 지출
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     date = models.DateField()
     amount = models.PositiveIntegerField()
     category = models.CharField(max_length=100) 

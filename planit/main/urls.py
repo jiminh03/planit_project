@@ -21,4 +21,5 @@ urlpatterns = [
     path('fixed-expense/', views.fixed_expense_input, name='fixed_expense_input'),
     path('monthly-budget/', views.monthly_budget_view, name='monthly_budget'),
     path('delete/', views.delete_account, name='delete_confirm'),
+    path('calendar-data/', views.calendar_data, name='calendar_data'),
 ]

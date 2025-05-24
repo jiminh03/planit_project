@@ -16,9 +16,9 @@ django.setup()
 from main.models import Expense  # 또는 Spending 모델명을 정확히 사용하세요
 from django.contrib.auth import get_user_model
 
-# ✅ 4. 타겟 유저 가져오기
-User = get_user_model()
-target_user = User.objects.get(email="jamieh200203@gmail.com")
+# ✅ 4. 타겟 유저 가져오기 제거
+# User = get_user_model()
+# target_user = User.objects.get(email="jamieh200203@gmail.com")
 
 # ✅ 5. 엑셀 불러오기
 excel_path = os.path.join(ROOT_DIR, "소비_황지민.xlsx")
@@ -35,13 +35,12 @@ for _, row in df.iterrows():
             continue
 
         Expense.objects.create(
-            user=target_user,
             date=pd.to_datetime(row['날짜']).date(),
             amount=amount,
-            category=str(row['카테고리']).strip()
+            category=f"[anonymous] {str(row['카테고리']).strip()}"
         )
     except Exception as e:
         print(f"❌ 오류 발생: {e} (원시 금액: {row['금액']})")
 
 
-print("✅ 엑셀 데이터가 jamieh200203@gmail.com 계정에 저장되었습니다.")
+print("✅ 엑셀 데이터가 로그인 없이 사용 가능한 형태로 저장되었습니다.")

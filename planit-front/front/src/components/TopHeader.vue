@@ -1,22 +1,44 @@
 <template>
   <header class="top-header">
     <div class="title-area">
-      <router-link to="/" class="menu-group" exact-active-class="active">
+      <router-link to="/home" class="menu-group" exact-active-class="active">
         <img src="@/assets/logo.png" alt="LOGO" class="icon" />
       </router-link>
     </div>
-    <button class="logout-button" @click="handleLogout">로그아웃</button>
+    <button
+      v-if="userStore.isLoggedIn"
+      class="logout-button"
+      @click="handleLogout"
+      style="background-color: crimson;"
+    >
+      로그아웃
+    </button>
+    <button
+      v-else
+      class="logout-button"
+      @click="goToLogin"
+      style="background-color: royalblue;"
+    >
+      로그인
+    </button>
   </header>
 </template>
 
 
 <script setup>
 import { useRouter } from 'vue-router'
+import { useUserStore } from '@/stores/user'
 
 const router = useRouter()
+const userStore = useUserStore()
 
 function handleLogout() {
+  userStore.logout()
   alert('로그아웃 되었습니다.')
+  router.push('/login')
+}
+
+function goToLogin() {
   router.push('/login')
 }
 </script>
