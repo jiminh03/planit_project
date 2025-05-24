@@ -1,16 +1,19 @@
 <template>
   <div class="calendar-section">
     <div class="calendar-header">
-      <h2>
-        <button @click="goToPrevMonth">&lt;</button>
-        <select v-model="selectedYear" @change="onYearOrMonthChange">
-          <option v-for="y in [2024, 2025, 2026]" :key="y" :value="y">{{ y }}년</option>
-        </select>
-        <select v-model="selectedMonth" @change="onYearOrMonthChange">
-          <option v-for="m in 12" :key="m" :value="m">{{ m }}월</option>
-        </select>
-        <button @click="goToNextMonth">&gt;</button>
-      </h2>
+      <div class="calendar-title-area" style="display: flex; align-items: center; justify-content: space-between;">
+        <h2 style="display: flex; align-items: center;">
+          <button @click="goToPrevMonth">&lt;</button>
+          <select v-model="selectedYear" @change="onYearOrMonthChange">
+            <option v-for="y in [2024, 2025, 2026]" :key="y" :value="y">{{ y }}년</option>
+          </select>
+          <select v-model="selectedMonth" @change="onYearOrMonthChange">
+            <option v-for="m in 12" :key="m" :value="m">{{ m }}월</option>
+          </select>
+          <button @click="goToNextMonth">&gt;</button>
+        </h2>
+        <button @click="viewAllExpenses">전체 지출내역 확인</button>
+      </div>
     </div>
 
     <div class="calendar-grid">
@@ -42,6 +45,11 @@
       :date="selectedDate"
       @close="isModalOpen = false"
     />
+    <AllExpensesModal
+      v-if="isAllModalOpen"
+      :expenses="store.transactions"
+      @close="isAllModalOpen = false"
+    />
   </div>
 </template>
 
@@ -49,9 +57,9 @@
 import { ref, computed } from 'vue'
 import { useTransactionStore } from '@/stores/transactions'
 import ModalForm from '@/components/ModalForm.vue'
+import AllExpensesModal from './AllExpensesModal.vue'
 
 const store = useTransactionStore()
-
 const days = ['일', '월', '화', '수', '목', '금', '토']
 const currentDate = ref(new Date())
 const selectedMonth = ref(currentDate.value.getMonth() + 1)
@@ -68,6 +76,12 @@ function selectDate(date) {
   isModalOpen.value = true
 }
 
+const isAllModalOpen = ref(false)
+
+
+function viewAllExpenses() {
+  isAllModalOpen.value = true
+}
 
 function onYearOrMonthChange() {
   currentDate.value = new Date(selectedYear.value, selectedMonth.value - 1)
@@ -135,6 +149,7 @@ function formatCurrency(val) {
   if (typeof val !== 'number') return '-'
   return val.toLocaleString('ko-KR') + '원'
 }
+
 </script>
 
 <style scoped>
