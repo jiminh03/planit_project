@@ -4,7 +4,7 @@
       <h2>로그인</h2>
       <input v-model="username" placeholder="사용자 이름 입력" />
       <input v-model="password" type="password" placeholder="비밀번호 입력" />
-      <button @click="signup">로그인</button>
+      <button @click="login">로그인</button>
       <button @click="goToSignup">회원가입</button>
     </div>
   </div>
@@ -21,14 +21,26 @@ const password = ref('')
 const router = useRouter()
 const userStore = useUserStore()
 
-const signup = () => {
-  if (username.value.trim() === '' || password.value.trim() === '') {
+import axios from 'axios'
+
+const login = async () => {
+  if (!username.value.trim() || !password.value.trim()) {
     alert('이름과 비밀번호를 입력해주세요.')
     return
   }
 
-  userStore.login(username.value)  // 실제로는 가입 후 로그인 상태로 진입
-  router.push('/home')
+  try {
+    const res = await axios.post('/accounts/api/login/', {
+      username: username.value,
+      password: password.value
+    }, { withCredentials: true })
+
+    alert('로그인 성공!')
+    userStore.login(username.value)
+    router.push('/home')
+  } catch (error) {
+    alert('로그인 실패: ' + (error.response?.data?.error || '서버 오류'))
+  }
 }
 
 const goToSignup = () => {

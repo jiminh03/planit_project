@@ -1,3 +1,7 @@
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+import json
+from django.contrib.auth import authenticate
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import get_user_model, login as auth_login
@@ -29,6 +33,49 @@ def login(request):
         'STATE': uuid.uuid4().hex,  # ✅ 추가
     }
     return render(request, 'accounts/login.html', context)
+
+
+# Vue 프론트에서 사용할 수 있는 JSON API 형태의 회원가입/로그인 API 추가
+@csrf_exempt
+def signup_api(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+        except Exception:
+            return JsonResponse({"error": "JSON 형식이 올바르지 않습니다."}, status=400)
+
+        username = data.get("username")
+        password = data.get("password")
+        email = data.get("email")
+
+        if not username or not password or not email:
+            return JsonResponse({"error": "모든 항목을 입력해주세요."}, status=400)
+
+        User = get_user_model()
+        if User.objects.filter(username=username).exists():
+            return JsonResponse({"error": "이미 존재하는 사용자입니다."}, status=400)
+        if User.objects.filter(email=email).exists():
+            return JsonResponse({"error": "이미 등록된 이메일입니다."}, status=400)
+
+        User.objects.create_user(username=username, password=password, email=email)
+        return JsonResponse({"message": "회원가입 성공"}, status=201)
+
+
+@csrf_exempt
+def login_api(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+        except Exception:
+            return JsonResponse({"error": "JSON 형식이 올바르지 않습니다."}, status=400)
+        username = data.get("username")
+        password = data.get("password")
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            auth_login(request, user)
+            return JsonResponse({"message": "로그인 성공"})
+        else:
+            return JsonResponse({"error": "로그인 실패"}, status=401)
 
 def signup(request):
     if request.method == "POST":

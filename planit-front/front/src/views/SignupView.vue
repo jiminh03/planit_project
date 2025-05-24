@@ -2,7 +2,7 @@
   <div class="signup-page">
     <h2>회원가입</h2>
     <form @submit.prevent="signup">
-      <input v-model="name" placeholder="이름을 입력하세요" required />
+      <input v-model="username" placeholder="아이디를 입력하세요" required />
       <input v-model="email" type="email" placeholder="이메일을 입력하세요" required />
       <input v-model="password" type="password" placeholder="비밀번호를 입력하세요" required />
       <button type="submit">회원가입</button>
@@ -17,24 +17,25 @@ import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import axios from 'axios'
 
-const name = ref('')
-const email = ref('')
+const username = ref('')
 const password = ref('')
+const email = ref('')
 const router = useRouter()
 const userStore = useUserStore()
 
 const signup = async () => {
-  if (!name.value || !email.value || !password.value) {
+  if (!username.value || !password.value || !email.value) {
     alert('모든 항목을 입력해주세요.')
     return
   }
 
   try {
-    const response = await axios.post('http://localhost:8000/api/signup/', {
-      username: name.value,
-      email: email.value,
+    const response = await axios.post('/accounts/api/signup/', {
+      username: username.value,
       password: password.value,
-    })
+      email: email.value,
+    }, { withCredentials: true })
+
     alert('회원가입 성공! 로그인 페이지로 이동합니다.')
     router.push('/login')
   } catch (error) {
