@@ -1,5 +1,3 @@
-<!-- CalendarSection.vue -->
-
 <template>
   <div class="calendar-section">
     <div class="calendar-header">
@@ -155,12 +153,32 @@ function formatCurrency(val) {
   margin-bottom: 1rem;
 }
 
-select {
-  border: 1px solid #ccc;
+.calendar-header h2 {
+  color: var(--text-color);
+}
+
+
+select,
+button {
+  background-color: var(--card-bg-color);
+  color: var(--text-color);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
   padding: 4px 8px;
   font-size: 16px;
-  border-radius: 4px;
+  transition: background-color 0.3s ease;
   margin: 0 8px;
+}
+
+select:focus,
+button:focus {
+  outline: none;
+  border: 1px solid #7c3aed;
+}
+
+button:hover {
+  background-color: rgba(255, 255, 255, 0.12);
+  cursor: pointer;
 }
 
 .calendar-grid {
@@ -186,7 +204,9 @@ select {
 .calendar-cell {
   height: 200px;
   padding: 6px;
-  background: #f4f4f4;
+  background-color: rgba(180, 180, 180, 0.2); /* 연한 회색 느낌의 반투명 */
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(0, 0, 0, 0.05);
   border-radius: 6px;
   text-align: right;
   font-size: 11px;
@@ -199,7 +219,7 @@ select {
 }
 
 .calendar-cell:hover {
-  background-color: #eaeaea;
+  background-color: var(--card-glass-hover);
 }
 
 .calendar-cell.selected {
@@ -236,7 +256,7 @@ select {
 .selected-info {
   margin-top: 1rem;
   font-size: 14px;
-  background-color: #f9f9f9;
+  background-color: var(--card-bg-color);
   padding: 1rem;
   border-radius: 8px;
 }

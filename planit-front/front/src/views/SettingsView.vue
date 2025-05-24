@@ -74,10 +74,13 @@
   list-style: none;
   padding: 0;
   margin: 0;
-  background: white;
+  background: rgba(180, 180, 180, 0.2);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(0, 0, 0, 0.05);
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   overflow: hidden;
+  color: var(--text-color);
 }
 
 .settings-card li {
@@ -85,7 +88,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--divider-color);
   font-size: 0.95rem;
 }
 
@@ -95,6 +98,6 @@
 
 .arrow {
   font-size: 1.2rem;
-  color: #888;
+  color: var(--text-color);
 }
 </style>

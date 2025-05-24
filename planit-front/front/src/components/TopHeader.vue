@@ -28,7 +28,8 @@ function handleLogout() {
   align-items: center;
   padding: 0.5rem 2rem 0.1rem 2rem;
   border-bottom: 1px solid #ddd;
-  background-color: white;
+  background-color: var(--sidebar-bg-color);
+  color: var(--sidebar-text-color);
   flex-shrink: 0;
   z-index: 1000;
   position: relative;
@@ -52,8 +53,8 @@ function handleLogout() {
 }
 
 .logout-button {
-  background-color: #f44336;
-  color: white;
+  background-color: var(--logout-button-bg);
+  color: var(--logout-button-text);
   border: none;
   padding: 0.5rem 1rem;
   border-radius: 8px;
@@ -63,6 +64,6 @@ function handleLogout() {
 }
 
 .logout-button:hover {
-  background-color: #d32f2f;
+  background-color: var(--logout-button-hover);
 }
 </style>
