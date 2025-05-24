@@ -13,7 +13,7 @@ from datetime import date, datetime
 from .models import Expense
 from django.shortcuts import get_object_or_404
 import csv
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.utils.encoding import escape_uri_path
 from .forms import FixedExpenseForm
 from .forms import MonthlyBudgetForm
@@ -22,29 +22,35 @@ from django.db.models import Sum, Count
 import re
 from django.contrib import messages
 
-@login_required
 def home(request):
-    user = request.user
     today = date.today()
-    latest_report = Report.objects.filter(user=user).order_by('-created_at').first()
-    expenses = Expense.objects.filter(user=user).order_by('-date', '-id')
-    todays_expenses = Expense.objects.filter(user=request.user, date=today)
 
+    if request.user.is_authenticated:
+        user = request.user
+        latest_report = Report.objects.filter(user=user).order_by('-created_at').first()
+        expenses = Expense.objects.filter(user=user).order_by('-date', '-id')  # 전체 지출
+        todays_expenses = expenses  # 변수명만 유지하고 전체 할당
+    else:
+        user = None
+        latest_report = None
+        expenses = Expense.objects.filter(user__isnull=True).order_by('-date', '-id')  # 익명 사용자용
+        todays_expenses = expenses
 
     context = {
         'user': user,
         'report': latest_report,
         'expenses': expenses,
         'todays_expenses': todays_expenses,
-        "today":today,
+        "today": today,
     }
     return render(request, 'main/home.html', context)
 
 
 
 
-@login_required
 def report(request):
+    if not request.user.is_authenticated:
+        return redirect("accounts:login")
     user = request.user
     today = date.today()
     year = today.year
@@ -210,8 +216,9 @@ def report(request):
     })
     
     
-@login_required
 def helper(request):
+    if not request.user.is_authenticated:
+        return redirect("accounts:login")
     user = request.user
     today = date.today()
     year = today.year
@@ -297,6 +304,8 @@ def helper(request):
 
 
 def setting(request):
+    if not request.user.is_authenticated:
+        return redirect("accounts:login")
     return render(request, 'main/setting.html')
 
 # 내 소비 분석 GPT 결과
@@ -460,3 +469,39 @@ def monthly_budget_view(request):
         form = MonthlyBudgetForm(instance=budget)
 
     return render(request, 'main/monthly_budget.html', {'form': form})
+
+def calendar_data(request):
+    today = datetime.now()
+    year = int(request.GET.get('year', today.year))
+    month = int(request.GET.get('month', today.month))
+
+    # 로그인 여부에 따라 사용자 필터링
+    if request.user.is_authenticated:
+        expenses = Expense.objects.filter(user=request.user, date__year=year, date__month=month)
+        incomes = Income.objects.filter(user=request.user, date__year=year, date__month=month)
+    else:
+        # 로그인하지 않은 경우에도 빈 응답이 아니라 모든 공개 데이터 내려줌 (프로토타입 단계)
+        expenses = Expense.objects.filter(date__year=year, date__month=month)
+        incomes = Income.objects.filter(date__year=year, date__month=month)
+
+    data = {}
+
+    for e in expenses:
+        day = e.date.isoformat()
+        data.setdefault(day, []).append({
+            "type": "expense",
+            "amount": e.amount,
+            "category": e.category,
+            "emotion": e.emotion
+        })
+
+    for i in incomes:
+        day = i.date.isoformat()
+        data.setdefault(day, []).append({
+            "type": "income",
+            "amount": i.amount,
+            "source": getattr(i, 'source', '기타'),
+            "emotion": i.emotion
+        })
+
+    return JsonResponse(data)

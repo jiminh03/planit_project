@@ -3,7 +3,7 @@
     <nav class="menu">
       <!-- 홈 화면 -->
       <div class="menu-group-wrapper">
-        <router-link to="/" class="menu-group" exact-active-class="active">
+        <router-link to="/home" class="menu-group" exact-active-class="active">
           <img src="@/assets/home_icon.png" alt="홈 화면" class="icon" />
           <span class="menu-group-title">홈 화면</span>
         </router-link>
