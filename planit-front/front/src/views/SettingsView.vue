@@ -2,33 +2,34 @@
   <div class="content">
     <div class="settings-section">
       <h2>사용자 정보 설정</h2>
-      <ul class="settings-card">
-        <li>비밀번호 변경 <span class="arrow">›</span></li>
-        <li>내 소비 데이터 다운로드 <span class="arrow">›</span></li>
-        <li>계정 탈퇴 <span class="arrow">›</span></li>
-        <li>감정/지출 기록 삭제 <span class="arrow">›</span></li>
-      </ul>
+      <SettingsCard :items="['비밀번호 변경', '내 소비 데이터 다운로드', '계정 탈퇴', '감정/지출 기록 삭제']" @open-modal="handleOpenModal" />
 
       <h2>월 수입 설정</h2>
-      <ul class="settings-card">
-        <li>고정지출 항목 입력 <span class="arrow">›</span></li>
-        <li>월 목표 지출액 설정 <span class="arrow">›</span></li>
-        <li>지출 초과시 알림 여부 설정 <span class="arrow">›</span></li>
-      </ul>
+      <SettingsCard :items="['고정지출 항목 입력', '월 목표 지출액 설정', '지출 초과시 알림 여부 설정']" @open-modal="handleOpenModal" />
 
       <h2>목표 설정</h2>
-      <ul class="settings-card">
-        <li>소비 절감 목표 설정 <span class="arrow">›</span></li>
-        <li>자동 추천 전략 <span class="arrow">›</span></li>
-        <li>챌린지 확인 / 수정 <span class="arrow">›</span></li>
-      </ul>
+      <SettingsCard :items="['소비 절감 목표 설정', '자동 추천 전략', '챌린지 확인 / 수정']" @open-modal="handleOpenModal" />
     </div>
   </div>
+  <SettingsItemModal v-if="isModalOpen" :title="selectedItem" @close="closeModal" />
 </template>
 
 <script setup>
+import { ref } from 'vue'
+import SettingsCard from '@/components/SettingsCard.vue'
+import SettingsItemModal from '@/components/SettingsItemModal.vue'
 
+const isModalOpen = ref(false)
+const selectedItem = ref('')
 
+function handleOpenModal(item) {
+  selectedItem.value = item
+  isModalOpen.value = true
+}
+
+function closeModal() {
+  isModalOpen.value = false
+}
 </script>
 
 <style scoped >
