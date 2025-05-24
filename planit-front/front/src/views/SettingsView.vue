@@ -1,0 +1,100 @@
+<template>
+  <div class="content">
+    <div class="settings-section">
+      <h2>사용자 정보 설정</h2>
+      <ul class="settings-card">
+        <li>비밀번호 변경 <span class="arrow">›</span></li>
+        <li>내 소비 데이터 다운로드 <span class="arrow">›</span></li>
+        <li>계정 탈퇴 <span class="arrow">›</span></li>
+        <li>감정/지출 기록 삭제 <span class="arrow">›</span></li>
+      </ul>
+
+      <h2>월 수입 설정</h2>
+      <ul class="settings-card">
+        <li>고정지출 항목 입력 <span class="arrow">›</span></li>
+        <li>월 목표 지출액 설정 <span class="arrow">›</span></li>
+        <li>지출 초과시 알림 여부 설정 <span class="arrow">›</span></li>
+      </ul>
+
+      <h2>목표 설정</h2>
+      <ul class="settings-card">
+        <li>소비 절감 목표 설정 <span class="arrow">›</span></li>
+        <li>자동 추천 전략 <span class="arrow">›</span></li>
+        <li>챌린지 확인 / 수정 <span class="arrow">›</span></li>
+      </ul>
+    </div>
+  </div>
+</template>
+
+<script setup>
+
+
+</script>
+
+<style scoped >
+.layout {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.content-body {
+  flex: 1;
+  padding: 2rem;
+  box-sizing: border-box;
+  overflow: auto;
+}
+
+.content {
+  padding: 1rem;
+  flex: 1;
+}
+
+.settings-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.settings-section h2 {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.settings-card {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.settings-card li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+  font-size: 0.95rem;
+}
+
+.settings-card li:last-child {
+  border-bottom: none;
+}
+
+.arrow {
+  font-size: 1.2rem;
+  color: #888;
+}
+</style>

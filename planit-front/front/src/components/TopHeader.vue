@@ -1,13 +1,14 @@
-<!-- TopHeader.vue -->
 <template>
   <header class="top-header">
     <div class="title-area">
-      <span class="icon">🏠</span>
-      <h1>홈 화면</h1>
+      <router-link to="/" class="menu-group" exact-active-class="active">
+        <img src="@/assets/logo.png" alt="LOGO" class="icon" />
+      </router-link>
     </div>
     <button class="logout-button" @click="handleLogout">로그아웃</button>
   </header>
 </template>
+
 
 <script setup>
 import { useRouter } from 'vue-router'
@@ -25,10 +26,12 @@ function handleLogout() {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.25rem 2rem;
+  padding: 0.5rem 2rem 0.1rem 2rem;
   border-bottom: 1px solid #ddd;
   background-color: white;
   flex-shrink: 0;
+  z-index: 1000;
+  position: relative;
 }
 
 .title-area {
@@ -41,6 +44,11 @@ function handleLogout() {
   font-size: 20px;
   font-weight: bold;
   margin: 0;
+}
+
+.icon {
+  width: 150x;
+  height: 60px;
 }
 
 .logout-button {

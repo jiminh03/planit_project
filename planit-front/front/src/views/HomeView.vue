@@ -1,22 +1,13 @@
 <!-- HomeView.vue -->
 <template>
-  <div class="home-container">
-    <SidebarMenu />
-    <div class="main-content">
-      <TopHeader />
-      <div class="content-body">
-        <CalendarSection @open-modal="openModal" />
-        <CardWidgets />
-      </div>
-
-    </div>
+  <div class="content-body">
+    <CalendarSection @open-modal="openModal" />
+    <CardWidgets />
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
-import SidebarMenu from '../components/SidebarMenu.vue'
-import TopHeader from '../components/TopHeader.vue'
 import CalendarSection from '../components/CalendarSection.vue'
 import CardWidgets from '../components/CardWidgets.vue'
 

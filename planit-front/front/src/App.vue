@@ -1,17 +1,18 @@
-<!-- App.vue -->
 <template>
-  <router-view />
+  <div class="app-layout">
+    <TopHeader />
+    <div class="main-layout">
+      <SidebarMenu />
+      <div class="content-view">
+        <router-view />
+      </div>
+    </div>
+  </div>
 </template>
 
-
 <script setup>
-import { onMounted } from 'vue'
-
-const theme = 'light' // 또는 localStorage 등
-
-onMounted(() => {
-  document.body.className = theme // body에 직접 적용
-})
+import TopHeader from '@/components/TopHeader.vue'
+import SidebarMenu from '@/components/SidebarMenu.vue'
 </script>
 
 <style>
@@ -20,18 +21,17 @@ html, body, #app {
   padding: 0;
   width: 100%;
   height: 100%;
-  /* overflow: hidden; */
   box-sizing: border-box;
 }
 
 *, *::before, *::after {
   box-sizing: inherit;
 }
-background-color: var(--bg-color);
-color: var(--text-color);
 
 body {
   font-family: sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
 }
 
 body.light {
@@ -43,9 +43,21 @@ body.dark {
   --bg-color: #1e1e1e;
   --text-color: #f0f0f0;
 }
-.sidebar {
-  background-color: var(--bg-color);
-  color: var(--text-color);
+
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
 }
 
+.main-layout {
+  display: flex;
+  flex: 1;
+}
+
+.content-view {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
 </style>
