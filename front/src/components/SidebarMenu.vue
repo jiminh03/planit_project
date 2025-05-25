@@ -15,13 +15,13 @@
           <span class="menu-group-title">내 소비 분석</span>
         </router-link>
         <div class="submenu">
-          <router-link to="/analysis/summary" class="menu-subitem">한 줄 분석</router-link>
-          <router-link to="/analysis/pattern" class="menu-subitem">소비 패턴 분석</router-link>
-          <router-link to="/analysis/date" class="menu-subitem">날짜별 소비 패턴</router-link>
-          <router-link to="/analysis/emotion" class="menu-subitem">감정-소비 관계</router-link>
-          <router-link to="/analysis/category" class="menu-subitem">카테고리별 분석</router-link>
-          <router-link to="/analysis/type" class="menu-subitem">소비 성향 진단</router-link>
-          <router-link to="/analysis/feedback" class="menu-subitem">개인 맞춤형 피드백</router-link>
+          <div class="menu-subitem">한 줄 분석</div>
+          <div class="menu-subitem">소비 패턴 분석</div>
+          <div class="menu-subitem">날짜별 소비 패턴</div>
+          <div class="menu-subitem">감정-소비 관계</div>
+          <div class="menu-subitem">카테고리별 분석</div>
+          <div class="menu-subitem">소비 성향 진단</div>
+          <div class="menu-subitem">개인 맞춤형 피드백</div>
         </div>
       </div>
 
@@ -32,11 +32,11 @@
           <span class="menu-group-title">지출 도우미</span>
         </router-link>
         <div class="submenu">
-          <router-link to="/guide/message" class="menu-subitem">개선이 필요한 메시지</router-link>
-          <router-link to="/guide/strategy" class="menu-subitem">대체 소비 전략</router-link>
-          <router-link to="/guide/simulation" class="menu-subitem">절약 시뮬레이션</router-link>
-          <router-link to="/guide/fixed" class="menu-subitem">고정/정기지출 정리 제안</router-link>
-          <router-link to="/guide/combo" class="menu-subitem">전략 조합 시뮬 결과</router-link>
+          <div class="menu-subitem">개선이 필요한 메시지</div>
+          <div class="menu-subitem">대체 소비 전략</div>
+          <div class="menu-subitem">절약 시뮬레이션</div>
+          <div class="menu-subitem">고정/정기지출 정리 제안</div>
+          <div class="menu-subitem">전략 조합 시뮬 결과</div>
         </div>
       </div>
 
@@ -47,7 +47,7 @@
           <span class="menu-group-title">설정</span>
         </router-link>
         <div class="submenu">
-          <router-link to="/settings" class="menu-subitem">설정</router-link>
+          <!-- <router-link to="/settings" class="menu-subitem">설정</router-link> -->
         </div>
       </div>
     </nav>

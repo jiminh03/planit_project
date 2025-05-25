@@ -18,6 +18,8 @@
 </template>
 
 <script setup>
+import TopHeader from '@/components/TopHeader.vue'
+import SidebarMenu from '@/components/SidebarMenu.vue'
 import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { computed } from 'vue'
