@@ -9,8 +9,18 @@
 </template>
 
 <script setup>
+import { onBeforeMount } from 'vue'
 import { useThemeStore } from '@/stores/useThemeStore'
 const themeStore = useThemeStore()
+
+onBeforeMount(() => {
+  const stored = localStorage.getItem('theme')
+  if (stored) {
+    themeStore.setTheme(stored)
+  } else {
+    themeStore.setTheme('system')
+  }
+})
 </script>
 
 <style scoped >

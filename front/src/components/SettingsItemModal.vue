@@ -126,7 +126,7 @@ const saveSavingGoal = () => {
 }
 </script>
 
-<style scoped>
+<style>
 .modal-overlay {
   position: fixed;
   top: 0; left: 0;
@@ -137,7 +137,7 @@ const saveSavingGoal = () => {
 }
 
 .modal-content {
-  background: #fff;
+  background: var(--bg-color);
   color: var(--text-color);
   padding: 2rem;
   border-radius: 12px;
@@ -145,6 +145,10 @@ const saveSavingGoal = () => {
   max-width: 90vw;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   z-index: 10000;
+}
+
+.modal-content h3 {
+  color: var(--text-color);
 }
 
 .button-group {
@@ -159,5 +163,14 @@ const saveSavingGoal = () => {
   flex-direction: column;
   gap: 0.75rem;
   margin-top: 1.5rem;
+}
+
+body.dark .modal-overlay {
+  background: rgba(0, 0, 0, 0.8) !important;
+}
+
+body.dark .modal-overlay .modal-content {
+  background-color: #2c2c2c !important;
+  color: var(--text-color) !important;
 }
 </style>

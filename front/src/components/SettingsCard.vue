@@ -50,4 +50,16 @@ defineProps({
   font-size: 1.2rem;
   color: var(--text-color);
 }
+:deep(body.dark) .settings-card {
+  background: #2c2c2c;
+}
+
+:deep(body.dark) .settings-card li {
+  border-bottom: 1px solid #444;
+}
+
+:deep(body.dark) .arrow {
+  color: #ccc;
+}
 </style>
+

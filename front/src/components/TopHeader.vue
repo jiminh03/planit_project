@@ -14,7 +14,7 @@
           :class="{ active: activeTab === 'features' }"
           @click="goToFeatures"
         >
-          기능
+          소개
         </li>
         <li
           v-if="!userStore.isLoggedIn"
@@ -43,20 +43,12 @@
       </ul>
     </nav>
 
-    <div class="right-buttons" v-if="userStore.isLoggedIn">
-      <button
-        class="logout-button"
-        @click="goToNotice"
-      >
-        공지사항
-      </button>
-      <button
-        class="logout-button logout"
-        @click="handleLogout"
-      >
-        로그아웃
-      </button>
-    </div>
+    <nav class="nav-tabs" v-if="userStore.isLoggedIn">
+      <ul class="nav-list">
+        <li class="nav-item" :class="{ active: activeTab === 'notice' }" @click="goToNotice">공지사항</li>
+        <li class="nav-item" @click="handleLogout">로그아웃</li>
+      </ul>
+    </nav>
   </header>
 </template>
 

@@ -16,11 +16,19 @@
 </template>
 
 <script setup>
+import { onBeforeMount } from 'vue'
 import { useRoute } from 'vue-router'
 import { computed } from 'vue'
 import TopHeader from '@/components/TopHeader.vue'
 import SidebarMenu from '@/components/SidebarMenu.vue'
 import { useUserStore } from '@/stores/user'
+
+onBeforeMount(() => {
+  const savedTheme = localStorage.getItem('theme') || 'system'
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+  const resolvedTheme = savedTheme === 'system' ? (prefersDark ? 'dark' : 'light') : savedTheme
+  document.documentElement.setAttribute('data-theme', resolvedTheme)
+})
 
 const route = useRoute()
 const authPaths = ['/login', '/signup']
@@ -47,12 +55,12 @@ body {
   color: var(--text-color);
 }
 
-:root[data-theme='light'] {
+html[data-theme='light'] {
   --bg-color: #fff;
   --text-color: #000;
 }
 
-:root[data-theme='light'] {
+html[data-theme='light'] {
   --sidebar-bg-color: #f8f8f8;
   --sidebar-text-color: #222;
   --logout-button-bg: #f44336;
@@ -60,12 +68,12 @@ body {
   --logout-button-text: #fff;
 }
 
-:root[data-theme='dark'] {
-  --bg-color: #1e1e1e;
+html[data-theme='dark'] {
+  --bg-color: #3f3f3f;
   --text-color: #f0f0f0;
 }
 
-:root[data-theme='dark'] {
+html[data-theme='dark'] {
   --sidebar-bg-color: #1e1e1e;
   --sidebar-text-color: #ffffff;
   --logout-button-bg: #b71c1c;

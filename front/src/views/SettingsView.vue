@@ -98,6 +98,11 @@ function closeModal() {
   font-size: 1.1rem;
   margin-bottom: 0.5rem;
   text-align: left;
+  color: var(--text-color);
+}
+
+body.dark .settings-section h2 {
+  color: white;
 }
 
 .settings-card {

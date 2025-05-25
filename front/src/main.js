@@ -23,6 +23,12 @@ axios.interceptors.request.use(config => {
   return config
 })
 
+// 초기 테마 적용 (Vue 앱 로딩 전에 HTML에 먼저 적용)
+const savedTheme = localStorage.getItem('theme') || 'system'
+const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+const resolvedTheme = savedTheme === 'system' ? (prefersDark ? 'dark' : 'light') : savedTheme
+document.documentElement.setAttribute('data-theme', resolvedTheme)
+
 const app = createApp(App)
 
 app.use(createPinia())
@@ -42,7 +48,15 @@ axios.get('/api/accounts/me/')
     userStore.logout()
   })
   .finally(() => {
+    // app.mount('#app')는 그대로 유지
     app.mount('#app')
+
+    // Apply dark class to body based on localStorage
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark')
+    } else {
+      document.body.classList.remove('dark')
+    }
   })
 
 const params = new URLSearchParams(window.location.search)
