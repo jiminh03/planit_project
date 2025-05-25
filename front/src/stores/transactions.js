@@ -108,7 +108,7 @@ export const useTransactionStore = defineStore('transaction', {
             'X-CSRFToken': getCookie('csrftoken')
           }
         })
-        this.transactions.push(res.data)
+        this.transactions = [...this.transactions, res.data]
       } catch (error) {
         console.error('지출 등록 실패:', error)
       }
@@ -118,6 +118,6 @@ export const useTransactionStore = defineStore('transaction', {
     getByDate: (state) => (date) =>
       state.transactions
         .map((t, i) => ({ ...t, _index: i })) // 수정/삭제용 인덱스 포함
-        .filter(t => t.date === date)
+        .filter(t => new Date(t.date).toISOString().split('T')[0] === date)
   }
 })

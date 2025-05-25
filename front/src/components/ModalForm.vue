@@ -1,4 +1,3 @@
-<!-- ModalForm.vue -->
 <template>
   <div class="modal-overlay" @click.self="$emit('close')">
     <div class="modal-container">
@@ -53,6 +52,7 @@ import { ref, computed } from 'vue'
 import { useTransactionStore } from '@/stores/transactions'
 import ExpenseForm from './ExpenseForm.vue'
 import IncomeForm from './IncomeForm.vue'
+import { forceUpdate } from '@/stores/summaryTrigger'
 
 const props = defineProps({ date: String })
 const tab = ref('expense')
@@ -86,15 +86,13 @@ function deleteItem(index) {
   }
 }
 
-
-
 function saveEdit(item) {
   const newItem = { ...item }  // ✅ 새 객체로 복사하여 반응성 보장
   store.updateTransaction(newItem._index, newItem)
   editingItem.value = null
 }
 
-function handleSave(data) {
+async function handleSave(data) {
   if (data._index !== undefined && data._index !== null) {
     store.updateTransaction(data._index, data)
   } else {
@@ -103,6 +101,11 @@ function handleSave(data) {
     } else {
       store.addExpense(data)
     }
+    const dateObj = new Date(props.date)
+    const year = dateObj.getFullYear()
+    const month = dateObj.getMonth() + 1
+    await store.fetchTransactions(year, month)
+    forceUpdate.value = !forceUpdate.value
   }
   editingItem.value = null
 }

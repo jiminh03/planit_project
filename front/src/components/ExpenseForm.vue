@@ -1,4 +1,3 @@
-<!-- ExpenseForm.vue -->
 <template>
   <div class="form-wrapper">
     <p class="form-date">{{ date }}</p>
@@ -37,7 +36,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { useTransactionStore } from '@/stores/transactions'
 
 const props = defineProps({ date: String })
@@ -73,7 +72,7 @@ watch(() => props.editing, (item) => {
 }, { immediate: true })
 
 
-function handleSubmit() {
+async function handleSubmit() {
   if (!amount.value || !category.value) {
     alert('금액과 카테고리를 입력해주세요.')
     return
@@ -88,9 +87,14 @@ function handleSubmit() {
   _index: index.value   // ✅ 이게 빠져있으면 update 못함
 }
 
-emit('save', payload)
+await store.addExpense(payload)
 
+const dateObj = new Date(props.date)
+const year = dateObj.getFullYear()
+const month = dateObj.getMonth() + 1
+await store.fetchTransactions(year, month)
 
+emit('close')
 }
 </script>
 

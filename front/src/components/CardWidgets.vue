@@ -3,7 +3,8 @@
     <div class="card-grid">
       <div class="card" v-for="(card, index) in cards" :key="index">
         <p class="card-title">{{ card.title }}</p>
-        <p class="card-content">{{ card.content }}</p>
+        <TodaySummaryWidget v-if="index === 0" :date="new Date().toISOString().split('T')[0]" />
+        <p v-else class="card-content">{{ card.content }}</p>
       </div>
     </div>
   </div>
@@ -11,6 +12,8 @@
 
 
 <script setup>
+import TodaySummaryWidget from './widgets/TodaySummaryWidget.vue'
+
 const cards = [
   { title: '제목1', content: '' },
   { title: '제목2', content: '' },
