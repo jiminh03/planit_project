@@ -29,7 +29,6 @@ app.use(createPinia())
 app.use(router)
 
 const userStore = useUserStore()
-userStore.restore()
 
 // 로그인 상태 백엔드에서 재확인
 axios.get('/api/accounts/me/')
