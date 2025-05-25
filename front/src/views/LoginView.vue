@@ -36,9 +36,9 @@ const login = async () => {
     }, { withCredentials: true })
 
     alert('로그인 성공!')
-    userStore.login(email.value)
+    userStore.login(res.data.user)  // 수정된 부분
 
-    // ✅ 로그인 후 전체 거래내역 불러오기
+    // 로그인 후 전체 거래내역 불러오기
     await transactionStore.fetchAllTransactions()
 
     router.push('/home')

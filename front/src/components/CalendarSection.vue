@@ -30,13 +30,13 @@
         <!-- <div v-if="cell.amount" :class="cell.amount > 0 ? 'plus' : 'minus'">
           {{ formatCurrency(cell.amount) }} -->
 
-        <div v-if="cell.expenseTotal" class="minus">
-          {{ formatCurrency(cell.expenseTotal) }}
-        </div>
-
         <!-- 수입 표시 -->
         <div v-if="cell.incomeTotal" class="plus">
           {{ formatCurrency(cell.incomeTotal) }}
+        </div>
+        <!-- 지출 표시 -->
+        <div v-if="cell.expenseTotal" class="minus">
+          {{ formatCurrency(cell.expenseTotal) }}
         </div>
       </div>
     </div>
@@ -259,16 +259,17 @@ button:hover {
 
 .minus, .plus {
   font-size: 10px;
-  margin-top: auto;
   text-align: right;
 }
 
 .minus {
   color: red;
+  order: 1; /* 지출은 아래쪽에 위치 */
 }
 
 .plus {
   color: blue;
+  order: 0; /* 수입은 위쪽에 위치 */
 }
 
 .selected-info {

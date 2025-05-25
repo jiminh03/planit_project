@@ -1,14 +1,13 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from .serializers import SignupSerializer
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth import get_user_model
 from django.contrib.auth import logout as auth_logout
-from rest_framework.permissions import IsAuthenticated
 from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 User = get_user_model()
 
@@ -53,3 +52,15 @@ class LogoutView(APIView):
     def post(self, request):
         auth_logout(request)
         return Response({'message': '로그아웃 되었습니다.'}, status=status.HTTP_200_OK)
+
+# 로그인 상태 확인
+class MeView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        return Response({
+            'id': user.id,
+            'email': user.email,
+            'username': user.username
+        })

@@ -6,10 +6,11 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import CalendarSection from '../components/CalendarSection.vue'
 import CardWidgets from '../components/CardWidgets.vue'
 import { useTransactionStore } from '@/stores/transactions'
+import { useUserStore } from '@/stores/user'
 
 const isModalOpen = ref(false)
 const selectedDate = ref('')
@@ -29,21 +30,32 @@ function closeModal() {
 }
 
 const transactionStore = useTransactionStore()
+const userStore = useUserStore()
 
 const now = new Date()
 const year = ref(now.getFullYear())
 const month = ref(now.getMonth() + 1)
 
 onMounted(async () => {
-  if (year.value && month.value) {
-    // await transactionStore.fetchTransactions(year.value, month.value)
+  if (year.value && month.value && userStore.isLoggedIn) {
+    await transactionStore.fetchTransactions(year.value, month.value)
   } else {
     console.warn('❌ HomeView.vue에서 잘못된 fetchTransactions 호출 차단:', {
       year: year.value,
-      month: month.value
+      month: month.value,
+      isLoggedIn: userStore.isLoggedIn
     })
   }
 })
+
+watch(
+  () => userStore.isLoggedIn,
+  async (isLoggedIn) => {
+    if (isLoggedIn) {
+      await transactionStore.fetchTransactions(year.value, month.value)
+    }
+  }
+)
 </script>
 
 <style scoped>
