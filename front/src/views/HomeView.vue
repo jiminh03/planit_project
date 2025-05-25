@@ -37,12 +37,10 @@ const year = ref(now.getFullYear())
 const month = ref(now.getMonth() + 1)
 
 onMounted(async () => {
-  if (year.value && month.value && userStore.isLoggedIn) {
-    await transactionStore.fetchTransactions(year.value, month.value)
+  if (userStore.isLoggedIn) {
+    await transactionStore.fetchAllTransactions()
   } else {
-    console.warn('❌ HomeView.vue에서 잘못된 fetchTransactions 호출 차단:', {
-      year: year.value,
-      month: month.value,
+    console.warn('❌ HomeView.vue에서 잘못된 fetchAllTransactions 호출 차단:', {
       isLoggedIn: userStore.isLoggedIn
     })
   }
@@ -52,7 +50,7 @@ watch(
   () => userStore.isLoggedIn,
   async (isLoggedIn) => {
     if (isLoggedIn) {
-      await transactionStore.fetchTransactions(year.value, month.value)
+      await transactionStore.fetchAllTransactions()
     }
   }
 )

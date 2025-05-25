@@ -8,6 +8,7 @@ import SignupView from '@/views/SignupView.vue'
 import { useUserStore } from '@/stores/user'
 import Mainview from '@/views/Mainview.vue'
 import NoticeView from '@/views/NoticeView.vue'
+import NoticeDetailView from '@/views/NoticeDetailView.vue'
 
 const routes = [
   { path: '/', redirect: '/main' },
@@ -20,6 +21,7 @@ const routes = [
   { path: '/guide', name: 'guide', component: GuideView },
   { path: '/settings', name: 'settings', component: SettingsView },
   { path: '/analysis/summary', component: HomeView },
+  { path: '/notice/:id', name: 'NoticeDetail', component: NoticeDetailView },
 ]
 
 const router = createRouter({
@@ -28,17 +30,17 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const publicPages = ['/login', '/signup', '/main', '/notice']
+  const publicPaths = ['/login', '/signup', '/main', '/notice']
   const userStore = useUserStore()
   userStore.restore()
 
   const isLoggedIn = userStore.isLoggedIn
-  const isPublic = publicPages.includes(to.path)
+  const isPublic = publicPaths.some(path => to.path.startsWith(path))
 
   if (!isPublic && !isLoggedIn) {
     next({ path: '/main', query: { redirect: to.fullPath } })
   } else if (to.path === '/home' && !isLoggedIn) {
-    next('/main')  // 홈 접근도 /main으로 변경
+    next('/main')
   } else {
     next()
   }

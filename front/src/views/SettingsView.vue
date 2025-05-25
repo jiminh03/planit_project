@@ -8,8 +8,8 @@
         <div class="settings-item" @click="handleOpenModal('내 소비 데이터 다운로드')">내 소비 데이터 다운로드</div>
         <hr class="settings-divider" />
         <div class="settings-item" @click="handleOpenModal('계정 탈퇴')">계정 탈퇴</div>
-        <hr class="settings-divider" />
-        <div class="settings-item" @click="handleOpenModal('감정/지출 기록 삭제')">감정/지출 기록 삭제</div>
+        <!-- <hr class="settings-divider" />
+        <div class="settings-item" @click="handleOpenModal('감정/지출 기록 삭제')">감정/지출 기록 삭제</div> -->
       </div>
 
       <h2>월 수입 설정</h2>

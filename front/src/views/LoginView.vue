@@ -5,6 +5,22 @@
       <input v-model="password" type="password" placeholder="비밀번호 입력" />
       <button @click="login">로그인</button>
       <button @click="goToSignup">회원가입</button>
+      <button class="google-split-button" @click="loginWithGoogle">
+        <div class="google-icon-box">
+          <img src="@/assets/google-logo.jpeg" alt="G" class="google-icon" />
+        </div>
+        <div class="google-text-box">
+          Google로 로그인
+        </div>
+      </button>
+      <button class="naver-split-button" @click="loginWithNaver">
+        <div class="naver-icon-box">
+          <img src="@/assets/naver-logo.jpg" alt="N" class="naver-icon" />
+        </div>
+        <div class="naver-text-box">
+          네이버 아이디로 로그인
+        </div>
+      </button>
     </div>
 </template>
 
@@ -20,6 +36,32 @@ const password = ref('')
 const router = useRouter()
 const userStore = useUserStore()
 const transactionStore = useTransactionStore()
+
+const loginWithGoogle = async () => {
+  try {
+    const res = await axios.get('http://localhost:8000/api/accounts/google/login-url/', {
+      withCredentials: true
+    })
+    console.log('✅ Google auth URL:', res.data.auth_url)
+    window.location.href = res.data.auth_url
+  } catch (error) {
+    console.error('❌ Google 로그인 요청 실패:', error)
+    alert('구글 로그인 요청에 실패했습니다.')
+  }
+}
+
+const loginWithNaver = async () => {
+  try {
+    const res = await axios.get('http://localhost:8000/api/accounts/naver/login-url/', {
+      withCredentials: true
+    })
+    console.log('✅ Naver auth URL:', res.data.auth_url)
+    window.location.href = res.data.auth_url
+  } catch (error) {
+    console.error('❌ Naver 로그인 요청 실패:', error)
+    alert('네이버 로그인 요청에 실패했습니다.')
+  }
+}
 
 const login = async () => {
   if (!email.value.trim() || !password.value.trim()) {
@@ -64,6 +106,7 @@ const goToSignup = () => {
   position: fixed;
   top: 20%;
   left: 50%;
+  transform: translateX(-50%);
   width: 500px;
   background: #fff;
   border-radius: 10px;
@@ -129,5 +172,78 @@ button:hover {
 
 .signup-container button:last-child:hover {
   background-color: #bbb;
+}
+
+
+.google-split-button {
+  display: flex;
+  width: 100%;
+  height: 52px;
+  border: 1px solid #ddd;
+  padding: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  font-weight: 700;
+  cursor: pointer;
+  background-color: white;
+}
+
+.google-icon-box {
+  width: 52px;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid #ddd;
+}
+
+.google-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.google-text-box {
+  flex: 1;
+  background-color: white;
+  color: #444;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.naver-split-button {
+  display: flex;
+  width: 100%;
+  height: 52px;
+  border: none;
+  padding: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.naver-icon-box {
+  width: 52px;
+  background-color: #03C75A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.naver-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.naver-text-box {
+  flex: 1;
+  background-color: #03C75A;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
 }
 </style>

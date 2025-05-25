@@ -12,3 +12,12 @@ class User(AbstractUser):
 
     USERNAME_FIELD = 'email'  # 이메일을 로그인 ID로 사용
     REQUIRED_FIELDS = ['username']  # createsuperuser 시 추가 입력 필드
+
+class Notice(models.Model):
+    title = models.CharField(max_length=200)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.title

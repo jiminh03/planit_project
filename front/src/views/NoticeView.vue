@@ -10,10 +10,14 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="n in 10" :key="n">
-          <td>{{ n }}</td>
-          <td></td>
-          <td></td>
+        <tr v-for="(notice, index) in notices" :key="notice.id">
+          <td>{{ notices.length - index }}</td>
+          <td>
+            <router-link :to="`/notice/${notice.id}`">
+              {{ notice.title }}
+            </router-link>
+          </td>
+          <td>{{ new Date(notice.created_at).toLocaleDateString() }}</td>
         </tr>
       </tbody>
     </table>
@@ -32,7 +36,19 @@
 </template>
 
 <script setup>
-// 추후 API 연동 및 기능 구현 예정
+import { ref, onMounted } from 'vue'
+import axios from 'axios'
+
+const notices = ref([])
+
+onMounted(async () => {
+  try {
+    const response = await axios.get('http://localhost:8000/api/accounts/notice/')
+    notices.value = response.data
+  } catch (error) {
+    console.error('공지사항 로딩 실패:', error)
+  }
+})
 </script>
 
 <style scoped>

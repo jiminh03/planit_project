@@ -1,3 +1,4 @@
+from django.utils.crypto import get_random_string
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -8,6 +9,16 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth import logout as auth_logout
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie
+from rest_framework.pagination import PageNumberPagination
+from .models import Notice
+from .serializers import NoticeSerializer
+from rest_framework.generics import RetrieveAPIView
+import os
+from urllib.parse import urlencode
+import requests
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import redirect
 
 User = get_user_model()
 
@@ -73,3 +84,128 @@ class MeView(APIView):
             'email': user.email,
             'username': user.username
         })
+    
+# 공지사항 조회
+class NoticeListView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        notices = Notice.objects.all().order_by('-created_at', '-updated_at')
+        serializer = NoticeSerializer(notices, many=True)
+        return Response(serializer.data)
+
+# 공지사항 목록 자세히 보기
+class NoticeDetailView(RetrieveAPIView):
+    queryset = Notice.objects.all()
+    serializer_class = NoticeSerializer
+    permission_classes = [AllowAny]  # ✅ 이 줄 추가
+
+# 구글 로그인
+@method_decorator(csrf_exempt, name='dispatch')
+class GoogleLoginURLView(APIView):
+    permission_classes = [AllowAny]
+    authentication_classes = []  # ✅ 인증도 비활성화
+
+    def get(self, request):
+        redirect_uri = 'http://localhost:8000/api/accounts/google/callback/'
+        print('🔍 Google OAuth redirect_uri:', redirect_uri)  # 디버깅용 로그
+        query = urlencode({
+            'client_id': os.getenv('GOOGLE_CLIENT_ID'),
+            'redirect_uri': redirect_uri,
+            'response_type': 'code',
+            'scope': 'openid email profile',
+            'prompt': 'select_account'
+        })
+        return Response({'auth_url': f'https://accounts.google.com/o/oauth2/v2/auth?{query}'})
+    
+@method_decorator(csrf_exempt, name='dispatch')
+class GoogleCallbackView(APIView):
+    permission_classes = [AllowAny]
+    authentication_classes = []  # ✅ 인증 비활성화
+
+    def get(self, request):
+        code = request.GET.get('code')
+        if not code:
+            return Response({'error': 'No code'}, status=400)
+
+        token_res = requests.post('https://oauth2.googleapis.com/token', data={
+            'code': code,
+            'client_id': os.getenv('GOOGLE_CLIENT_ID'),
+            'client_secret': os.getenv('GOOGLE_CLIENT_SECRET'),
+            'redirect_uri': 'http://localhost:8000/api/accounts/google/callback/',
+            'grant_type': 'authorization_code'
+        }).json()
+
+        access_token = token_res.get('access_token')
+        userinfo = requests.get(
+            'https://www.googleapis.com/oauth2/v3/userinfo',
+            headers={'Authorization': f'Bearer {access_token}'}
+        ).json()
+
+        email = userinfo.get('email')
+        name = userinfo.get('name')
+
+        user, _ = User.objects.get_or_create(username=email, defaults={'email': email, 'first_name': name})
+        auth_login(request, user)
+        return redirect('http://localhost:5173/home')  # ✅ Vue 앱 홈으로 이동
+    
+    
+@method_decorator(csrf_exempt, name='dispatch')
+class NaverLoginURLView(APIView):
+    permission_classes = [AllowAny]
+    authentication_classes = []
+
+    def get(self, request):
+        client_id = os.getenv("NAVER_CLIENT_ID")
+        redirect_uri = "http://localhost:8000/api/accounts/naver/callback/"
+        state = get_random_string(12)
+        query = urlencode({
+            'response_type': 'code',
+            'client_id': client_id,
+            'redirect_uri': redirect_uri,
+            'state': state,
+        })
+        return JsonResponse({
+            'auth_url': f"https://nid.naver.com/oauth2.0/authorize?{query}"
+        })
+
+@method_decorator(csrf_exempt, name='dispatch')
+class NaverCallbackView(APIView):
+    permission_classes = [AllowAny]
+    authentication_classes = []
+
+    def get(self, request):
+        code = request.GET.get("code")
+        state = request.GET.get("state")
+
+        token_url = "https://nid.naver.com/oauth2.0/token"
+        token_params = {
+            'grant_type': 'authorization_code',
+            'client_id': os.getenv("NAVER_CLIENT_ID"),
+            'client_secret': os.getenv("NAVER_CLIENT_SECRET"),
+            'code': code,
+            'state': state,
+        }
+        token_res = requests.get(token_url, params=token_params).json()
+        access_token = token_res.get("access_token")
+
+        profile_url = "https://openapi.naver.com/v1/nid/me"
+        headers = {"Authorization": f"Bearer {access_token}"}
+        profile_res = requests.get(profile_url, headers=headers).json()
+        naver_info = profile_res.get("response")
+
+        if not naver_info:
+            return redirect("http://localhost:5173/login")
+
+        email = naver_info.get("email")
+        name = naver_info.get("name") or naver_info.get("nickname")
+        if not name:
+            name = f"네이버사용자_{get_random_string(6)}"
+
+        user, _ = User.objects.get_or_create(
+            username=email,
+            defaults={'email': email, 'first_name': name}
+        )
+
+        auth_login(request, user)
+        return redirect("http://localhost:5173/home")

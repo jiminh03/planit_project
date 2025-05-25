@@ -11,6 +11,22 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = ['http://localhost:5173']
+CSRF_TRUSTED_ORIGINS = ['http://localhost:5173']
+SESSION_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_SECURE = False
+CSRF_COOKIE_HTTPONLY = False
+
+NAVER_CLIENT_ID = os.getenv("NAVER_CLIENT_ID")
+NAVER_CLIENT_SECRET = os.getenv("NAVER_CLIENT_SECRET")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -153,9 +169,3 @@ CORS_ALLOW_CREDENTIALS = True  # withCredentials 지원
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
 ]
-
-# 개발 환경에서 http를 쓰는 경우 CSRF와 세션 쿠키의 SameSite 정책을 None으로 설정하고 Secure 옵션을 False로 설정하여 크로스 도메인 쿠키 전송 문제를 해결합니다.
-SESSION_COOKIE_SAMESITE = None
-SESSION_COOKIE_SECURE = False
-CSRF_COOKIE_SAMESITE = None
-CSRF_COOKIE_SECURE = False

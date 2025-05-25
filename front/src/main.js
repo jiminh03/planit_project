@@ -41,3 +41,14 @@ axios.get('/api/accounts/me/')
   })
 
 app.mount('#app')
+
+const params = new URLSearchParams(window.location.search)
+if (params.has('code') && params.has('state')) {
+  axios.get(`http://localhost:8000/api/accounts/naver/callback/?code=${params.get('code')}&state=${params.get('state')}`, {
+    withCredentials: true
+  }).then(() => {
+    window.location.href = '/home'
+  }).catch(() => {
+    alert('네이버 로그인 실패')
+  })
+}
