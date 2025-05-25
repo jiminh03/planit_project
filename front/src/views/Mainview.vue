@@ -1,6 +1,5 @@
 <template>
   <div class="app-layout">
-    <TopHeader />
     <div v-if="!isAuthPage" class="main-layout">
       <div v-if="userStore.isLoggedIn">
         <SidebarMenu />
