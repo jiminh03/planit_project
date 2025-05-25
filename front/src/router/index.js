@@ -9,11 +9,13 @@ import { useUserStore } from '@/stores/user'
 import Mainview from '@/views/Mainview.vue'
 import NoticeView from '@/views/NoticeView.vue'
 import NoticeDetailView from '@/views/NoticeDetailView.vue'
+import NoticeCreateView from '@/views/NoticeCreateView.vue'
 
 const routes = [
   { path: '/', redirect: '/main' },
   { path: '/main', name: 'main', component: Mainview },
   { path: '/notice', name: 'notice', component: NoticeView},
+  { path: '/notice/create', name: 'NoticeCreate', component: NoticeCreateView },
   { path: '/login', name: 'login', component: LoginView },
   { path: '/signup', name: 'signup', component: SignupView },
   { path: '/home', name:'home', component: HomeView },

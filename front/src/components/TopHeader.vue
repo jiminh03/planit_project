@@ -6,9 +6,10 @@
       </div>
     </div>
 
-    <nav v-if="!userStore.isLoggedIn" class="nav-tabs">
+    <nav class="nav-tabs">
       <ul class="nav-list">
         <li
+          v-if="!userStore.isLoggedIn"
           class="nav-item"
           :class="{ active: activeTab === 'features' }"
           @click="goToFeatures"
@@ -16,13 +17,7 @@
           기능
         </li>
         <li
-          class="nav-item"
-          :class="{ active: activeTab === 'notice' }"
-          @click="goToNotice"
-        >
-          공지사항
-        </li>
-        <li
+          v-if="!userStore.isLoggedIn"
           class="nav-item"
           :class="{ active: activeTab === 'signup' }"
           @click="goToSignup"
@@ -30,6 +25,7 @@
           회원가입
         </li>
         <li
+          v-if="!userStore.isLoggedIn"
           class="nav-item"
           :class="{ active: activeTab === 'login' }"
           @click="goToLogin"
@@ -39,13 +35,20 @@
       </ul>
     </nav>
 
-    <button
-      v-else
-      class="logout-button logout"
-      @click="handleLogout"
-    >
-      로그아웃
-    </button>
+    <div class="right-buttons" v-if="userStore.isLoggedIn">
+      <button
+        class="logout-button"
+        @click="goToNotice"
+      >
+        공지사항
+      </button>
+      <button
+        class="logout-button logout"
+        @click="handleLogout"
+      >
+        로그아웃
+      </button>
+    </div>
   </header>
 </template>
 
@@ -184,4 +187,6 @@ function goHome() {
 .logout-button.logout:hover {
   background-color: var(--logout-button-hover);
 }
+
 </style>
+

@@ -34,13 +34,17 @@ userStore.restore()
 // 로그인 상태 백엔드에서 재확인
 axios.get('/api/accounts/me/')
   .then(res => {
-    userStore.login(res.data)
+    userStore.login({
+      ...res.data,
+      isAdmin: res.data.is_staff  // 명시적으로 추가
+    })
   })
   .catch(() => {
     userStore.logout()
   })
-
-app.mount('#app')
+  .finally(() => {
+    app.mount('#app')
+  })
 
 const params = new URLSearchParams(window.location.search)
 if (params.has('code') && params.has('state')) {

@@ -97,6 +97,7 @@ function closeModal() {
 .settings-section h2 {
   font-size: 1.1rem;
   margin-bottom: 0.5rem;
+  text-align: left;
 }
 
 .settings-card {
