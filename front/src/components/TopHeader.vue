@@ -1,52 +1,105 @@
 <template>
   <header class="top-header">
     <div class="title-area">
-      <div class="menu-group" @click="goHomeIfLoggedIn" style="cursor: pointer">
+      <div class="menu-group" @click="goHome" style="cursor: pointer">
         <img src="@/assets/logo.png" alt="LOGO" class="icon" />
       </div>
     </div>
-    <button
-      v-if="userStore.isLoggedIn"
-      class="logout-button"
-      @click="handleLogout"
-      style="background-color: crimson;"
-    >
-      로그아웃
-    </button>
+
+    <nav v-if="!userStore.isLoggedIn" class="nav-tabs">
+      <ul class="nav-list">
+        <li
+          class="nav-item"
+          :class="{ active: activeTab === 'features' }"
+          @click="goToFeatures"
+        >
+          기능
+        </li>
+        <li
+          class="nav-item"
+          :class="{ active: activeTab === 'notice' }"
+          @click="goToNotice"
+        >
+          공지사항
+        </li>
+        <li
+          class="nav-item"
+          :class="{ active: activeTab === 'signup' }"
+          @click="goToSignup"
+        >
+          회원가입
+        </li>
+        <li
+          class="nav-item"
+          :class="{ active: activeTab === 'login' }"
+          @click="goToLogin"
+        >
+          로그인
+        </li>
+      </ul>
+    </nav>
+
     <button
       v-else
-      class="logout-button"
-      @click="goToLogin"
-      style="background-color: royalblue;"
+      class="logout-button logout"
+      @click="handleLogout"
     >
-      로그인
+      로그아웃
     </button>
   </header>
 </template>
 
-
 <script setup>
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
+import { ref } from 'vue'
 
 const router = useRouter()
 const userStore = useUserStore()
 userStore.restore()
 
-function handleLogout() {
-  userStore.logout()
-  alert('로그아웃 되었습니다.')
-  router.push('/login')
+const activeTab = ref('features')
+
+function setActiveTab(tab) {
+  activeTab.value = tab
+}
+
+function goToFeatures() {
+  setActiveTab('features')
+  router.push('/features')
+}
+
+function goToNotice() {
+  setActiveTab('notice')
+  router.push('/notice')
+}
+
+function goToSignup() {
+  setActiveTab('signup')
+  router.push('/signup')
 }
 
 function goToLogin() {
+  setActiveTab('login')
   router.push('/login')
 }
 
-function goHomeIfLoggedIn() {
-  userStore.restore()
+async function handleLogout() {
+  try {
+    await userStore.logout()
+    alert('로그아웃 되었습니다.')
+    router.push('/login')
+  } catch (error) {
+    console.error('로그아웃 실패', error)
+    alert('로그아웃에 실패했습니다.')
+  }
+}
+
+function goHome() {
   if (userStore.isLoggedIn) {
     router.push('/home')
+  } else {
+    router.push('/main')
   }
 }
 </script>
@@ -62,7 +115,9 @@ function goHomeIfLoggedIn() {
   color: var(--sidebar-text-color);
   flex-shrink: 0;
   z-index: 1000;
-  position: relative;
+  position: sticky;
+  top: 0;
+  width: 100%;
 }
 
 .title-area {
@@ -78,22 +133,55 @@ function goHomeIfLoggedIn() {
 }
 
 .icon {
-  width: 150x;
+  width: 150px;
   height: 60px;
 }
 
+.gray-button {
+  background-color: #cccccc;
+  border: none;
+  padding: 8px 16px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 6px;
+  margin-right: 20px;
+}
+
+.nav-tabs {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav-list {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-item {
+  margin-left: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  color: var(--sidebar-text-color);
+}
+
+.nav-item.active {
+  color: blue;
+  border-bottom: 2px solid blue;
+}
 .logout-button {
-  background-color: var(--logout-button-bg);
-  color: var(--logout-button-text);
   border: none;
   padding: 0.5rem 1rem;
   border-radius: 8px;
   cursor: pointer;
   font-weight: bold;
   transition: background-color 0.2s;
+  background-color: var(--logout-button-bg);
+  color: var(--logout-button-text);
 }
-
-.logout-button:hover {
+.logout-button.logout:hover {
   background-color: var(--logout-button-hover);
 }
 </style>

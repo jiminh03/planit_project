@@ -50,8 +50,17 @@ class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        auth_logout(request)
-        return Response({'message': '로그아웃 되었습니다.'}, status=status.HTTP_200_OK)
+        auth_logout(request)  # 서버 세션 비우기
+        request.session.flush()  # 세션 데이터 완전 삭제
+        response = Response({'message': '로그아웃 되었습니다.'}, status=status.HTTP_200_OK)
+        # 클라이언트 쿠키 삭제
+        response.delete_cookie('sessionid', path='/')
+        response.delete_cookie('csrftoken', path='/')
+        # 추가: 캐시 무효화 헤더 추가
+        response['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+        response['Pragma'] = 'no-cache'
+        response['Expires'] = '0'
+        return response
 
 # 로그인 상태 확인
 class MeView(APIView):

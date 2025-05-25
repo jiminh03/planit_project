@@ -6,9 +6,13 @@ import SettingsView from '@/views/SettingsView.vue'
 import LoginView from '@/views/LoginView.vue'
 import SignupView from '@/views/SignupView.vue'
 import { useUserStore } from '@/stores/user'
+import Mainview from '@/views/Mainview.vue'
+import NoticeView from '@/views/NoticeView.vue'
 
 const routes = [
-  { path: '/', redirect: '/login' },
+  { path: '/', redirect: '/main' },
+  { path: '/main', name: 'main', component: Mainview },
+  { path: '/notice', name: 'notice', component: NoticeView},
   { path: '/login', name: 'login', component: LoginView },
   { path: '/signup', name: 'signup', component: SignupView },
   { path: '/home', name:'home', component: HomeView },
@@ -24,7 +28,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const publicPages = ['/login', '/signup']
+  const publicPages = ['/login', '/signup', '/main', '/notice']
   const userStore = useUserStore()
   userStore.restore()
 
@@ -32,9 +36,9 @@ router.beforeEach((to, from, next) => {
   const isPublic = publicPages.includes(to.path)
 
   if (!isPublic && !isLoggedIn) {
-    next({ path: '/login', query: { redirect: to.fullPath } })
+    next({ path: '/main', query: { redirect: to.fullPath } })
   } else if (to.path === '/home' && !isLoggedIn) {
-    next('/login')  // 혹시라도 명시적으로 홈 접근을 막고 싶다면
+    next('/main')  // 홈 접근도 /main으로 변경
   } else {
     next()
   }

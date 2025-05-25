@@ -1,5 +1,4 @@
 <template>
-  <div class="login-page">
     <div class="signup-container">
       <h2>로그인</h2>
       <input v-model="email" placeholder="사용자 이름 입력" />
@@ -7,7 +6,6 @@
       <button @click="login">로그인</button>
       <button @click="goToSignup">회원가입</button>
     </div>
-  </div>
 </template>
 
 <script setup>
@@ -58,3 +56,78 @@ const goToSignup = () => {
   router.push('/signup')
 }
 </script>
+
+<style>
+
+
+.signup-container {
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  width: 500px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.1);
+  padding: 32px 40px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+
+h2 {
+  text-align: center;
+  font-weight: 700;
+  font-size: 28px;
+  margin: 0 0 32px 0;
+  color: #222;
+}
+
+input {
+  height: 44px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  padding: 12px 16px;
+  font-size: 16px;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input::placeholder {
+  color: #bbb;
+}
+
+input:focus {
+  outline: none;
+  border-color: #4A90E2;
+  box-shadow: 0 0 0 3px rgba(74,144,226,0.15);
+}
+
+button {
+  height: 52px;
+  border-radius: 8px;
+  background-color: #222;
+  color: white;
+  font-weight: 700;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+button:hover {
+  background-color: #444;
+}
+
+.signup-container button:last-child {
+  background-color: #ccc;
+  color: #444;
+  font-weight: 600;
+  margin-top: 12px;
+}
+
+.signup-container button:last-child:hover {
+  background-color: #bbb;
+}
+</style>

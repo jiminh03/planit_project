@@ -1,9 +1,10 @@
 <template>
-  <!-- <ThemeSelector /> -->
   <div class="app-layout">
-    <TopHeader />
+    <TopHeader class="top-header" />
     <div v-if="!isAuthPage" class="main-layout">
-      <SidebarMenu />
+      <div v-if="userStore.isLoggedIn">
+        <SidebarMenu />
+      </div>
       <div class="content-view">
         <router-view />
       </div>
@@ -15,28 +16,16 @@
 </template>
 
 <script setup>
-import TopHeader from '@/components/TopHeader.vue'
-import SidebarMenu from '@/components/SidebarMenu.vue'
-import { onMounted } from 'vue'
-import { useThemeStore } from '@/stores/useThemeStore'
-import ThemeSelector from './components/ThemeSelector.vue'
 import { useRoute } from 'vue-router'
 import { computed } from 'vue'
+import TopHeader from '@/components/TopHeader.vue'
+import SidebarMenu from '@/components/SidebarMenu.vue'
+import { useUserStore } from '@/stores/user'
 
 const route = useRoute()
-const isAuthPage = computed(() => route.path === '/login' || route.path === '/signup')
-const themeStore = useThemeStore()
-
-onMounted(() => {
-  themeStore.applyTheme()
-
-  // 시스템 설정 변경 감지
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-    if (themeStore.theme === 'system') {
-      themeStore.applyTheme()
-    }
-  })
-})
+const authPaths = ['/login', '/signup']
+const isAuthPage = computed(() => authPaths.includes(route.path))
+const userStore = useUserStore()
 </script>
 
 <style>
@@ -99,5 +88,12 @@ body {
   flex: 1;
   padding: 20px;
   overflow-y: auto;
+}
+
+.top-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: var(--sidebar-bg-color);
 }
 </style>

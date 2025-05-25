@@ -1,5 +1,6 @@
 // stores/user.js
 import { defineStore } from 'pinia'
+import axios from 'axios'
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -26,15 +27,33 @@ export const useUserStore = defineStore('user', {
       })
     },
     logout() {
-      this.isLoggedIn = false
-      this.username = ''
-      this.email = ''
-      this.userId = null
-      localStorage.removeItem('isLoggedIn')
-      localStorage.removeItem('username')
-      localStorage.removeItem('email')
-      localStorage.removeItem('userId')
-      console.log('User logged out')
+      function getCookie(name) {
+        const value = `; ${document.cookie}`
+        const parts = value.split(`; ${name}=`)
+        if (parts.length === 2) return parts.pop().split(';').shift()
+      }
+      const csrfToken = getCookie('csrftoken')
+
+      return axios.post('/api/accounts/logout/', {}, {
+        headers: {
+          'X-CSRFToken': csrfToken
+        },
+        withCredentials: true
+      })
+      .then(() => {
+        this.isLoggedIn = false
+        this.username = ''
+        this.email = ''
+        this.userId = null
+        localStorage.removeItem('isLoggedIn')
+        localStorage.removeItem('username')
+        localStorage.removeItem('email')
+        localStorage.removeItem('userId')
+        console.log('User logged out')
+      })
+      .catch((error) => {
+        console.error('Logout failed:', error)
+      })
     },
     restore() {
       this.isLoggedIn = localStorage.getItem('isLoggedIn') === 'true'
