@@ -103,17 +103,17 @@ class NoticeDetailView(RetrieveAPIView):
     serializer_class = NoticeSerializer
     permission_classes = [AllowAny]  # ✅ 이 줄 추가
 
-# 공지사항 생성 (관리자만)
-from rest_framework.permissions import IsAuthenticated
-class NoticeCreateAPIView(CreateAPIView):
-    queryset = Notice.objects.all()
-    serializer_class = NoticeSerializer
-    permission_classes = [IsAuthenticated]
+# # 공지사항 생성 (관리자만)
+# from rest_framework.permissions import IsAuthenticated
+# class NoticeCreateAPIView(CreateAPIView):
+#     queryset = Notice.objects.all()
+#     serializer_class = NoticeSerializer
+#     permission_classes = [IsAuthenticated]
 
-    def perform_create(self, serializer):
-        if not self.request.user.is_staff:
-            raise PermissionDenied("관리자만 공지사항을 작성할 수 있습니다.")
-        serializer.save()
+#     def perform_create(self, serializer):
+#         if not self.request.user.is_staff:
+#             raise PermissionDenied("관리자만 공지사항을 작성할 수 있습니다.")
+#         serializer.save()
 
 # 구글 로그인
 @method_decorator(csrf_exempt, name='dispatch')

@@ -19,6 +19,14 @@
         <li
           v-if="!userStore.isLoggedIn"
           class="nav-item"
+          :class="{ active: activeTab === 'notice' }"
+          @click="goToNotice"
+        >
+          공지사항
+        </li>
+        <li
+          v-if="!userStore.isLoggedIn"
+          class="nav-item"
           :class="{ active: activeTab === 'signup' }"
           @click="goToSignup"
         >
@@ -189,4 +197,3 @@ function goHome() {
 }
 
 </style>
-

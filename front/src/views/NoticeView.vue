@@ -54,8 +54,14 @@ const totalPages = ref(1)
 const fetchNotices = async (page = 1) => {
   try {
     const response = await axios.get(`http://localhost:8000/api/accounts/notice/?page=${page}`)
-    notices.value = response.data.results
-    totalPages.value = Math.ceil(response.data.count / 5)  // assuming 5 per page
+    if (Array.isArray(response.data)) {
+      notices.value = response.data
+      totalPages.value = 1
+    } else {
+      notices.value = response.data.results
+      totalPages.value = Math.ceil(response.data.count / 5)
+    }
+    console.log('✅ 응답 확인:', response.data)
     currentPage.value = page
   } catch (error) {
     console.error('공지사항 로딩 실패:', error)
