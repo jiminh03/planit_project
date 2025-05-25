@@ -12,7 +12,8 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from rest_framework.pagination import PageNumberPagination
 from .models import Notice
 from .serializers import NoticeSerializer
-from rest_framework.generics import RetrieveAPIView
+from rest_framework.generics import RetrieveAPIView, CreateAPIView
+from rest_framework.exceptions import PermissionDenied
 import os
 from urllib.parse import urlencode
 import requests
@@ -52,6 +53,7 @@ class LoginView(APIView):
                 'id': user.id,
                 'email': user.email,
                 'username': user.username,
+                'isAdmin': user.is_staff
             }})
         else:
             return Response({'error': '이메일 또는 비밀번호가 올바르지 않습니다.'}, status=status.HTTP_401_UNAUTHORIZED)
@@ -82,7 +84,8 @@ class MeView(APIView):
         return Response({
             'id': user.id,
             'email': user.email,
-            'username': user.username
+            'username': user.username,
+            'is_staff': user.is_staff  # ✅ 관리자 여부 포함
         })
     
 # 공지사항 조회
@@ -99,6 +102,18 @@ class NoticeDetailView(RetrieveAPIView):
     queryset = Notice.objects.all()
     serializer_class = NoticeSerializer
     permission_classes = [AllowAny]  # ✅ 이 줄 추가
+
+# 공지사항 생성 (관리자만)
+from rest_framework.permissions import IsAuthenticated
+class NoticeCreateAPIView(CreateAPIView):
+    queryset = Notice.objects.all()
+    serializer_class = NoticeSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        if not self.request.user.is_staff:
+            raise PermissionDenied("관리자만 공지사항을 작성할 수 있습니다.")
+        serializer.save()
 
 # 구글 로그인
 @method_decorator(csrf_exempt, name='dispatch')
