@@ -54,7 +54,7 @@ const emotions = [
   { value: 'sad', icon: '😟' },
 ]
 
-function handleSubmit() {
+async function handleSubmit() {
   if (!amount.value || !source.value) {
     alert('금액과 출처를 입력해주세요.')
     return
@@ -62,14 +62,22 @@ function handleSubmit() {
 
   const payload = {
     date: props.date,
-    amount: Math.abs(Number(amount.value)), // 수입은 양수
+    amount: Math.abs(Number(amount.value)),
     source: source.value,
     emotion: emotion.value
   }
 
-  emit('save', payload)
+  await store.addIncome(payload)  // ✅ 수입 저장 (store에 addIncome 함수가 있어야 함)
+
+  // ✅ 저장 직후 달력 갱신
+  const dateObj = new Date(props.date)
+  const year = dateObj.getFullYear()
+  const month = dateObj.getMonth() + 1
+  await store.fetchTransactions(year, month)
+
   // emit('close')
 }
+
 </script>
 
 <style scoped>

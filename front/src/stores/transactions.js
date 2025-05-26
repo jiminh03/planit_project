@@ -16,14 +16,58 @@ export const useTransactionStore = defineStore('transaction', {
     addTransaction(payload) {
       this.transactions.push(payload)
     },
-    updateTransaction(index, updatedData) {
-      console.log('[스토어 업데이트]', index, updatedData)
-      this.transactions[index] = updatedData
+    updateTransaction: async function(index, updatedData) {
+      try {
+        const target = this.transactions[index]
+        if (!target || !target.id || !updatedData) {
+          console.warn('업데이트 대상이 유효하지 않음:', target)
+          return
+        }
+
+        const endpoint = target.amount > 0
+          ? `http://localhost:8000/api/home/incomes/${target.id}/`
+          : `http://localhost:8000/api/home/expenses/${target.id}/`
+
+        const res = await axios.put(endpoint, updatedData, {
+          withCredentials: true,
+          headers: {
+            'X-CSRFToken': getCookie('csrftoken')
+          }
+        })
+
+        this.transactions[index] = res.data
+        console.log('✅ 거래 업데이트 완료:', res.data)
+      } catch (err) {
+        console.error('❌ 거래 업데이트 실패:', err)
+      }
     },
 
-    deleteTransaction(index) {
-      this.transactions.splice(index, 1)
+    deleteTransaction: async function(index) {
+      try {
+        const target = this.transactions[index]
+        if (!target || !target.id) {
+          console.warn('삭제 대상이 유효하지 않음:', target)
+          return
+        }
+
+        const endpoint = target.amount > 0
+          ? `http://localhost:8000/api/home/incomes/${target.id}/`
+          : `http://localhost:8000/api/home/expenses/${target.id}/`
+
+        await axios.delete(endpoint, {
+          withCredentials: true,
+          headers: {
+            'X-CSRFToken': getCookie('csrftoken')
+          }
+        })
+
+        this.transactions.splice(index, 1)
+        console.log('🗑️ 거래 삭제 완료:', target)
+      } catch (err) {
+        console.error('❌ 거래 삭제 실패:', err)
+      }
     },
+
 
     // API 연동 actions
     async fetchTransactions(year, month) {
@@ -121,3 +165,6 @@ export const useTransactionStore = defineStore('transaction', {
         .filter(t => new Date(t.date).toISOString().split('T')[0] === date)
   }
 })
+
+
+

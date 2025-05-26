@@ -121,7 +121,7 @@ function cancelEdit() {
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(66, 66, 66, 0.4);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -200,4 +200,20 @@ function cancelEdit() {
   font-weight: bold;
   border-color: #007bff;
 }
+
+.action-buttons button {
+  background-color: #ffffff00;  /* ✅ 밝은 회색 */
+  color: black;
+  border: none;
+  border-radius: 6px;
+  padding: 0.4rem 0.6rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.action-buttons button:hover {
+  background-color: #e0e0e0; /* 🔆 hover 시 더 진한 회색 */
+}
+
 </style>

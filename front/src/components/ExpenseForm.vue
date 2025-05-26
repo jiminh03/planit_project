@@ -94,7 +94,7 @@ const year = dateObj.getFullYear()
 const month = dateObj.getMonth() + 1
 await store.fetchTransactions(year, month)
 
-emit('close')
+// emit('close')
 }
 </script>
 

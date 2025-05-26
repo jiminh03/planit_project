@@ -1,8 +1,8 @@
 <template>
   <div class="calendar-section">
     <div class="calendar-header">
-      <div class="calendar-title-area" style="display: flex; align-items: center; justify-content: center; position: relative;">
-        <h2 style="display: flex; align-items: center;">
+      <div class="calendar-title-area">
+        <h2>
           <button @click="goToPrevMonth">&lt;</button>
           <select v-model="selectedYear" @change="onYearOrMonthChange">
             <option v-for="y in [2024, 2025, 2026]" :key="y" :value="y">{{ y }}년</option>
@@ -13,7 +13,7 @@
           <button @click="goToNextMonth">&gt;</button>
         </h2>
       </div>
-      <div style="margin-top: 0rem; text-align: right;">
+      <div class="expense-check-button">
         <button @click="viewAllExpenses">이번 달 지출내역 확인</button>
       </div>
     </div>
@@ -27,21 +27,13 @@
         @click="selectDate(cell.date)"
       >
         <div class="date-label">{{ cell.date?.split('-')[2] || '' }}</div>
-        <!-- <div v-if="cell.amount" :class="cell.amount > 0 ? 'plus' : 'minus'">
-          {{ formatCurrency(cell.amount) }} -->
-
-        <!-- 수입 표시 -->
-        <div v-if="cell.incomeTotal" class="plus">
-          {{ formatCurrency(cell.incomeTotal) }}
-        </div>
-        <!-- 지출 표시 -->
-        <div v-if="cell.expenseTotal" class="minus">
-          {{ formatCurrency(cell.expenseTotal) }}
+        <div class="entry-group">
+          <div v-if="cell.incomeTotal" class="entry income">+{{ formatCurrency(cell.incomeTotal) }}</div>
+          <div v-if="cell.expenseTotal" class="entry expense">{{ formatCurrency(cell.expenseTotal) }}</div>
         </div>
       </div>
     </div>
 
-    <!-- ✅ 모달 렌더링 -->
     <ModalForm
       v-if="isModalOpen"
       :date="selectedDate"
@@ -62,24 +54,19 @@ import ModalForm from '@/components/ModalForm.vue'
 import AllExpensesModal from './AllExpensesModal.vue'
 
 const store = useTransactionStore()
+
 const days = ['일', '월', '화', '수', '목', '금', '토']
 const currentDate = ref(new Date())
 const selectedMonth = ref(currentDate.value.getMonth() + 1)
 const selectedYear = ref(currentDate.value.getFullYear())
 const selectedDate = ref('')
 const isModalOpen = ref(false)
-
-function selectDate(date) {
-  if (typeof date === 'object') {
-    selectedDate.value = date.toISOString().slice(0, 10)
-  } else {
-    selectedDate.value = date
-  }
-  isModalOpen.value = true
-}
-
 const isAllModalOpen = ref(false)
 
+function selectDate(date) {
+  selectedDate.value = date
+  isModalOpen.value = true
+}
 
 function viewAllExpenses() {
   isAllModalOpen.value = true
@@ -120,38 +107,30 @@ const calendarCells = computed(() => {
   const startDay = getStartDay(year, month)
   const endDate = getEndDate(year, month)
 
-  for (let i = 0; i < startDay; i++) cells.push({})
+  for (let i = 0; i < startDay; i++) {
+    cells.push({})
+  }
 
   for (let day = 1; day <= endDate; day++) {
     const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`
     const txs = store.getByDate(dateStr)
-    const expenseTotal = txs
-      .filter(t => t.amount < 0)
-      .reduce((sum, t) => sum + t.amount, 0)
-
-    const incomeTotal = txs
-      .filter(t => t.amount > 0)
-      .reduce((sum, t) => sum + t.amount, 0)
+    const incomeTotal = txs.filter(t => t.amount > 0).reduce((sum, t) => sum + t.amount, 0)
+    const expenseTotal = txs.filter(t => t.amount < 0).reduce((sum, t) => sum + t.amount, 0)
 
     cells.push({
       date: dateStr,
+      incomeTotal,
       expenseTotal,
-      incomeTotal
     })
-    // const totalAmount = txs.reduce((sum, t) => sum + t.amount, 0)
-    // cells.push({ date: dateStr, amount: totalAmount })
   }
-
-
 
   return cells
 })
 
 function formatCurrency(val) {
   if (typeof val !== 'number') return '-'
-  return val.toLocaleString('ko-KR') + '원'
+  return Math.abs(val).toLocaleString('ko-KR') + '원'
 }
-
 </script>
 
 <style scoped>
@@ -162,121 +141,115 @@ function formatCurrency(val) {
   display: flex;
   flex-direction: column;
   min-width: 720px;
+  font-family: 'Segoe UI', sans-serif;
 }
 
 .calendar-header {
   text-align: center;
-  font-size: 20px;
+  font-size: 28px;
   font-weight: bold;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
 }
 
-.calendar-header h2 {
-  color: var(--text-color);
+.calendar-title-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  font-size: 24px;
+  gap: 12px;
 }
 
+.expense-check-button {
+  text-align: right;
+  padding: 0 1rem;
+  margin-bottom: 1.2rem;
+}
 
 select,
 button {
   background-color: var(--card-bg-color);
   color: var(--text-color);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 4px;
-  padding: 4px 8px;
-  font-size: 16px;
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 18px;
   transition: background-color 0.3s ease;
-  margin: 0 8px;
-}
-
-select:focus,
-button:focus {
-  outline: none;
-  border: 1px solid #7c3aed;
-}
-
-button:hover {
-  background-color: rgba(255, 255, 255, 0.12);
-  cursor: pointer;
 }
 
 .calendar-grid {
   display: grid;
-  margin-top: 0;
-  padding-top: 0;
+  /* margin-top: 0;
+  padding-top: 0; */
   grid-template-columns: repeat(7, 1fr);
-  grid-template-rows: 30px repeat(6, 200px);
+  /* grid-template-rows: 50px repeat(6, 220px); */
   gap: 4px;
 }
 
 .day-header {
   text-align: center;
   font-weight: bold;
-  color: gray;
-  font-size: 14px;
+  color: #444;
+  font-size: 20px;
+  background-color: #fafafa;
+  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 30px;
+  height: 50px;
 }
 
 .calendar-cell {
-  height: 200px;
-  padding: 6px;
-  background-color: rgba(180, 180, 180, 0.2); /* 연한 회색 느낌의 반투명 */
-  backdrop-filter: blur(6px);
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  border-radius: 6px;
-  text-align: right;
-  font-size: 11px;
+  aspect-ratio: 1 / 1;
+  /* height: 220px; */
+  height: auto;
+  padding: 10px;
+  background-color: #e9e9e9;
+  border: 1px solid #ccc;
+  /* border-radius: 10px; */
+  font-size: 16px;
   cursor: pointer;
   position: relative;
-  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  overflow: hidden;
+  transition: transform 0.15s ease;
 }
 
 .calendar-cell:hover {
-  background-color: var(--card-glass-hover);
-}
-
-.calendar-cell.selected {
-  border: 2px solid #007bff;
+  background-color: #f0f0f0;
+  transform: scale(1.02);
 }
 
 .date-label {
   font-weight: bold;
-  font-size: 14px;
-  align-self: flex-end;
+  font-size: 18px;
+  color: #222;
+  align-self: flex-start;
 }
 
-.emoji {
-  position: absolute;
-  top: 4px;
-  left: 6px;
+.entry-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.entry {
   font-size: 16px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.minus, .plus {
-  font-size: 10px;
-  text-align: right;
+.income {
+  color: #007bff;
+  font-weight: 600;
 }
 
-.minus {
-  color: red;
-  order: 1; /* 지출은 아래쪽에 위치 */
-}
-
-.plus {
-  color: blue;
-  order: 0; /* 수입은 위쪽에 위치 */
-}
-
-.selected-info {
-  margin-top: 1rem;
-  font-size: 14px;
-  background-color: var(--card-bg-color);
-  padding: 1rem;
-  border-radius: 8px;
+.expense {
+  color: #dc3545;
+  font-weight: 600;
 }
 </style>

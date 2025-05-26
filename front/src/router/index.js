@@ -31,21 +31,29 @@ const router = createRouter({
   routes
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const publicPaths = ['/login', '/signup', '/main', '/notice']
   const userStore = useUserStore()
-  userStore.restore()
+  await userStore.restore()
 
   const isLoggedIn = userStore.isLoggedIn
   const isPublic = publicPaths.some(path => to.path.startsWith(path))
 
+  // 🔒 로그인 안 한 유저가 보호 페이지 접근 시
   if (!isPublic && !isLoggedIn) {
     next({ path: '/main', query: { redirect: to.fullPath } })
-  } else if (to.path === '/home' && !isLoggedIn) {
-    next('/main')
+
+  // ✅ 로그인 했고, 쿼리에 redirect가 있는 경우 → 해당 경로로 이동 + 쿼리 제거
+  } else if (to.query.redirect && isLoggedIn) {
+    const redirectPath = to.query.redirect
+    next(redirectPath)  // 한 번 이동하고
+    router.replace(redirectPath) // 쿼리 제거
+
+  // 🎯 그 외는 정상 이동
   } else {
     next()
   }
 })
+
 
 export default router
