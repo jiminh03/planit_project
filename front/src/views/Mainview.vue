@@ -1,28 +1,39 @@
 <template>
-  <div class="app-layout">
-    <div v-if="!isAuthPage" class="main-layout">
-      <div v-if="userStore.isLoggedIn">
+  <!-- <div class="app-layout">
+    <div v-if="!isAuthPage" class="main-layout"> -->
+      <!-- <div v-if="userStore.isLoggedIn">
         <SidebarMenu />
-      </div>
-      <div class="content-view">
-        <router-view />
-        <div>로그인 상태 (userStore): {{ userStore.isLoggedIn }}</div>
-        <div>사이드바 존재 여부: {{ sidebarExists }}</div>
-      </div>
-    </div>
+      </div> -->
+      <!-- <div class="content-view"> -->
+        <!-- <router-view /> -->
+        <!-- <div class="intro-images">
+          <img v-for="(img, index) in introImages" :key="index" :src="img" class="full-width-img" alt="Planit 소개 이미지" />
+        </div> -->
+        <!-- <div>로그인 상태 (userStore): {{ userStore.isLoggedIn }}</div>
+        <div>사이드바 존재 여부: {{ sidebarExists }}</div> -->
+      <!-- </div> -->
+    <!-- </div>
     <div v-else class="content-view">
       <router-view />
     </div>
-  </div>
+  </div> -->
+<div class="intro-images">
+  <img v-for="(img, index) in introImages" :key="index" :src="img" class="full-width-img" alt="Planit 소개 이미지" />
+</div>
 </template>
 
 <script setup>
-import TopHeader from '@/components/TopHeader.vue'
+import introImage1 from '@/assets/001.png'
+import introImage2 from '@/assets/002.png'
+import introImage3 from '@/assets/003.png'
+import introImage4 from '@/assets/004.png'
+import introImage5 from '@/assets/005.png'
 import SidebarMenu from '@/components/SidebarMenu.vue'
 import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { computed } from 'vue'
 import { useUserStore } from '@/stores/user'
+
 
 const route = useRoute()
 
@@ -40,6 +51,8 @@ watch(
   },
   { immediate: true }
 )
+
+const introImages = [introImage1, introImage2, introImage3, introImage4, introImage5]
 </script>
 
 <style>
@@ -110,5 +123,16 @@ body {
   flex: 1;
   padding: 20px;
   overflow-y: auto;
+}
+
+.full-width-img {
+  width: 100vw;
+  height: auto;
+  display: block;
+}
+
+.intro-images {
+  margin: 0;
+  padding: 0;
 }
 </style>

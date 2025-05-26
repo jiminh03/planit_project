@@ -1,16 +1,21 @@
 <template>
   <div class="app-layout">
     <TopHeader class="top-header" />
-    <div v-if="!isAuthPage" class="main-layout">
-      <div v-if="userStore.isLoggedIn">
-        <SidebarMenu />
+    <div class="scroll-wrapper">
+      <div v-if="!isAuthPage" class="main-layout">
+        <div v-if="!userStore.isLoggedIn && !isAuthPage && introImages.length" class="intro-images">
+          <img v-for="(img, index) in introImages" :key="index" :src="img" class="full-width-img" alt="Planit 소개 이미지" />
+        </div>
+        <div v-if="userStore.isLoggedIn">
+          <SidebarMenu />
+        </div>
+        <div class="content-view">
+          <router-view />
+        </div>
       </div>
-      <div class="content-view">
+      <div v-else class="content-view">
         <router-view />
       </div>
-    </div>
-    <div v-else class="content-view">
-      <router-view />
     </div>
   </div>
 </template>
@@ -22,6 +27,15 @@ import { computed } from 'vue'
 import TopHeader from '@/components/TopHeader.vue'
 import SidebarMenu from '@/components/SidebarMenu.vue'
 import { useUserStore } from '@/stores/user'
+
+import introImage1 from '@/assets/001.png'
+import introImage2 from '@/assets/002.png'
+import introImage3 from '@/assets/003.png'
+import introImage4 from '@/assets/004.png'
+import introImage5 from '@/assets/005.png'
+
+const introImages = [introImage1, introImage2, introImage3, introImage4, introImage5]
+console.log('Loaded introImages:', introImages)
 
 onBeforeMount(() => {
   const savedTheme = localStorage.getItem('theme') || 'system'
@@ -41,7 +55,7 @@ html, body, #app {
   margin: 0;
   padding: 0;
   width: 100%;
-  height: 100%;
+  min-height: 100vh;
   box-sizing: border-box;
 }
 
@@ -84,12 +98,17 @@ html[data-theme='dark'] {
 .app-layout {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  min-height: 100vh;
 }
 
 .main-layout {
-  display: flex;
+  display: block;
+}
+
+.scroll-wrapper {
   flex: 1;
+  overflow-y: auto;
+  height: 100%;
 }
 
 .content-view {
@@ -103,5 +122,10 @@ html[data-theme='dark'] {
   top: 0;
   z-index: 1000;
   background-color: var(--sidebar-bg-color);
+}
+.full-width-img {
+  width: 100%;
+  height: auto;
+  display: block;
 }
 </style>
