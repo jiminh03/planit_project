@@ -8,7 +8,7 @@
             <input id="name" v-model="formData.name" type="text" class="form-input" />
           </div>
           <div class="form-group">
-            <label for="userId">아이디</label>
+            <label for="userId">이메일</label>
             <input id="userId" v-model="formData.userId" type="text" class="form-input" />
           </div>
         </div>
@@ -33,10 +33,7 @@
               <option value="female">여성</option>
             </select>
           </div>
-          <div class="form-group">
-            <label for="email">e-mail</label>
-            <input id="email" v-model="formData.email" type="email" class="form-input" />
-          </div>
+          
         </div>
 
         <div class="form-row">

@@ -100,8 +100,34 @@ const changePassword = async () => {
   }
 }
 
-const downloadData = () => {
-  alert('소비 데이터 다운로드 요청됨 (백엔드 연동 예정)')
+const downloadData = async () => {
+  try {
+    const response = await axios.get('/api/setting/download/expense-data/', {
+      responseType: 'blob',  // ✅ 파일 다운로드를 위한 설정
+      withCredentials: true
+    })
+
+    const blob = new Blob([response.data], { type: 'text/csv;charset=utf-8;' })
+    const url = window.URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+
+    // 파일 이름 설정 (서버에서 받은 이름 있으면 그걸 쓰고, 없으면 기본)
+    const disposition = response.headers['content-disposition']
+    const filenameMatch = disposition && disposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/)
+    const filename = filenameMatch ? decodeURIComponent(filenameMatch[1].replace(/['"]/g, '')) : '소비데이터.csv'
+
+    link.setAttribute('download', filename)
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
+
+    alert('소비 데이터가 다운로드되었습니다.')
+  } catch (error) {
+    console.error('❌ 소비 데이터 다운로드 실패:', error)
+    alert('소비 데이터를 다운로드하는 데 실패했습니다.')
+  }
 }
 
 const deletePassword = ref('')
