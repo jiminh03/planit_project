@@ -58,6 +58,7 @@
 </template>
 
 <script setup>
+import axios from 'axios'
 import { ref } from 'vue'
 const props = defineProps({
   title: String
@@ -67,7 +68,7 @@ const currentPassword = ref('')
 const newPassword = ref('')
 const confirmPassword = ref('')
 
-const changePassword = () => {
+const changePassword = async () => {
   if (!currentPassword.value || !newPassword.value || !confirmPassword.value) {
     alert('모든 항목을 입력해주세요.')
     return
@@ -76,7 +77,27 @@ const changePassword = () => {
     alert('새 비밀번호가 일치하지 않습니다.')
     return
   }
-  alert('비밀번호 변경 요청됨 (백엔드 연동 예정)')
+
+  try {
+    const response = await axios.post('/api/setting/password/change/', {
+      old_password: currentPassword.value,
+      new_password: newPassword.value,
+    })
+
+    alert(response.data.detail || '비밀번호가 성공적으로 변경되었습니다.')
+    currentPassword.value = ''
+    newPassword.value = ''
+    confirmPassword.value = ''
+  } catch (error) {
+    console.log(error.response?.data)
+    if (error.response?.data?.old_password) {
+      alert(error.response.data.old_password[0])
+    } else if (error.response?.data?.new_password) {
+      alert(error.response.data.new_password[0])
+    } else {
+      alert('비밀번호 변경 중 오류가 발생했습니다.')
+    }
+  }
 }
 
 const downloadData = () => {
@@ -129,10 +150,14 @@ const saveSavingGoal = () => {
 <style>
 .modal-overlay {
   position: fixed;
-  top: 0; left: 0;
-  width: 100vw; height: 100vh;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
   background: rgba(0, 0, 0, 0.5);
-  display: flex; justify-content: center; align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   z-index: 9999;
 }
 

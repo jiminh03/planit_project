@@ -12,6 +12,7 @@
       <!-- 내 소비 분석 -->
       <div class="menu-group-wrapper">
         <router-link to="/analysis" class="menu-group" @click="toggleSubmenu('analysis')">
+          <img src="@/assets/search_icon.png" alt="지출 도우미" class="icon" />
           <span class="menu-group-title">내 소비 분석</span>
         </router-link>
         <transition name="submenu-transition">
@@ -174,11 +175,13 @@ const toggleSubmenu = (menuName) => {
   transition: max-height 0.3s ease, opacity 1.5s ease;
   overflow: hidden;
 }
+
 .submenu-transition-enter-from,
 .submenu-transition-leave-to {
   max-height: 0;
   opacity: 0;
 }
+
 .submenu-transition-enter-to,
 .submenu-transition-leave-from {
   max-height: 500px;
