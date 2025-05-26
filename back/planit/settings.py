@@ -163,3 +163,5 @@ CORS_ALLOW_CREDENTIALS = True  # withCredentials 지원
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
 ]
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True

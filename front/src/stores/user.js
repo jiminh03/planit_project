@@ -45,36 +45,46 @@ export const useUserStore = defineStore('user', {
         },
         withCredentials: true
       })
-      .then(() => {
+        .then(() => {
+          this.isLoggedIn = false
+          this.username = ''
+          this.email = ''
+          this.userId = null
+          this.isAdmin = false
+          localStorage.removeItem('isLoggedIn')
+          localStorage.removeItem('username')
+          localStorage.removeItem('email')
+          localStorage.removeItem('userId')
+          localStorage.removeItem('isAdmin')
+          console.log('User logged out')
+        })
+        .catch((error) => {
+          console.error('Logout failed:', error)
+        })
+    },
+    async restore() {
+      try {
+        const response = await axios.get('/api/accounts/me/', {
+          withCredentials: true
+        })
+
+        const user = response.data
+        this.isLoggedIn = true
+        this.username = user.username
+        this.email = user.email
+        this.userId = user.id
+        this.isAdmin = user.isAdmin ?? user.is_staff ?? false
+
+        console.log('User restored from server session:', user)
+      } catch (error) {
+        // 세션 없음 → 로그아웃 상태 유지
         this.isLoggedIn = false
         this.username = ''
         this.email = ''
         this.userId = null
         this.isAdmin = false
-        localStorage.removeItem('isLoggedIn')
-        localStorage.removeItem('username')
-        localStorage.removeItem('email')
-        localStorage.removeItem('userId')
-        localStorage.removeItem('isAdmin')
-        console.log('User logged out')
-      })
-      .catch((error) => {
-        console.error('Logout failed:', error)
-      })
-    },
-    restore() {
-      this.isLoggedIn = localStorage.getItem('isLoggedIn') === 'true'
-      this.username = localStorage.getItem('username') || ''
-      this.email = localStorage.getItem('email') || ''
-      this.userId = localStorage.getItem('userId') ? Number(localStorage.getItem('userId')) : null
-      this.isAdmin = localStorage.getItem('isAdmin') === 'true'
-      console.log('User state restored:', {
-        isLoggedIn: this.isLoggedIn,
-        username: this.username,
-        email: this.email,
-        userId: this.userId,
-        isAdmin: this.isAdmin,
-      })
+        console.warn('❌ 세션이 만료되어 로그인 복원 실패')
+      }
     }
   }
 })
