@@ -33,8 +33,8 @@
           <button @click="saveFixedExpense">저장</button>
         </div>
       </div>
-      <div v-if="title === '월 목표액 지출 설정'" class="form-group">
-        <label for="monthly-budget">월 목표액 지출 설정:</label>
+      <div v-if="title === '월 목표 지출액 설정'" class="form-group">
+        <label for="monthly-budget">월 목표 지출액 설정:</label>
         <input id="monthly-budget" v-model="monthlyBudget" type="number" placeholder="금액 입력" />
         <div class="button-group">
           <button @click="$emit('close')">취소</button>
@@ -59,7 +59,9 @@
 
 <script setup>
 import axios from 'axios'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+
+const emit = defineEmits(['close'])
 const props = defineProps({
   title: String
 })
@@ -144,23 +146,85 @@ const fixedItem = ref('')
 const fixedAmount = ref('')
 const fixedDate = ref('')
 
-const saveFixedExpense = () => {
+const saveFixedExpense = async () => {
   if (!fixedItem.value || !fixedAmount.value || !fixedDate.value) {
     alert('모든 항목을 입력해주세요.')
     return
   }
-  alert('고정지출 항목 저장 요청됨 (백엔드 연동 예정)')
+
+  try {
+    const response = await axios.post('/api/setting/fixed-expenses/', {
+      name: fixedItem.value,
+      amount: fixedAmount.value,
+      payment_day: fixedDate.value
+    }, {
+      withCredentials: true
+    })
+
+    alert('고정지출 항목이 저장되었습니다.')
+
+    // 입력값 초기화
+    fixedItem.value = ''
+    fixedAmount.value = ''
+    fixedDate.value = ''
+
+    // 닫기
+    // $emit 사용 시 외부에서 <SettingsItemModal @close="..." /> 으로 닫기 처리 필요
+    // emit('close') 직접 호출하려면 setup 상단에 defineEmits 사용 필요
+  } catch (error) {
+    console.error('고정지출 저장 실패:', error)
+    alert('고정지출 항목 저장에 실패했습니다.')
+  }
 }
+
 
 const monthlyBudget = ref('')
 
-const saveMonthlyBudget = () => {
+const saveMonthlyBudget = async () => {
   if (!monthlyBudget.value) {
     alert('금액을 입력해주세요.')
     return
   }
-  alert('월 목표 지출액 저장 요청됨 (백엔드 연동 예정)')
+
+  const now = new Date()
+  const year = now.getFullYear()
+  const month = now.getMonth() + 1
+
+  try {
+    const response = await axios.post('/api/setting/budget/', {
+      year,
+      month,
+      budget: Number(monthlyBudget.value)
+    }, {
+      withCredentials: true
+    })
+
+    alert('월 목표 지출액이 저장되었습니다.')
+    emit('close')
+  } catch (error) {
+    console.error('월 목표 지출 저장 실패:', error)
+    alert('월 목표 지출액 저장에 실패했습니다.')
+  }
 }
+
+onMounted(async () => {
+  if (props.title === '월 목표 지출액 설정') {  // ✅ 텍스트 일치 필요
+    const now = new Date()
+    const year = now.getFullYear()
+    const month = now.getMonth() + 1
+
+    try {
+      const response = await axios.get(`/api/setting/budget/?year=${year}&month=${month}`, {
+        withCredentials: true
+      })
+      monthlyBudget.value = response.data.budget
+    } catch (error) {
+      console.warn('월 목표 지출 예산이 아직 설정되지 않았습니다.')
+      monthlyBudget.value = ''
+    }
+  }
+})
+
 
 const savingGoal = ref('')
 
