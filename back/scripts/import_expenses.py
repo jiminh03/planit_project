@@ -13,10 +13,10 @@ from home.models import Expense
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
-user = User.objects.get(email='test@example.com')  # ⚠️ 이메일 수정 필요
+user = User.objects.get(email='admin@naver.com')  # ⚠️ 이메일 수정 필요
 
 # 엑셀 파일 경로
-file_path = '소비_황지민.xlsx'  # .xlsx 확장자 확인
+file_path = 'test_cases/testuser1.xlsx'  # .xlsx 확장자 확인
 
 # 데이터 불러오기
 df = pd.read_excel(file_path)

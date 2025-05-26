@@ -1,5 +1,5 @@
 <template>
-  <div class="modal-overlay" @click.self="$emit('close')">
+  <div class="modal-overlay" @click.self="handleClose">
     <div class="modal-container">
       <!-- ✅ 좌측: 오늘의 기록 리스트 -->
       <div class="modal-left">
@@ -41,18 +41,20 @@
           <span :class="{ active: tab === 'income' }" @click="tab = 'income'">수입</span>
         </div>
 
-        <component :is="tabMap[tab]" :date="date" :editing="editingItem" @save="handleSave" @close="$emit('close')" />
+        <component :is="tabMap[tab]" :date="date" :editing="editingItem" @save="handleSave" @close="handleClose" />
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, nextTick } from 'vue'
 import { useTransactionStore } from '@/stores/transactions'
 import ExpenseForm from './ExpenseForm.vue'
 import IncomeForm from './IncomeForm.vue'
 import { forceUpdate } from '@/stores/summaryTrigger'
+
+const emit = defineEmits(['close', 'edit', 'update'])
 
 const props = defineProps({ date: String })
 const tab = ref('expense')
@@ -72,7 +74,6 @@ const editingItem = ref(null)
 function handleEdit(item) {
   editingItem.value = item
 }
-const emit = defineEmits(['edit'])
 
 function editItem(item) {
   editingItem.value = { ...item }
@@ -83,12 +84,17 @@ function editItem(item) {
 function deleteItem(index) {
   if (confirm('정말 삭제하시겠습니까?')) {
     store.deleteTransaction(index)
+    forceUpdate.value = !forceUpdate.value
+    emit('update')
   }
 }
 
-function saveEdit(item) {
+async function saveEdit(item) {
   const newItem = { ...item }  // ✅ 새 객체로 복사하여 반응성 보장
   store.updateTransaction(newItem._index, newItem)
+  await nextTick()
+  forceUpdate.value = !forceUpdate.value
+  emit('update')
   editingItem.value = null
 }
 
@@ -105,6 +111,7 @@ async function handleSave(data) {
     const year = dateObj.getFullYear()
     const month = dateObj.getMonth() + 1
     await store.fetchTransactions(year, month)
+    await nextTick()
     forceUpdate.value = !forceUpdate.value
   }
   editingItem.value = null
@@ -114,6 +121,11 @@ function cancelEdit() {
   editingItem.value = null   // ✅ 수정 모드 종료
 }
 
+function handleClose() {
+  forceUpdate.value = !forceUpdate.value  // ✅ 요약 위젯 등 업데이트 트리거
+  emit('close')
+  emit('update')
+}
 
 </script>
 

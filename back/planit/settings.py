@@ -174,3 +174,8 @@ CACHES = {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
     }
 }
+
+# settings.py
+
+TIME_ZONE = 'Asia/Seoul'     # 서버 시간대를 한국 시간으로 설정
+USE_TZ = False                # 시간대 사용 비활성화 (로컬 타임존 사용)

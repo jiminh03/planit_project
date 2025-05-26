@@ -1,7 +1,7 @@
 <template>
   <div class="content-body">
     <CalendarSection @open-modal="openModal" />
-    <CardWidgets />
+    <CardWidgets :date="selectedDate" />
   </div>
 </template>
 
@@ -13,7 +13,7 @@ import { useTransactionStore } from '@/stores/transactions'
 import { useUserStore } from '@/stores/user'
 
 const isModalOpen = ref(false)
-const selectedDate = ref('')
+const selectedDate = ref(new Date().toISOString().slice(0, 10))
 
 function handleSave(payload) {
   console.log('저장된 데이터:', payload)
@@ -27,6 +27,7 @@ function openModal(date) {
 
 function closeModal() {
   isModalOpen.value = false
+  selectedDate.value = new Date().toISOString().slice(0, 10)
 }
 
 const transactionStore = useTransactionStore()

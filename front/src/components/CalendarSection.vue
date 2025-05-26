@@ -37,7 +37,8 @@
     <ModalForm
       v-if="isModalOpen"
       :date="selectedDate"
-      @close="isModalOpen = false"
+      @close="handleModalClose"
+      @update="handleModalUpdate"
     />
     <AllExpensesModal
       v-if="isAllModalOpen"
@@ -50,6 +51,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useTransactionStore } from '@/stores/transactions'
+import { forceUpdate } from '@/stores/summaryTrigger'
 import ModalForm from '@/components/ModalForm.vue'
 import AllExpensesModal from './AllExpensesModal.vue'
 
@@ -62,6 +64,8 @@ const selectedYear = ref(currentDate.value.getFullYear())
 const selectedDate = ref('')
 const isModalOpen = ref(false)
 const isAllModalOpen = ref(false)
+
+defineEmits(['close'])
 
 function selectDate(date) {
   selectedDate.value = date
@@ -131,7 +135,19 @@ function formatCurrency(val) {
   if (typeof val !== 'number') return '-'
   return Math.abs(val).toLocaleString('ko-KR') + '원'
 }
+
+function handleModalClose() {
+  isModalOpen.value = false
+  store.fetchTransactions(selectedYear.value, selectedMonth.value)
+  forceUpdate.value++
+}
+
+function handleModalUpdate() {
+  store.fetchTransactions(selectedYear.value, selectedMonth.value)
+  forceUpdate.value++
+}
 </script>
+
 
 <style scoped>
 .calendar-section {

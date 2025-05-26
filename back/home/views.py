@@ -9,6 +9,8 @@ from rest_framework.permissions import IsAuthenticated
 from .models import Income, Expense
 from .serializers import IncomeSerializer, ExpenseSerializer
 from rest_framework.generics import RetrieveUpdateDestroyAPIView
+from datetime import date
+
 
 # CSRF exemption for login view
 from django.utils.decorators import method_decorator
@@ -199,7 +201,7 @@ class TodaySummaryView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        today = timezone.localdate()
+        today = date.today()
         year = today.year
         month = today.month
 
