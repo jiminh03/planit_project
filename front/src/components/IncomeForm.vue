@@ -20,12 +20,8 @@
 
     <label>감정</label>
     <div class="emotion-group">
-      <span
-        v-for="emo in emotions"
-        :key="emo.value"
-        :class="{ selected: emotion === emo.value }"
-        @click="emotion = emo.value"
-      >{{ emo.icon }}</span>
+      <span v-for="emo in emotions" :key="emo.value" :class="{ selected: emotion === emo.value }"
+        @click="emotion = emo.value">{{ emo.icon }}</span>
     </div>
 
     <div class="btn-group">
@@ -36,7 +32,7 @@
 </template>
 
 <script setup>
-import { ref,watch } from 'vue'
+import { ref, watch } from 'vue'
 import { useTransactionStore } from '@/stores/transactions'
 
 const props = defineProps({ date: String })
@@ -52,6 +48,7 @@ const emotions = [
   { value: 'happy', icon: '😀' },
   { value: 'neutral', icon: '😐' },
   { value: 'sad', icon: '😟' },
+  { value: 'angry', icon: '😡' },
 ]
 
 async function handleSubmit() {
@@ -97,6 +94,7 @@ async function handleSubmit() {
 .input-icon-wrapper {
   position: relative;
 }
+
 .input-icon-wrapper input {
   width: 100%;
   padding: 0.6rem 2.5rem 0.6rem 0.6rem;
@@ -104,6 +102,7 @@ async function handleSubmit() {
   border-radius: 8px;
   font-size: 16px;
 }
+
 .unit {
   position: absolute;
   right: 2rem;
@@ -112,6 +111,7 @@ async function handleSubmit() {
   font-weight: bold;
   color: #888;
 }
+
 .icon {
   position: absolute;
   right: 0.5rem;
@@ -125,10 +125,12 @@ async function handleSubmit() {
   gap: 1rem;
   font-size: 2rem;
 }
+
 .emotion-group span {
   cursor: pointer;
   transition: transform 0.1s ease;
 }
+
 .emotion-group span.selected {
   transform: scale(1.2);
   border-bottom: 2px solid #007bff;
@@ -140,6 +142,7 @@ async function handleSubmit() {
   gap: 1rem;
   margin-top: 1rem;
 }
+
 button.cancel {
   background: #ccc;
   color: black;
@@ -148,6 +151,7 @@ button.cancel {
   border-radius: 6px;
   cursor: pointer;
 }
+
 button.submit {
   background: #007bff;
   color: white;
@@ -155,4 +159,5 @@ button.submit {
   border: none;
   border-radius: 6px;
   cursor: pointer;
-}</style>
+}
+</style>

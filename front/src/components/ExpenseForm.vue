@@ -20,12 +20,8 @@
 
     <label>감정</label>
     <div class="emotion-group">
-      <span
-        v-for="emo in emotions"
-        :key="emo.value"
-        :class="{ selected: emotion === emo.value }"
-        @click="emotion = emo.value"
-      >{{ emo.icon }}</span>
+      <span v-for="emo in emotions" :key="emo.value" :class="{ selected: emotion === emo.value }"
+        @click="emotion = emo.value">{{ emo.icon }}</span>
     </div>
 
     <div class="btn-group">
@@ -53,6 +49,7 @@ const emotions = [
   { value: 'happy', icon: '😀' },
   { value: 'neutral', icon: '😐' },
   { value: 'sad', icon: '😟' },
+  { value: 'angry', icon: '😡' },
 ]
 
 watch(() => props.editing, (item) => {
@@ -79,22 +76,22 @@ async function handleSubmit() {
   }
 
   const payload = {
-  date: props.date,
-  amount: -Math.abs(Number(amount.value)),  // 또는 +amount
-  category: category.value,
-  emotion: emotion.value,
-  // source: source.value,
-  _index: index.value   // ✅ 이게 빠져있으면 update 못함
-}
+    date: props.date,
+    amount: -Math.abs(Number(amount.value)),  // 또는 +amount
+    category: category.value,
+    emotion: emotion.value,
+    // source: source.value,
+    _index: index.value   // ✅ 이게 빠져있으면 update 못함
+  }
 
-await store.addExpense(payload)
+  await store.addExpense(payload)
 
-const dateObj = new Date(props.date)
-const year = dateObj.getFullYear()
-const month = dateObj.getMonth() + 1
-await store.fetchTransactions(year, month)
+  const dateObj = new Date(props.date)
+  const year = dateObj.getFullYear()
+  const month = dateObj.getMonth() + 1
+  await store.fetchTransactions(year, month)
 
-// emit('close')
+  // emit('close')
 }
 </script>
 
@@ -115,6 +112,7 @@ await store.fetchTransactions(year, month)
 .input-icon-wrapper {
   position: relative;
 }
+
 .input-icon-wrapper input {
   width: 100%;
   padding: 0.6rem 2.5rem 0.6rem 0.6rem;
@@ -122,6 +120,7 @@ await store.fetchTransactions(year, month)
   border-radius: 8px;
   font-size: 16px;
 }
+
 .unit {
   position: absolute;
   right: 2rem;
@@ -130,6 +129,7 @@ await store.fetchTransactions(year, month)
   font-weight: bold;
   color: #888;
 }
+
 .icon {
   position: absolute;
   right: 0.5rem;
@@ -143,10 +143,12 @@ await store.fetchTransactions(year, month)
   gap: 1rem;
   font-size: 2rem;
 }
+
 .emotion-group span {
   cursor: pointer;
   transition: transform 0.1s ease;
 }
+
 .emotion-group span.selected {
   transform: scale(1.2);
   border-bottom: 2px solid #007bff;
@@ -158,6 +160,7 @@ await store.fetchTransactions(year, month)
   gap: 1rem;
   margin-top: 1rem;
 }
+
 button.cancel {
   background: #ccc;
   color: black;
@@ -166,6 +169,7 @@ button.cancel {
   border-radius: 6px;
   cursor: pointer;
 }
+
 button.submit {
   background: #007bff;
   color: white;
@@ -173,4 +177,5 @@ button.submit {
   border: none;
   border-radius: 6px;
   cursor: pointer;
-}</style>
+}
+</style>

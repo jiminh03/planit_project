@@ -20,31 +20,17 @@
 
     <div class="calendar-grid">
       <div class="day-header" v-for="day in days" :key="day">{{ day }}</div>
-      <div
-        v-for="(cell, index) in calendarCells"
-        :key="index"
-        class="calendar-cell"
-        @click="selectDate(cell.date)"
-      >
+      <div v-for="(cell, index) in calendarCells" :key="index" class="calendar-cell" @click="selectDate(cell.date)">
         <div class="date-label">{{ cell.date?.split('-')[2] || '' }}</div>
         <div class="entry-group">
           <div v-if="cell.incomeTotal" class="entry income">+{{ formatCurrency(cell.incomeTotal) }}</div>
-          <div v-if="cell.expenseTotal" class="entry expense">{{ formatCurrency(cell.expenseTotal) }}</div>
+          <div v-if="cell.expenseTotal" class="entry expense">-{{ formatCurrency(cell.expenseTotal) }}</div>
         </div>
       </div>
     </div>
 
-    <ModalForm
-      v-if="isModalOpen"
-      :date="selectedDate"
-      @close="handleModalClose"
-      @update="handleModalUpdate"
-    />
-    <AllExpensesModal
-      v-if="isAllModalOpen"
-      :expenses="store.transactions"
-      @close="isAllModalOpen = false"
-    />
+    <ModalForm v-if="isModalOpen" :date="selectedDate" @close="handleModalClose" @update="handleModalUpdate" />
+    <AllExpensesModal v-if="isAllModalOpen" :expenses="store.transactions" @close="isAllModalOpen = false" />
   </div>
 </template>
 

@@ -14,6 +14,7 @@
               <option value="happy">😀</option>
               <option value="neutral">😐</option>
               <option value="sad">😟</option>
+              <option value="angry">😡</option>
             </select>
             <button @click="saveEdit(editingItem)">저장</button>
             <button @click="cancelEdit">취소</button>
@@ -22,7 +23,7 @@
           <!-- 👀 기본 보기 모드 -->
           <template v-else>
             <div class="cell amount" :class="item.amount > 0 ? 'income' : 'expense'">
-              {{ item.amount.toLocaleString() }}원
+              {{ item.amount > 0 ? '+ ' : '- ' }}{{ Math.abs(item.amount).toLocaleString() }}원
             </div>
             <div class="cell">{{ item.category || item.source }}</div>
             <div class="cell emoji">{{ emojiMap[item.emotion] }}</div>
@@ -67,7 +68,8 @@ const todayList = computed(() => store.getByDate(props.date))
 const emojiMap = {
   happy: '😀',
   neutral: '😐',
-  sad: '😟'
+  sad: '😟',
+  angry: '😡'
 }
 const editingItem = ref(null)
 
