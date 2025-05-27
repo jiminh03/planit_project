@@ -2,5 +2,5 @@ from django.urls import path
 from .views import SpendingHelperView
 
 urlpatterns = [
-    path('helper/', SpendingHelperView.as_view(), name='spending-helper'),
+    path('analysis/', SpendingHelperView.as_view(), name='spending-helper'),
 ]

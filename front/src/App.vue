@@ -3,9 +3,10 @@
     <TopHeader class="top-header" />
     <div class="scroll-wrapper">
       <div v-if="!isAuthPage" class="main-layout">
-        <div v-if="!userStore.isLoggedIn && !isAuthPage && introImages.length" class="intro-images">
+        <div v-if="showIntroImages && introImages.length" class="intro-images">
           <img v-for="(img, index) in introImages" :key="index" :src="img" class="full-width-img" alt="Planit 소개 이미지" />
         </div>
+
         <div v-if="userStore.isLoggedIn">
           <SidebarMenu />
         </div>
@@ -34,6 +35,12 @@ import introImage3 from '@/assets/003.png'
 import introImage4 from '@/assets/004.png'
 import introImage5 from '@/assets/005.png'
 
+const introAllowedPaths = ['/', '/home']  // intro 이미지가 보일 경로만 명시
+const showIntroImages = computed(() => {
+  return !userStore.isLoggedIn && !isAuthPage.value && introAllowedPaths.includes(route.path)
+})
+
+
 const introImages = [introImage1, introImage2, introImage3, introImage4, introImage5]
 console.log('Loaded introImages:', introImages)
 
@@ -51,7 +58,9 @@ const userStore = useUserStore()
 </script>
 
 <style>
-html, body, #app {
+html,
+body,
+#app {
   margin: 0;
   padding: 0;
   width: 100%;
@@ -59,7 +68,9 @@ html, body, #app {
   box-sizing: border-box;
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: inherit;
 }
 
@@ -123,6 +134,7 @@ html[data-theme='dark'] {
   z-index: 1000;
   background-color: var(--sidebar-bg-color);
 }
+
 .full-width-img {
   width: 100%;
   height: auto;
