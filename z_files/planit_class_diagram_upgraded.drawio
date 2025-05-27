@@ -1,0 +1,47 @@
+<?xml version="1.0" ?>
+<mxfile>
+  <diagram name="UpgradedClassDiagram">
+    <mxGraphModel>
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="AbstractUser" value="&amp;lt;b&amp;gt;AbstractUser&amp;lt;/b&amp;gt;&lt;br/&gt;&lt;br/&gt;+ login(): void" style="shape=umlClass;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="420" y="40" width="180" height="160" as="geometry"/>
+        </mxCell>
+        <mxCell id="User" value="&amp;lt;b&amp;gt;User&amp;lt;/b&amp;gt;&lt;br/&gt;+ id: int&lt;br/&gt;+ email: string&lt;br/&gt;+ password: string&lt;br/&gt;+ username: string&lt;br/&gt;+ name: string&lt;br/&gt;+ age: int&lt;br/&gt;+ gender: string&lt;br/&gt;+ phone: string&lt;br/&gt;+ save(): void&lt;br/&gt;+ __str__(): string" style="shape=umlClass;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="420" y="240" width="180" height="160" as="geometry"/>
+        </mxCell>
+        <mxCell id="Income" value="&amp;lt;b&amp;gt;Income&amp;lt;/b&amp;gt;&lt;br/&gt;+ id: int&lt;br/&gt;+ date: date&lt;br/&gt;+ amount: int&lt;br/&gt;+ source: string&lt;br/&gt;+ emotion: string&lt;br/&gt;- user: FK → User" style="shape=umlClass;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="240" width="180" height="160" as="geometry"/>
+        </mxCell>
+        <mxCell id="Expense" value="&amp;lt;b&amp;gt;Expense&amp;lt;/b&amp;gt;&lt;br/&gt;+ id: int&lt;br/&gt;+ date: date&lt;br/&gt;+ amount: int&lt;br/&gt;+ category: string&lt;br/&gt;+ emotion: string&lt;br/&gt;- user: FK → User" style="shape=umlClass;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="800" y="240" width="180" height="160" as="geometry"/>
+        </mxCell>
+        <mxCell id="MonthlyBudget" value="&amp;lt;b&amp;gt;MonthlyBudget&amp;lt;/b&amp;gt;&lt;br/&gt;+ id: int&lt;br/&gt;+ year: int&lt;br/&gt;+ month: int&lt;br/&gt;+ budget: int&lt;br/&gt;- user: FK → User" style="shape=umlClass;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="460" width="180" height="160" as="geometry"/>
+        </mxCell>
+        <mxCell id="FixedExpense" value="&amp;lt;b&amp;gt;FixedExpense&amp;lt;/b&amp;gt;&lt;br/&gt;+ id: int&lt;br/&gt;+ name: string&lt;br/&gt;+ amount: int&lt;br/&gt;+ payment_day: int&lt;br/&gt;- user: FK → User" style="shape=umlClass;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="800" y="460" width="180" height="160" as="geometry"/>
+        </mxCell>
+        <mxCell id="Notice" value="&amp;lt;b&amp;gt;Notice&amp;lt;/b&amp;gt;&lt;br/&gt;+ id: int&lt;br/&gt;+ title: string&lt;br/&gt;+ content: text&lt;br/&gt;+ created_at: datetime&lt;br/&gt;+ updated_at: datetime" style="shape=umlClass;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="420" y="460" width="180" height="160" as="geometry"/>
+        </mxCell>
+        <mxCell id="Income_User_edge" edge="1" source="Income" target="User" style="endArrow=block;html=1;" parent="1" value="user: FK">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="Expense_User_edge" edge="1" source="Expense" target="User" style="endArrow=block;html=1;" parent="1" value="user: FK">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="MonthlyBudget_User_edge" edge="1" source="MonthlyBudget" target="User" style="endArrow=block;html=1;" parent="1" value="user: FK">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="FixedExpense_User_edge" edge="1" source="FixedExpense" target="User" style="endArrow=block;html=1;" parent="1" value="user: FK">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="User_AbstractUser_edge" edge="1" source="User" target="AbstractUser" style="endArrow=block;endFill=0;html=1;" parent="1" value="extends">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

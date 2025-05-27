@@ -1,0 +1,132 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36" version="27.0.9">
+  <diagram name="UseCaseDiagram" id="-LosAtJ9FkhSpdLTbdFY">
+    <mxGraphModel dx="2175" dy="2366" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="fe2UUlqtw0i8HZ7uOaDE-46" value="설정" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;direction=south;" vertex="1" parent="1">
+          <mxGeometry x="781" y="990" width="460" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="fe2UUlqtw0i8HZ7uOaDE-44" value="지출도우미" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;direction=south;" vertex="1" parent="1">
+          <mxGeometry x="781" y="760" width="460" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="fe2UUlqtw0i8HZ7uOaDE-43" value="분석" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;direction=south;" vertex="1" parent="1">
+          <mxGeometry x="780" y="530" width="460" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="fe2UUlqtw0i8HZ7uOaDE-42" value="카드" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="110" width="200" height="380" as="geometry" />
+        </mxCell>
+        <mxCell id="fe2UUlqtw0i8HZ7uOaDE-23" value="회원" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="288" y="-250" width="250" height="440" as="geometry" />
+        </mxCell>
+        <mxCell id="fe2UUlqtw0i8HZ7uOaDE-24" value="달력" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="780" y="110" width="200" height="380" as="geometry" />
+        </mxCell>
+        <mxCell id="fe2UUlqtw0i8HZ7uOaDE-1" value="회원" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="40" y="510" width="30" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="fe2UUlqtw0i8HZ7uOaDE-2" value="회원가입" style="shape=ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="328" y="-220" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="fe2UUlqtw0i8HZ7uOaDE-3" value="" style="endArrow=none;html=1;" edge="1" parent="1" target="fe2UUlqtw0i8HZ7uOaDE-2">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="70" y="550" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fe2UUlqtw0i8HZ7uOaDE-4" value="로그인" style="shape=ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="328" y="-140" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="fe2UUlqtw0i8HZ7uOaDE-5" value="" style="endArrow=none;html=1;" edge="1" parent="1" target="fe2UUlqtw0i8HZ7uOaDE-4">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="70" y="550" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fe2UUlqtw0i8HZ7uOaDE-6" value="수입 등록" style="shape=ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="800" y="150" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="fe2UUlqtw0i8HZ7uOaDE-8" value="지출 등록" style="shape=ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="800" y="220" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="fe2UUlqtw0i8HZ7uOaDE-9" value="" style="endArrow=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" target="fe2UUlqtw0i8HZ7uOaDE-22">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="70" y="551.36" as="sourcePoint" />
+            <mxPoint x="800" y="290.00197530864205" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fe2UUlqtw0i8HZ7uOaDE-10" value="오늘 요약 보기" style="shape=ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="150" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="fe2UUlqtw0i8HZ7uOaDE-12" value="월별 통계 보기" style="shape=ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="800" y="290" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="fe2UUlqtw0i8HZ7uOaDE-14" value="소비내역 다운로드" style="shape=ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="781" y="1000" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="fe2UUlqtw0i8HZ7uOaDE-16" value="GPT 소비 분석 받기" style="shape=ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="930" y="580" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="fe2UUlqtw0i8HZ7uOaDE-17" value="" style="endArrow=none;html=1;" edge="1" parent="1" target="fe2UUlqtw0i8HZ7uOaDE-16">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="70" y="550" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fe2UUlqtw0i8HZ7uOaDE-20" value="회원 탈퇴" style="shape=ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="328" y="-55" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="fe2UUlqtw0i8HZ7uOaDE-21" value="" style="endArrow=none;html=1;" edge="1" parent="1" target="fe2UUlqtw0i8HZ7uOaDE-20">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="70" y="550" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fe2UUlqtw0i8HZ7uOaDE-22" value="홈화면" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="560" y="310" width="160" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="fe2UUlqtw0i8HZ7uOaDE-18" value="회원정보 수정" style="shape=ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="328" y="30" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="fe2UUlqtw0i8HZ7uOaDE-28" value="비회원&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="100" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="fe2UUlqtw0i8HZ7uOaDE-32" value="" style="endArrow=none;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" target="fe2UUlqtw0i8HZ7uOaDE-2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="70" y="140" as="sourcePoint" />
+            <mxPoint x="170" y="80" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fe2UUlqtw0i8HZ7uOaDE-33" value="로그아웃" style="shape=ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="333" y="110" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="fe2UUlqtw0i8HZ7uOaDE-34" value="" style="endArrow=none;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" target="fe2UUlqtw0i8HZ7uOaDE-4">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="70" y="140" as="sourcePoint" />
+            <mxPoint x="250" y="120" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fe2UUlqtw0i8HZ7uOaDE-35" value="" style="endArrow=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" target="fe2UUlqtw0i8HZ7uOaDE-33">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="70" y="550" as="sourcePoint" />
+            <mxPoint x="419" y="420" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fe2UUlqtw0i8HZ7uOaDE-36" value="항목입력" style="shape=ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="190" y="720" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="fe2UUlqtw0i8HZ7uOaDE-37" value="" style="endArrow=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" target="fe2UUlqtw0i8HZ7uOaDE-6">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="720" y="337.5962962962965" as="sourcePoint" />
+            <mxPoint x="1210" y="140" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fe2UUlqtw0i8HZ7uOaDE-45" value="" style="endArrow=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" target="fe2UUlqtw0i8HZ7uOaDE-47">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="70" y="550" as="sourcePoint" />
+            <mxPoint x="1120" y="875" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fe2UUlqtw0i8HZ7uOaDE-47" value="GPT 지출 도우미" style="shape=ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="930" y="820" width="160" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

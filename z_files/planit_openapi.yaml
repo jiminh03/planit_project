@@ -1,0 +1,192 @@
+!!python/object/apply:collections.OrderedDict
+- - - openapi
+    - 3.0.0
+  - - info
+    - title: Planit API
+      version: 1.0.0
+      description: 감정 기반 소비 분석 서비스 Planit의 전체 API 명세서입니다.
+  - - servers
+    - - url: http://localhost:8000/api
+  - - paths
+    - !!python/object/apply:collections.OrderedDict
+      - - - /accounts/signup/
+          - post:
+              summary: 회원가입
+              tags:
+              - Accounts
+              requestBody:
+                required: true
+                content:
+                  application/json:
+                    schema:
+                      $ref: '#/components/schemas/UserSignup'
+              responses:
+                '201':
+                  description: 회원가입 성공
+                '400':
+                  description: 입력 오류
+        - - /accounts/login/
+          - post:
+              summary: 로그인
+              tags:
+              - Accounts
+              requestBody:
+                required: true
+                content:
+                  application/json:
+                    schema:
+                      type: object
+                      properties:
+                        email:
+                          type: string
+                        password:
+                          type: string
+                      required:
+                      - email
+                      - password
+              responses:
+                '200':
+                  description: 로그인 성공
+                '401':
+                  description: 인증 실패
+        - - /home/expenses/
+          - get:
+              summary: 지출 목록 조회
+              tags:
+              - Expense
+              responses:
+                '200':
+                  description: 지출 목록 반환
+                  content:
+                    application/json:
+                      schema:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Expense'
+            post:
+              summary: 지출 등록
+              tags:
+              - Expense
+              requestBody:
+                required: true
+                content:
+                  application/json:
+                    schema:
+                      $ref: '#/components/schemas/ExpenseInput'
+              responses:
+                '201':
+                  description: 등록 성공
+        - - /home/incomes/
+          - get:
+              summary: 수입 목록 조회
+              tags:
+              - Income
+              responses:
+                '200':
+                  description: 수입 목록 반환
+                  content:
+                    application/json:
+                      schema:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Income'
+            post:
+              summary: 수입 등록
+              tags:
+              - Income
+              requestBody:
+                required: true
+                content:
+                  application/json:
+                    schema:
+                      $ref: '#/components/schemas/IncomeInput'
+              responses:
+                '201':
+                  description: 등록 성공
+  - - components
+    - schemas:
+        UserSignup:
+          type: object
+          properties:
+            email:
+              type: string
+            password:
+              type: string
+            username:
+              type: string
+            name:
+              type: string
+            age:
+              type: integer
+            gender:
+              type: string
+            phone:
+              type: string
+          required:
+          - email
+          - password
+          - username
+        Expense:
+          type: object
+          properties:
+            id:
+              type: integer
+            user:
+              type: integer
+            date:
+              type: string
+              format: date
+            amount:
+              type: integer
+            category:
+              type: string
+            emotion:
+              type: string
+        ExpenseInput:
+          type: object
+          required:
+          - date
+          - amount
+          - category
+          properties:
+            date:
+              type: string
+              format: date
+            amount:
+              type: integer
+            category:
+              type: string
+            emotion:
+              type: string
+        Income:
+          type: object
+          properties:
+            id:
+              type: integer
+            user:
+              type: integer
+            date:
+              type: string
+              format: date
+            amount:
+              type: integer
+            source:
+              type: string
+            emotion:
+              type: string
+        IncomeInput:
+          type: object
+          required:
+          - date
+          - amount
+          - source
+          properties:
+            date:
+              type: string
+              format: date
+            amount:
+              type: integer
+            source:
+              type: string
+            emotion:
+              type: string

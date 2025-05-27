@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+<mxfile>
+  <diagram name="ClassDiagram">
+    <mxGraphModel>
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="User_cell" value="&amp;lt;b&amp;gt;User&amp;lt;/b&amp;gt;&lt;br/&gt;+ id: int&lt;br/&gt;+ email: string&lt;br/&gt;+ password: string&lt;br/&gt;+ username: string&lt;br/&gt;+ name: string&lt;br/&gt;+ age: int&lt;br/&gt;+ gender: string&lt;br/&gt;+ phone: string" style="shape=umlClass;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="160" height="140" as="geometry"/>
+        </mxCell>
+        <mxCell id="Income_cell" value="&amp;lt;b&amp;gt;Income&amp;lt;/b&amp;gt;&lt;br/&gt;+ id: int&lt;br/&gt;+ date: date&lt;br/&gt;+ amount: int&lt;br/&gt;+ source: string&lt;br/&gt;+ emotion: string&lt;br/&gt;- user: FK → User" style="shape=umlClass;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="240" y="40" width="160" height="140" as="geometry"/>
+        </mxCell>
+        <mxCell id="Expense_cell" value="&amp;lt;b&amp;gt;Expense&amp;lt;/b&amp;gt;&lt;br/&gt;+ id: int&lt;br/&gt;+ date: date&lt;br/&gt;+ amount: int&lt;br/&gt;+ category: string&lt;br/&gt;+ emotion: string&lt;br/&gt;- user: FK → User" style="shape=umlClass;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="440" y="40" width="160" height="140" as="geometry"/>
+        </mxCell>
+        <mxCell id="MonthlyBudget_cell" value="&amp;lt;b&amp;gt;MonthlyBudget&amp;lt;/b&amp;gt;&lt;br/&gt;+ id: int&lt;br/&gt;+ year: int&lt;br/&gt;+ month: int&lt;br/&gt;+ budget: int&lt;br/&gt;- user: FK → User" style="shape=umlClass;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="640" y="40" width="160" height="140" as="geometry"/>
+        </mxCell>
+        <mxCell id="FixedExpense_cell" value="&amp;lt;b&amp;gt;FixedExpense&amp;lt;/b&amp;gt;&lt;br/&gt;+ id: int&lt;br/&gt;+ name: string&lt;br/&gt;+ amount: int&lt;br/&gt;+ payment_day: int&lt;br/&gt;- user: FK → User" style="shape=umlClass;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="220" width="160" height="140" as="geometry"/>
+        </mxCell>
+        <mxCell id="Notice_cell" value="&amp;lt;b&amp;gt;Notice&amp;lt;/b&amp;gt;&lt;br/&gt;+ id: int&lt;br/&gt;+ title: string&lt;br/&gt;+ content: text&lt;br/&gt;+ created_at: datetime&lt;br/&gt;+ updated_at: datetime" style="shape=umlClass;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="240" y="220" width="160" height="140" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

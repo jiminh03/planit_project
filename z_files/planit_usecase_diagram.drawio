@@ -1,0 +1,74 @@
+<?xml version="1.0" ?>
+<mxfile>
+  <diagram name="UseCaseDiagram">
+    <mxGraphModel>
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="actor_user" value="사용자" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="40" y="200" width="30" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="usecase_signup" value="회원가입" style="shape=ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="260" y="60" width="160" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="actor_user_usecase_signup_edge" edge="1" source="actor_user" target="usecase_signup" style="endArrow=none;html=1;" parent="1" value="">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="usecase_login" value="로그인" style="shape=ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="260" y="150" width="160" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="actor_user_usecase_login_edge" edge="1" source="actor_user" target="usecase_login" style="endArrow=none;html=1;" parent="1" value="">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="usecase_record_income" value="수입 등록" style="shape=ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="260" y="240" width="160" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="actor_user_usecase_record_income_edge" edge="1" source="actor_user" target="usecase_record_income" style="endArrow=none;html=1;" parent="1" value="">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="usecase_record_expense" value="지출 등록" style="shape=ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="260" y="330" width="160" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="actor_user_usecase_record_expense_edge" edge="1" source="actor_user" target="usecase_record_expense" style="endArrow=none;html=1;" parent="1" value="">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="usecase_view_today_summary" value="오늘 요약 보기" style="shape=ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="260" y="420" width="160" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="actor_user_usecase_view_today_summary_edge" edge="1" source="actor_user" target="usecase_view_today_summary" style="endArrow=none;html=1;" parent="1" value="">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="usecase_view_monthly_stats" value="월별 통계 보기" style="shape=ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="260" y="510" width="160" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="actor_user_usecase_view_monthly_stats_edge" edge="1" source="actor_user" target="usecase_view_monthly_stats" style="endArrow=none;html=1;" parent="1" value="">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="usecase_download_expense" value="소비내역 다운로드" style="shape=ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="260" y="600" width="160" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="actor_user_usecase_download_expense_edge" edge="1" source="actor_user" target="usecase_download_expense" style="endArrow=none;html=1;" parent="1" value="">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="usecase_get_gpt_advice" value="GPT 소비 분석 받기" style="shape=ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="260" y="690" width="160" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="actor_user_usecase_get_gpt_advice_edge" edge="1" source="actor_user" target="usecase_get_gpt_advice" style="endArrow=none;html=1;" parent="1" value="">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="usecase_edit_profile" value="회원정보 수정" style="shape=ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="260" y="780" width="160" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="actor_user_usecase_edit_profile_edge" edge="1" source="actor_user" target="usecase_edit_profile" style="endArrow=none;html=1;" parent="1" value="">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="usecase_delete_account" value="회원 탈퇴" style="shape=ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="260" y="870" width="160" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="actor_user_usecase_delete_account_edge" edge="1" source="actor_user" target="usecase_delete_account" style="endArrow=none;html=1;" parent="1" value="">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

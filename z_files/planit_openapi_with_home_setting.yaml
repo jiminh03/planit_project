@@ -1,0 +1,397 @@
+openapi: 3.0.0
+info:
+  title: Planit API
+  version: 1.0.0
+  description: 감정 기반 소비 분석 서비스 Planit의 전체 API 명세서입니다.
+servers:
+- url: http://localhost:8000/api
+paths:
+  /accounts/signup/:
+    post:
+      summary: 회원가입
+      tags:
+      - Accounts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserSignup'
+      responses:
+        '201':
+          description: 회원가입 성공
+        '400':
+          description: 입력 오류
+  /accounts/login/:
+    post:
+      summary: 로그인
+      tags:
+      - Accounts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+              - email
+              - password
+      responses:
+        '200':
+          description: 로그인 성공
+        '401':
+          description: 인증 실패
+  /home/incomes/:
+    get:
+      summary: 수입 목록 조회
+      tags:
+      - Income
+      responses:
+        '200':
+          description: 수입 목록 반환
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Income'
+    post:
+      summary: 수입 등록
+      tags:
+      - Income
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IncomeInput'
+      responses:
+        '201':
+          description: 등록 성공
+  /home/expenses/:
+    get:
+      summary: 지출 목록 조회
+      tags:
+      - Expense
+      responses:
+        '200':
+          description: 지출 목록 반환
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Expense'
+    post:
+      summary: 지출 등록
+      tags:
+      - Expense
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExpenseInput'
+      responses:
+        '201':
+          description: 등록 성공
+  /report/summary/:
+    get:
+      summary: GPT 소비 분석 리포트
+      tags:
+      - Report
+      responses:
+        '200':
+          description: GPT 분석 결과
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+  /helper/helper/:
+    post:
+      summary: GPT 소비 도우미 분석 요청
+      tags:
+      - Helper
+      responses:
+        '200':
+          description: 분석 결과
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+  /home/transactions/:
+    get:
+      summary: 특정 날짜 거래 조회
+      tags:
+      - Transaction
+      parameters:
+      - name: date
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date
+      responses:
+        '200':
+          description: 해당 날짜의 수입 및 지출 반환
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  incomes:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Income'
+                  expenses:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Expense'
+  /home/monthly-summary/:
+    get:
+      summary: 날짜별 수입/지출 총액 조회
+      tags:
+      - Summary
+      parameters:
+      - name: year
+        in: query
+        required: true
+        schema:
+          type: integer
+      - name: month
+        in: query
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 날짜별 수입/지출 총액 반환
+  /home/monthly-summary-stats/:
+    get:
+      summary: 감정/카테고리 기반 통계
+      tags:
+      - Summary
+      parameters:
+      - name: year
+        in: query
+        required: true
+        schema:
+          type: integer
+      - name: month
+        in: query
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 통계 정보 반환
+  /home/today-summary/:
+    get:
+      summary: 오늘 지출 및 권장 지출 조회
+      tags:
+      - Summary
+      responses:
+        '200':
+          description: 오늘 요약 정보
+  /home/ai-feedback/:
+    post:
+      summary: AI 한줄 피드백 요청
+      tags:
+      - Feedback
+      responses:
+        '200':
+          description: GPT 기반 피드백 결과
+  /setting/budget/:
+    get:
+      summary: 월 예산 조회
+      tags:
+      - Setting
+      parameters:
+      - name: year
+        in: query
+        required: true
+        schema:
+          type: integer
+      - name: month
+        in: query
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 예산 반환
+    post:
+      summary: 월 예산 설정
+      tags:
+      - Setting
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                year:
+                  type: integer
+                month:
+                  type: integer
+                budget:
+                  type: integer
+              required:
+              - year
+              - month
+              - budget
+      responses:
+        '201':
+          description: 예산 등록됨
+  /setting/fixed-expenses/:
+    get:
+      summary: 고정 지출 목록 조회
+      tags:
+      - Setting
+      responses:
+        '200':
+          description: 고정 지출 리스트
+    post:
+      summary: 고정 지출 등록
+      tags:
+      - Setting
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                amount:
+                  type: integer
+                payment_day:
+                  type: integer
+              required:
+              - name
+              - amount
+              - payment_day
+      responses:
+        '201':
+          description: 고정 지출 등록 완료
+  /setting/accounts/delete/:
+    post:
+      summary: 계정 탈퇴
+      tags:
+      - Setting
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+              required:
+              - password
+      responses:
+        '200':
+          description: 계정 삭제 성공
+        '400':
+          description: 비밀번호 오류
+components:
+  schemas:
+    UserSignup:
+      type: object
+      required:
+      - email
+      - password
+      - username
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        username:
+          type: string
+        name:
+          type: string
+        age:
+          type: integer
+        gender:
+          type: string
+        phone:
+          type: string
+    Income:
+      type: object
+      properties:
+        id:
+          type: integer
+        user:
+          type: integer
+        date:
+          type: string
+          format: date
+        amount:
+          type: integer
+        source:
+          type: string
+        emotion:
+          type: string
+    IncomeInput:
+      type: object
+      required:
+      - date
+      - amount
+      - source
+      properties:
+        date:
+          type: string
+          format: date
+        amount:
+          type: integer
+        source:
+          type: string
+        emotion:
+          type: string
+    Expense:
+      type: object
+      properties:
+        id:
+          type: integer
+        user:
+          type: integer
+        date:
+          type: string
+          format: date
+        amount:
+          type: integer
+        category:
+          type: string
+        emotion:
+          type: string
+    ExpenseInput:
+      type: object
+      required:
+      - date
+      - amount
+      - category
+      properties:
+        date:
+          type: string
+          format: date
+        amount:
+          type: integer
+        category:
+          type: string
+        emotion:
+          type: string
