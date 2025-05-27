@@ -3,73 +3,137 @@ from django.conf import settings
 import os
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny
 from django.utils import timezone
 from collections import Counter, defaultdict
 from home.models import Expense
 from dotenv import load_dotenv
 from openai import OpenAI
+from django.contrib.auth import get_user_model
+from django.utils.timezone import now
+from datetime import timedelta
+from home.models import Expense, MonthlyBudget
+from setting.models import FixedExpense
 
+load_dotenv()
+User = get_user_model()
 
 class SpendingReportView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
-    def get(self, request):
-        today = timezone.localdate()
-        start_date = today.replace(day=1)
+    def post(self, request):
+        email = request.data.get("email")
+        if not email:
+            return Response({"error": "이메일이 필요합니다."}, status=400)
 
-        expenses = Expense.objects.filter(user=request.user, date__range=(start_date, today))
+        user = User.objects.filter(email=email).first()
+        if not user:
+            return Response({"error": "해당 이메일의 사용자를 찾을 수 없습니다."}, status=404)
 
-        total_spent = sum(abs(e.amount) for e in expenses)
+        today = now().date()
+        start_date = today - timedelta(days=14)
+        expenses = Expense.objects.filter(user=user, date__range=(start_date, today)).order_by('-date')
+
+        if not expenses.exists():
+            return Response({"message": "최근 소비 내역이 없어 분석할 수 없습니다."})
+
+        lines = [f"{e.date} - {e.category} - {e.amount}원 - 감정: {e.emotion or '없음'}" for e in expenses]
+
+        # ✅ 프롬프트 템플릿 파일 경로 정의
+        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        prompt_dir = os.path.join(base_dir, 'report', 'prompts')
+        prompt_files = {
+            "analysis1": "prompt_total_expenses.txt",
+            "analysis2": "prompt_budget_analysis.txt",
+            "analysis3": "prompt_type_analysis.txt",
+            "advice": "prompt_advice.txt",
+        }
+
+        # ✅ 파일 불러오기
+        try:
+            templates = {}
+            for key, filename in prompt_files.items():
+                with open(os.path.join(prompt_dir, filename), encoding='utf-8') as f:
+                    templates[key] = f.read()
+        except FileNotFoundError as e:
+            return Response({"error": f"프롬프트 파일 누락: {str(e)}"}, status=500)
+
+        # ✅ 데이터 포맷팅
+        total_spent = sum(e.amount for e in expenses)
+
+        budget_obj = MonthlyBudget.objects.filter(user=user, year=today.year, month=today.month).first()
+        if budget_obj:
+            target_budget = budget_obj.budget
+            budget_info = f"목표 예산: {target_budget}원"
+            budget_ratio = round(abs(total_spent) / target_budget * 100, 1)
+        else:
+            budget_info = "목표 예산 없음"
+            budget_ratio = 0
+
         emotion_count = Counter(e.emotion for e in expenses if e.emotion)
+        emotion_lines = "\n".join([f"{k}: {v}회" for k, v in emotion_count.items()]) or "감정 소비 없음"
+
         category_sum = defaultdict(int)
         for e in expenses:
             category_sum[e.category] += abs(e.amount)
+        category_lines = "\n".join([f"{k}: {v}원" for k, v in category_sum.items()]) or "카테고리 정보 없음"
 
-        # 프롬프트 템플릿 경로 설정 및 로드
-        prompt_path = os.path.join(settings.BASE_DIR, 'report', 'prompts', 'report_prompt.txt')
-        with open(prompt_path, 'r', encoding='utf-8') as f:
-            prompt_template = f.read()
+        fixed_qs = FixedExpense.objects.filter(user=user)
+        fixed_lines = "\n".join([
+            f"{f.name}: {f.amount}원 / 매월 {f.payment_day}일" for f in fixed_qs
+        ]) if fixed_qs.exists() else "고정지출 없음"
 
+        # ✅ 공통 context 정의 (txt 파일 대신 코드 내에서 생성)
+        context = f"""
+다음은 사용자의 월간 소비 분석 요청입니다.
+사용자 이름: {user.username}
+분석 월: {today.month}
+총 지출: {total_spent}원
+{budget_info}
+예산 대비 비율: {budget_ratio}%
+
+[감정별 소비]
+{emotion_lines}
+
+[카테고리별 소비]
+{category_lines}
+
+[고정지출 항목]
+{fixed_lines}
+""".strip()
+
+        format_kwargs = {
+            "context": context,
+            "username": user.username,
+            "month": today.month,
+            "total_spent": total_spent,
+            "budget_info": budget_info,
+            "budget_ratio": budget_ratio,
+            "emotion_lines": emotion_lines,
+            "category_lines": category_lines,
+            "fixed_lines": fixed_lines,
+            "spending_lines": "\n".join(lines),
+        }
+
+        # ✅ GPT 호출
         try:
-            emotion_lines = "\n".join(f"{emotion}: {count}회" for emotion, count in emotion_count.items()) if emotion_count else "없음"
-            category_lines = "\n".join(f"{category}: {amount}원" for category, amount in category_sum.items()) if category_sum else "없음"
+            client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+            results = {}
 
-            prompt = prompt_template.format(
-                username=request.user.username,
-                year=today.year,
-                month=today.month,
-                emotion_lines=emotion_lines,
-                category_lines=category_lines,
-                total_spent=total_spent,
-                budget_info="(예산 정보가 설정되어 있지 않습니다.)",
-                budget_ratio="(지출 대비 예산 비율 정보가 없습니다.)"
-            )
-        except KeyError as e:
-            return Response({"error": f"프롬프트 구성 중 누락된 항목이 있습니다: {str(e)}"}, status=500)
+            for key in ["analysis1", "analysis2", "analysis3", "advice"]:
+                filled_prompt = templates[key].format(**format_kwargs)
+                response = client.chat.completions.create(
+                    model="gpt-4o-mini",
+                    messages=[{"role": "user", "content": filled_prompt}],
+                    max_tokens=1800,
+                    temperature=0.7,
+                )
+                results[f"{key}_result"] = response.choices[0].message.content.strip()
 
-        # .env 파일에서 환경변수 로드
-        load_dotenv()
-        api_key = os.getenv("OPENAI_API_KEY")
-        if not api_key:
-            return Response({"error": "OPENAI_API_KEY 환경변수가 설정되어 있지 않습니다."}, status=500)
-
-        client = OpenAI(api_key=api_key)
-
-        try:
-            response = client.chat.completions.create(
-                model="gpt-4o",
-                messages=[
-                    {"role": "system", "content": "너는 소비 분석을 도와주는 분석가야."},
-                    {"role": "user", "content": prompt}
-                ],
-                max_tokens=600,
-                temperature=0.7
-            )
-            analysis = response.choices[0].message.content.strip()
         except Exception as e:
             return Response({"error": str(e)}, status=500)
 
-        return Response({
-            "result": analysis
-        })
+        return Response(results)
+
+        
+        
