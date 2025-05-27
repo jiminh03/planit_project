@@ -1,25 +1,25 @@
 <template>
   <!-- <div class="app-layout">
     <div v-if="!isAuthPage" class="main-layout"> -->
-      <!-- <div v-if="userStore.isLoggedIn">
+  <!-- <div v-if="userStore.isLoggedIn">
         <SidebarMenu />
       </div> -->
-      <!-- <div class="content-view"> -->
-        <!-- <router-view /> -->
-        <!-- <div class="intro-images">
+  <!-- <div class="content-view"> -->
+  <!-- <router-view /> -->
+  <!-- <div class="intro-images">
           <img v-for="(img, index) in introImages" :key="index" :src="img" class="full-width-img" alt="Planit 소개 이미지" />
         </div> -->
-        <!-- <div>로그인 상태 (userStore): {{ userStore.isLoggedIn }}</div>
+  <!-- <div>로그인 상태 (userStore): {{ userStore.isLoggedIn }}</div>
         <div>사이드바 존재 여부: {{ sidebarExists }}</div> -->
-      <!-- </div> -->
-    <!-- </div>
+  <!-- </div> -->
+  <!-- </div>
     <div v-else class="content-view">
       <router-view />
     </div>
   </div> -->
-<div class="intro-images">
+  <!-- <div class="intro-images">
   <img v-for="(img, index) in introImages" :key="index" :src="img" class="full-width-img" alt="Planit 소개 이미지" />
-</div>
+</div> -->
 </template>
 
 <script setup>
@@ -56,7 +56,9 @@ const introImages = [introImage1, introImage2, introImage3, introImage4, introIm
 </script>
 
 <style>
-html, body, #app {
+html,
+body,
+#app {
   margin: 0;
   padding: 0;
   width: 100%;
@@ -64,7 +66,9 @@ html, body, #app {
   box-sizing: border-box;
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: inherit;
 }
 

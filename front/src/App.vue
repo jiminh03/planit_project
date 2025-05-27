@@ -1,20 +1,18 @@
 <template>
   <div class="app-layout">
     <TopHeader class="top-header" />
-    <div class="scroll-wrapper">
-      <div v-if="!isAuthPage" class="main-layout">
+
+    <div class="main-layout">
+      <!-- ✅ 사이드바 조건부 렌더링 -->
+      <SidebarMenu v-if="showSidebar" />
+
+      <div class="content-view" :style="{ marginLeft: showSidebar ? '220px' : '0' }">
+        <!-- ✅ 인트로 이미지 조건부 렌더링 -->
         <div v-if="showIntroImages && introImages.length" class="intro-images">
           <img v-for="(img, index) in introImages" :key="index" :src="img" class="full-width-img" alt="Planit 소개 이미지" />
         </div>
 
-        <div v-if="userStore.isLoggedIn">
-          <SidebarMenu />
-        </div>
-        <div class="content-view">
-          <router-view />
-        </div>
-      </div>
-      <div v-else class="content-view">
+        <!-- ✅ 페이지 본문 영역 -->
         <router-view />
       </div>
     </div>
@@ -22,9 +20,8 @@
 </template>
 
 <script setup>
-import { onBeforeMount } from 'vue'
+import { computed, onBeforeMount } from 'vue'
 import { useRoute } from 'vue-router'
-import { computed } from 'vue'
 import TopHeader from '@/components/TopHeader.vue'
 import SidebarMenu from '@/components/SidebarMenu.vue'
 import { useUserStore } from '@/stores/user'
@@ -35,26 +32,43 @@ import introImage3 from '@/assets/003.png'
 import introImage4 from '@/assets/004.png'
 import introImage5 from '@/assets/005.png'
 
-const introAllowedPaths = ['/', '/home']  // intro 이미지가 보일 경로만 명시
-const showIntroImages = computed(() => {
-  return !userStore.isLoggedIn && !isAuthPage.value && introAllowedPaths.includes(route.path)
+const route = useRoute()
+const userStore = useUserStore()
+
+// 🔹 사이드바가 없어야 할 경로
+const sidebarExcludedPaths = ['/login', '/signup', '/main', '/main/features', '/main/intro']
+
+// 🔹 인트로 이미지가 나올 경로
+const introImagePaths = ['/main', '/main/features', '/main/intro']
+
+// 🔹 사이드바 조건부 표시
+const showSidebar = computed(() => {
+  const path = route.path
+  const isExcluded = sidebarExcludedPaths.includes(path)
+  const isNoticePage = path.startsWith('/notice')
+  const isLoggedIn = userStore.isLoggedIn
+
+  if (isExcluded) return false
+  if (isNoticePage) return isLoggedIn
+  return true
 })
 
+// 🔹 인트로 이미지 조건부 표시
+const showIntroImages = computed(() => {
+  const path = route.path
+  return !userStore.isLoggedIn && introImagePaths.includes(path)
+})
 
+// 🔹 인트로 이미지 배열
 const introImages = [introImage1, introImage2, introImage3, introImage4, introImage5]
-console.log('Loaded introImages:', introImages)
 
+// 🔹 테마 설정
 onBeforeMount(() => {
   const savedTheme = localStorage.getItem('theme') || 'system'
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
   const resolvedTheme = savedTheme === 'system' ? (prefersDark ? 'dark' : 'light') : savedTheme
   document.documentElement.setAttribute('data-theme', resolvedTheme)
 })
-
-const route = useRoute()
-const authPaths = ['/login', '/signup']
-const isAuthPage = computed(() => authPaths.includes(route.path))
-const userStore = useUserStore()
 </script>
 
 <style>
@@ -64,7 +78,7 @@ body,
   margin: 0;
   padding: 0;
   width: 100%;
-  min-height: 100vh;
+  height: 100%;
   box-sizing: border-box;
 }
 
@@ -83,9 +97,6 @@ body {
 html[data-theme='light'] {
   --bg-color: #fff;
   --text-color: #000;
-}
-
-html[data-theme='light'] {
   --sidebar-bg-color: #f8f8f8;
   --sidebar-text-color: #222;
   --logout-button-bg: #f44336;
@@ -96,9 +107,6 @@ html[data-theme='light'] {
 html[data-theme='dark'] {
   --bg-color: #3f3f3f;
   --text-color: #f0f0f0;
-}
-
-html[data-theme='dark'] {
   --sidebar-bg-color: #1e1e1e;
   --sidebar-text-color: #ffffff;
   --logout-button-bg: #b71c1c;
@@ -109,23 +117,22 @@ html[data-theme='dark'] {
 .app-layout {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  height: 100vh;
 }
 
 .main-layout {
-  display: block;
-}
-
-.scroll-wrapper {
+  display: flex;
   flex: 1;
-  overflow-y: auto;
-  height: 100%;
+  overflow: hidden;
 }
 
 .content-view {
   flex: 1;
-  padding: 20px;
+  /* padding: 20px; */
   overflow-y: auto;
+  height: calc(100vh - 64px);
+  /* TopHeader 높이 고려 */
+  transition: margin-left 0.2s ease;
 }
 
 .top-header {

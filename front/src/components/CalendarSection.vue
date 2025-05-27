@@ -179,6 +179,13 @@ button {
   transition: background-color 0.3s ease;
 }
 
+button:hover {
+  background-color: #b9b9b975;
+  /* 예: 진한 회색 */
+  color: #000000;
+}
+
+
 .calendar-grid {
   display: grid;
   /* margin-top: 0;

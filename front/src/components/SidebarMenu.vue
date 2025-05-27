@@ -17,13 +17,12 @@
         </router-link>
         <transition name="submenu-transition">
           <div class="submenu" v-show="activeMenu === 'analysis'">
-            <div class="menu-subitem">한 줄 분석</div>
-            <div class="menu-subitem">소비 패턴 분석</div>
-            <div class="menu-subitem">날짜별 소비 패턴</div>
+            <!-- <div class="menu-subitem">월 지출 총액 분석</div> -->
+            <!-- <div class="menu-subitem">예산 초과 여부 </div>
             <div class="menu-subitem">감정-소비 관계</div>
             <div class="menu-subitem">카테고리별 분석</div>
             <div class="menu-subitem">소비 성향 진단</div>
-            <div class="menu-subitem">개인 맞춤형 피드백</div>
+            <div class="menu-subitem">개인 맞춤형 피드백</div> -->
           </div>
         </transition>
       </div>
@@ -36,11 +35,11 @@
         </router-link>
         <transition name="submenu-transition">
           <div class="submenu" v-show="activeMenu === 'guide'">
-            <div class="menu-subitem">개선이 필요한 메시지</div>
+            <!-- <div class="menu-subitem">개선이 필요한 메시지</div>
             <div class="menu-subitem">대체 소비 전략</div>
             <div class="menu-subitem">절약 시뮬레이션</div>
             <div class="menu-subitem">고정/정기지출 정리 제안</div>
-            <div class="menu-subitem">전략 조합 시뮬 결과</div>
+            <div class="menu-subitem">전략 조합 시뮬 결과</div> -->
           </div>
         </transition>
       </div>
@@ -68,14 +67,17 @@ const toggleSubmenu = (menuName) => {
 
 <style scoped>
 .sidebar {
+  position: fixed;
+  top: 20;
+  left: 0;
   width: 220px;
-  min-width: 220px;
+  height: 100vh;
   background-color: var(--sidebar-bg-color);
   padding: 1rem;
   box-sizing: border-box;
   border-right: 1px solid #ddd;
-  height: 100vh;
-  overflow: auto;
+  overflow: hidden;
+  z-index: 1000;
 }
 
 .menu-group-wrapper {
@@ -104,9 +106,10 @@ const toggleSubmenu = (menuName) => {
 .menu-group {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 6px;
   padding: 4px 8px;
+  padding-left: 25px;
   min-height: 36px;
   margin-top: 1.5rem;
 }
@@ -114,22 +117,22 @@ const toggleSubmenu = (menuName) => {
 .menu-group-title {
   margin-left: 6px;
   font-weight: bold;
-  font-size: 15px;
+  font-size: 19px;
   color: var(--sidebar-text-color) !important;
 }
 
 .submenu {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   flex-direction: column;
 }
 
 .menu-subitem {
-  font-size: 14px;
+  font-size: 16px;
   border-radius: 6px;
   transition: background 0.2s;
   padding: 4px 8px;
-  text-align: center;
+  text-align: start;
   width: 100%;
   display: flex;
   justify-content: center;

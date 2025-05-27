@@ -1,13 +1,25 @@
 <template>
   <div class="analysis-page">
-    <h2 class="title">💡 GPT 소비 도우미 분석 결과</h2>
+    <h2 class="title">💡나의 소비 분석 결과</h2>
 
     <div v-if="isLoading">분석 중입니다...</div>
     <div v-else-if="error" class="error">{{ error }}</div>
     <div v-else class="card-container">
-      <div v-for="(card, index) in cards" :key="index" class="card">
-        <h3 v-html="card.title" class="card-title" />
-        <p v-html="card.content" class="card-content" />
+      <div class="card" v-if="results.analysis1">
+        <h3 class="card-title">📈 1. 월 지출 총액 분석</h3>
+        <p class="card-content" v-html="results.analysis1" />
+      </div>
+      <div class="card" v-if="results.analysis2">
+        <h3 class="card-title">🧾 2. 예산 초과 여부 및 원인 분석</h3>
+        <p class="card-content" v-html="results.analysis2" />
+      </div>
+      <div class="card" v-if="results.analysis3">
+        <h3 class="card-title">🔍 소비 성향 분석 (감정소비/계획소비/절약형 등)</h3>
+        <p class="card-content" v-html="results.analysis3" />
+      </div>
+      <div class="card" v-if="results.advice">
+        <h3 class="card-title"> ✨ 소비 개선을 위한 핵심 조언</h3>
+        <p class="card-content" v-html="results.advice" />
       </div>
     </div>
   </div>
@@ -20,10 +32,14 @@ import { useUserStore } from '@/stores/user'
 
 const isLoading = ref(true)
 const error = ref('')
-const cards = ref([])
+const results = ref({
+  analysis1: '',
+  analysis2: '',
+  analysis3: '',
+  advice: ''
+})
 const userStore = useUserStore()
 
-// ✅ CSRF 토큰 가져오기
 const getCSRFToken = () => {
   const value = `; ${document.cookie}`
   const parts = value.split(`; csrftoken=`)
@@ -31,13 +47,12 @@ const getCSRFToken = () => {
   return ''
 }
 
-// ✅ GPT 분석 요청
 const fetchGPTAnalysis = async () => {
   isLoading.value = true
   error.value = ''
   try {
-    const response = await axios.post(
-      '/api/helper/analysis/',
+    const res = await axios.post(
+      '/api/report/summary/',
       { email: userStore.email },
       {
         headers: {
@@ -47,17 +62,10 @@ const fetchGPTAnalysis = async () => {
         withCredentials: true
       }
     )
-    const rawText = response.data.result
-
-    // 항목별 분할: "###" 로 시작하는 제목 기준
-    const sections = rawText.split(/(?=### )/g)
-    cards.value = sections.map(section => {
-      const [titleLine, ...bodyLines] = section.split('\n')
-      return {
-        title: titleLine.trim(),
-        content: bodyLines.join('\n').trim().replaceAll('\n', '<br/>')
-      }
-    })
+    results.value.analysis1 = res.data.analysis1_result.replaceAll('\n', '<br/>')
+    results.value.analysis2 = res.data.analysis2_result.replaceAll('\n', '<br/>')
+    results.value.analysis3 = res.data.analysis3_result.replaceAll('\n', '<br/>')
+    results.value.advice = res.data.advice_result.replaceAll('\n', '<br/>')
   } catch (err) {
     error.value = err.response?.data?.error || '분석 요청 실패'
   } finally {

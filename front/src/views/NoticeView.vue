@@ -90,18 +90,15 @@ onMounted(() => {
   padding: 20px;
   font-family: Arial, sans-serif;
   text-align: center;
-}
 
-h1 {
-  font-size: 32px;
-  font-weight: 800;
-  text-align: center;
-  margin-bottom: 16px;
-  color: black;
+  max-width: 1200px;
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .notice-table {
   width: 100%;
+  max-width: 100%;
   border-collapse: collapse;
   text-align: center;
   margin-bottom: 15px;
@@ -117,6 +114,7 @@ h1 {
   font-weight: 600;
   background-color: #f9f9f9;
 }
+
 
 .pagination {
   display: flex;

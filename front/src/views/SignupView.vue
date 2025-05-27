@@ -1,52 +1,52 @@
 <template>
-    <div class="signup-form-container">
-      <h1 class="form-title">회원가입</h1>
-      <form @submit.prevent="handleSubmit" class="signup-form">
-        <div class="form-row">
-          <div class="form-group">
-            <label for="name">이름</label>
-            <input id="name" v-model="formData.name" type="text" class="form-input" />
-          </div>
-          <div class="form-group">
-            <label for="userId">이메일</label>
-            <input id="userId" v-model="formData.userId" type="text" class="form-input" />
-          </div>
+  <div class="signup-form-container">
+    <h1 class="form-title">회원가입</h1>
+    <form @submit.prevent="handleSubmit" class="signup-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="name">이름</label>
+          <input id="name" v-model="formData.name" type="text" class="form-input" />
+        </div>
+        <div class="form-group">
+          <label for="userId">이메일</label>
+          <input id="userId" v-model="formData.userId" type="text" class="form-input" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="age">나이</label>
+          <input id="age" v-model="formData.age" type="number" class="form-input" />
+        </div>
+        <div class="form-group">
+          <label for="password">비밀번호</label>
+          <input id="password" v-model="formData.password" type="password" class="form-input" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="gender">성별</label>
+          <select id="gender" v-model="formData.gender" class="form-select">
+            <option value="">선택해주세요</option>
+            <option value="male">남성</option>
+            <option value="female">여성</option>
+          </select>
         </div>
 
-        <div class="form-row">
-          <div class="form-group">
-            <label for="age">나이</label>
-            <input id="age" v-model="formData.age" type="number" class="form-input" />
-          </div>
-          <div class="form-group">
-            <label for="password">비밀번호</label>
-            <input id="password" v-model="formData.password" type="password" class="form-input" />
-          </div>
-        </div>
+      </div>
 
-        <div class="form-row">
-          <div class="form-group">
-            <label for="gender">성별</label>
-            <select id="gender" v-model="formData.gender" class="form-select">
-              <option value="">선택해주세요</option>
-              <option value="male">남성</option>
-              <option value="female">여성</option>
-            </select>
-          </div>
-          
+      <div class="form-row">
+        <div class="form-group full-width">
+          <label for="phone">전화번호</label>
+          <input id="phone" v-model="formData.phone" type="tel" class="form-input" />
         </div>
+        <div class="form-group empty"></div>
+      </div>
 
-        <div class="form-row">
-          <div class="form-group full-width">
-            <label for="phone">전화번호</label>
-            <input id="phone" v-model="formData.phone" type="tel" class="form-input" />
-          </div>
-          <div class="form-group empty"></div>
-        </div>
-
-        <button type="submit" class="submit-btn">회원가입 완료</button>
-      </form>
-    </div>
+      <button type="submit" class="submit-btn">회원가입 완료</button>
+    </form>
+  </div>
 </template>
 
 <script setup>
@@ -88,7 +88,6 @@ async function handleSubmit() {
 </script>
 
 <style scoped>
-
 .signup-form-container {
   position: fixed;
   top: 50%;
@@ -97,7 +96,7 @@ async function handleSubmit() {
   width: 780px;
   background: #ffffff;
   border-radius: 10px;
-  box-shadow: 0 1px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
   padding: 42px 52px;
   box-sizing: border-box;
   display: flex;
@@ -165,7 +164,7 @@ label {
 
 .submit-btn {
   width: 100%;
-  padding: 21px 0;
+  padding: 10px 0;
   background-color: #222;
   border: none;
   border-radius: 8px;
@@ -186,10 +185,12 @@ label {
     width: 100%;
     padding: 24px 16px;
   }
+
   .form-row {
     flex-direction: column;
     gap: 16px;
   }
+
   .form-group.empty {
     display: none;
   }
