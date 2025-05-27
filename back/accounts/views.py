@@ -20,6 +20,7 @@ import requests
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import redirect
+from rest_framework.generics import ListAPIView
 
 User = get_user_model()
 
@@ -88,14 +89,25 @@ class MeView(APIView):
             'is_staff': user.is_staff  # ✅ 관리자 여부 포함
         })
     
-# 공지사항 조회
-class NoticeListView(APIView):
-    permission_classes = [AllowAny]
+class NoticePagination(PageNumberPagination):
+    page_size = 10
+    
+    def get_paginated_response(self, data):
+        return Response({
+            'count': self.page.paginator.count,
+            'page_size': self.page_size,
+            'results': data,
+        })
 
-    def get(self, request):
-        notices = Notice.objects.all().order_by('-created_at', '-updated_at')
-        serializer = NoticeSerializer(notices, many=True)
-        return Response(serializer.data)
+# 공지사항 조회
+
+
+class NoticeListView(ListAPIView):
+    queryset = Notice.objects.all().order_by('-created_at', '-updated_at')
+    serializer_class = NoticeSerializer
+    permission_classes = [AllowAny]
+    pagination_class = NoticePagination  # 👈 page_size=5 적용됨
+
 
 # 공지사항 목록 자세히 보기
 class NoticeDetailView(RetrieveAPIView):

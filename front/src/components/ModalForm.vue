@@ -8,7 +8,7 @@
         <div v-for="(item, idx) in todayList" :key="item._index" class="record-item">
           <!-- ✏️ 수정 모드일 경우 -->
           <template v-if="editingItem && editingItem._index === item._index">
-            <input type="number" v-model="editingItem.amount" style="width: 80px;" />
+            <input type="number" v-model="editingItem.amount" style="width: 120px;" />
             <input type="text" v-model="editingItem.category" style="width: 80px;" />
             <select v-model="editingItem.emotion">
               <option value="happy">😀</option>
@@ -214,7 +214,8 @@ function handleClose() {
 }
 
 .action-buttons button {
-  background-color: #ffffff00;  /* ✅ 밝은 회색 */
+  background-color: #ffffff00;
+  /* ✅ 밝은 회색 */
   color: black;
   border: none;
   border-radius: 6px;
@@ -225,7 +226,7 @@ function handleClose() {
 }
 
 .action-buttons button:hover {
-  background-color: #e0e0e0; /* 🔆 hover 시 더 진한 회색 */
+  background-color: #e0e0e0;
+  /* 🔆 hover 시 더 진한 회색 */
 }
-
 </style>

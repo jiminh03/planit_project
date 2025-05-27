@@ -74,7 +74,7 @@ const toggleSubmenu = (menuName) => {
   padding: 1rem;
   box-sizing: border-box;
   border-right: 1px solid #ddd;
-  height: 100%;
+  height: 100vh;
   overflow: auto;
 }
 

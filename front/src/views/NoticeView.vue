@@ -1,9 +1,11 @@
 <template>
   <div class="notice-container">
     <h1>📢 공지사항</h1>
+
     <div style="text-align: right; margin-bottom: 6px" v-if="userStore.isAdmin">
       <!-- <button class="plain-write-button" @click="$router.push('/notice/create')">글쓰기</button> -->
     </div>
+
     <table class="notice-table">
       <thead>
         <tr>
@@ -14,7 +16,7 @@
       </thead>
       <tbody>
         <tr v-for="(notice, index) in notices" :key="notice.id">
-          <td>{{ (currentPage - 1) * 5 + index + 1 }}</td>
+          <td>{{ (currentPage - 1) * pageSize + index + 1 }}</td>
           <td>
             <router-link :to="`/notice/${notice.id}`">
               {{ notice.title }}
@@ -24,19 +26,19 @@
         </tr>
       </tbody>
     </table>
-    <div class="pagination">
-      <button :disabled="currentPage === 1" @click="changePage(currentPage - 1)">‹</button>
 
-      <button
-        v-for="page in totalPages"
-        :key="page"
-        :class="{ active: currentPage === page }"
-        @click="changePage(page)"
-      >
+    <div class="pagination">
+      <!-- 이전 페이지 -->
+      <button @click="changePage(currentPage - 1)" :disabled="currentPage === 1">‹</button>
+
+      <!-- 페이지 번호 -->
+      <button v-for="page in totalPages" :key="page" @click="changePage(page)"
+        :class="{ active: currentPage === page }">
         {{ page }}
       </button>
 
-      <button :disabled="currentPage === totalPages" @click="changePage(currentPage + 1)">›</button>
+      <!-- 다음 페이지 -->
+      <button @click="changePage(currentPage + 1)" :disabled="currentPage === totalPages">›</button>
     </div>
   </div>
 </template>
@@ -45,38 +47,42 @@
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
 import { useUserStore } from '@/stores/user'
-const userStore = useUserStore()
 
+const userStore = useUserStore()
 const notices = ref([])
 const currentPage = ref(1)
 const totalPages = ref(1)
+const pageSize = ref(10)  // 페이지 사이즈 동적으로 계산
 
 const fetchNotices = async (page = 1) => {
   try {
     const response = await axios.get(`http://localhost:8000/api/accounts/notice/?page=${page}`)
+
     if (Array.isArray(response.data)) {
       notices.value = response.data
       totalPages.value = 1
+      pageSize.value = 10
     } else {
       notices.value = response.data.results
-      totalPages.value = Math.ceil(response.data.count / 5)
+      pageSize.value = response.data.page_size || response.data.results.length || 10
+      totalPages.value = Math.ceil(response.data.count / pageSize.value)
     }
-    console.log('✅ 응답 확인:', response.data)
+
     currentPage.value = page
   } catch (error) {
     console.error('공지사항 로딩 실패:', error)
   }
 }
 
-onMounted(() => {
-  fetchNotices()
-})
-
 const changePage = (page) => {
   if (page >= 1 && page <= totalPages.value) {
     fetchNotices(page)
   }
 }
+
+onMounted(() => {
+  fetchNotices()
+})
 </script>
 
 <style scoped>
@@ -101,7 +107,8 @@ h1 {
   margin-bottom: 15px;
 }
 
-.notice-table th, .notice-table td {
+.notice-table th,
+.notice-table td {
   border-bottom: 1px solid #ccc;
   padding: 12px 10px;
 }
@@ -114,17 +121,23 @@ h1 {
 .pagination {
   display: flex;
   justify-content: center;
-  gap: 8px;
+  align-items: center;
+  gap: 6px;
+  margin-top: 16px;
 }
 
 .pagination button {
-  border: 1px solid #ccc;
-  background-color: white;
-  border-radius: 4px;
-  padding: 6px 10px;
+  min-width: 36px;
+  height: 36px;
+  font-size: 14px;
+  font-weight: bold;
+  border: 1px solid #000000;
+  border-radius: 8px;
+  background-color: #000000;
   cursor: pointer;
-  font-weight: 600;
-  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .pagination button.active {
@@ -134,25 +147,19 @@ h1 {
 }
 
 .pagination button:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
-}
-
-.write-button {
-  background-color: #2563eb;
+  background-color: black;
   color: white;
-  border: none;
-  padding: 8px 14px;
-  border-radius: 5px;
-  font-weight: 600;
-  cursor: pointer;
-  margin-bottom: 12px;
+  border-color: black;
+  cursor: not-allowed;
+  opacity: 1;
+  /* 흐려지지 않게 */
+
 }
 
 .plain-write-button {
   all: unset;
   font-size: 15px;
-  font-weight:500;
+  font-weight: 500;
   cursor: pointer;
 }
 </style>

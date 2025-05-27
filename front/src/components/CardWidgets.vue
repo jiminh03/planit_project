@@ -15,7 +15,7 @@
 import TodaySummaryWidget from './widgets/TodaySummaryWidget.vue'
 
 const cards = [
-  { title: '제목1', content: '' },
+  { title: ' ', content: '' },
   { title: '제목2', content: '' },
   { title: '제목3', content: '' },
   { title: '구독 서비스', content: '' },
@@ -43,9 +43,10 @@ const cards = [
 
 .card {
   margin-top: 80px;
-  background-color: rgba(180, 180, 180, 0.2); /* 밝은 회색 느낌의 투명 배경 */
+  /* background-color: rgba(180, 180, 180, 0.2); 밝은 회색 느낌의 투명 배경 */
   backdrop-filter: blur(6px);
-  border: 1px solid rgba(255, 255, 255, 0.12); /* 흐릿한 외곽선 */
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  /* 흐릿한 외곽선 */
   color: var(--text-color);
   border-radius: 12px;
   padding: 1rem;

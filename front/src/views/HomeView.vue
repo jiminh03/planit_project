@@ -60,7 +60,8 @@ watch(
 <style scoped>
 .home-container {
   display: flex;
-  height: 100vh;         /* ✅ 전체 화면 고정 */
+  height: 100vh;
+  /* ✅ 전체 화면 고정 */
   width: 100vw;
   overflow: hidden;
 }
@@ -69,7 +70,8 @@ watch(
   flex: 1;
   display: flex;
   flex-direction: column;
-  height: 100%;          /* ✅ 자식이 height: 100%로 받을 수 있도록 */
+  height: 100%;
+  /* ✅ 자식이 height: 100%로 받을 수 있도록 */
   overflow: hidden;
 }
 
@@ -77,14 +79,14 @@ watch(
   flex: 1;
   display: flex;
   flex-direction: row;
-  flex-wrap: nowrap;           /* ✅ 줄바꿈 금지 */
+  flex-wrap: nowrap;
+  /* ✅ 줄바꿈 금지 */
   width: 100%;
   height: 100%;
   padding: 2rem;
   gap: 2rem;
-  overflow-x: auto;            /* ✅ 수평 스크롤 허용 */
+  overflow-x: auto;
+  /* ✅ 수평 스크롤 허용 */
   box-sizing: border-box;
 }
-
-
 </style>
